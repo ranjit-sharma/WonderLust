@@ -851,7 +851,7 @@ https://github.com/ranjit-sharma
 
 ### Project Repository
 
-https://github.com/ranjit-sharma/MajorProject
+[https://github.com/ranjit-sharma/MajorProject](https://github.com/ranjit-sharma/WonderLust)
 
 ---
 
