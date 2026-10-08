@@ -73,7 +73,7 @@ A modern full-stack travel and staycation accommodation web application inspired
 https://wonderlust-1tk1.onrender.com/
 
 **GitHub Repository:**  
-https://github.com/ranjit-sharma/MajorProject
+https://github.com/ranjit-sharma/WonderLust
 
 The deployed root URL redirects to the main listings page:
 
