@@ -1,25 +1,27 @@
 <% layout("layouts/boilerplate") %>
-    <div class="row mt-3">
-        <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
-            <h3>Edit Your Listing</h3>
-            <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation listing-form"
+<div class="row mt-3 show-page">
+    <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+        <h3 class="show-title mb-4">Edit Your Listing</h3>
+        
+        <div class="card show-card listing-form-card p-4">
+            <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation listing-form m-0"
                 enctype="multipart/form-data">
 
-                <div class="mb-3">
+                <div class="mb-4">
                     <label for="title" class="form-label">Title</label>
                     <input name="listing[title]" value="<%= listing.title %>" type="text" class="form-control" required>
                     <div class="valid-feedback">Title looks good!</div>
                     <div class="invalid-feedback">Please enter a short title</div>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-4">
                     <label for="description" class="form-label">Description</label>
                     <textarea name="listing[description]" type="text" class="form-control"
                         required><%= listing.description %></textarea>
                     <div class="invalid-feedback">Please enter a short description</div>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-4">
                     <label for="category" class="form-label">Category</label>
                     <select name="listing[category]" class="form-select" required>
                         <option value="" disabled <%= listing.category ? '' : 'selected' %>>Select a category</option>
@@ -29,24 +31,27 @@
                     </select>
                 </div>
 
-                <div class="mb-3">
-                    Original Listing Image <br>
-                    <img src="<%= originalImageUrl %>" class="edit-img" alt="listing_image" />
+                <div class="mb-4">
+                    <label class="form-label">Original Listing Image</label><br>
+                    <img src="<%= originalImageUrl %>" class="edit-img img-fluid rounded" style="max-height: 200px;" alt="listing_image" />
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-4">
                     <label for="image" class="form-label">Upload New Image</label>
                     <input name="listing[image]" type="file" class="form-control" />
                 </div>
 
-                <div class="row">
-                    <div class="mb-3 col-md-4">
-                        <label for="price" class="form-label">Price</label>
-                        <input name="listing[price]" value="<%= listing.price %>" class="form-control" required />
-                        <div class="invalid-feedback">please enter a valid price</div>
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <label for="price" class="form-label">Price per night</label>
+                        <div class="input-group has-validation">
+                            <span class="input-group-text">₹</span>
+                            <input name="listing[price]" value="<%= listing.price %>" type="number" class="form-control" required min="1" />
+                            <div class="invalid-feedback">Please enter a valid price</div>
+                        </div>
                     </div>
 
-                    <div class="mb-3 col-md-8">
+                    <div class="col-md-8 mt-3 mt-md-0">
                         <label for="country" class="form-label">Country</label>
                         <select name="listing[country]" class="form-select" required>
                             <% if (listing.country && !countries.includes(listing.country)) { %>
@@ -56,23 +61,28 @@
                                 <option value="<%= country %>" <%= listing.country === country ? 'selected' : '' %>><%= country %></option>
                             <% }) %>
                         </select>
-                        <div class="invalid-feedback">please enter the valid country</div>
+                        <div class="invalid-feedback">Please select a country</div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="mb-3 col-md-6">
+                <div class="row mb-4">
+                    <div class="col-md-6">
                         <label for="state" class="form-label">State / Region</label>
                         <input name="listing[state]" value="<%= listing.state || '' %>" placeholder="Enter state or region" type="text" class="form-control">
                     </div>
-                    <div class="mb-3 col-md-6">
+                    <div class="col-md-6 mt-3 mt-md-0">
                         <label for="location" class="form-label">City</label>
                         <input name="listing[location]" value="<%= listing.location %>" placeholder="Enter city" type="text" class="form-control" required>
-                        <div class="invalid-feedback">please enter a valid city</div>
+                        <div class="invalid-feedback">Please enter a valid city</div>
                     </div>
                 </div>
 
-                <button class="btn btn-dark edit-btn mt-3">Edit</button>
+                <div class="mt-4 d-flex gap-3">
+                    <a href="/listings/<%= listing._id %>" class="btn btn-outline-secondary px-4">Cancel</a>
+                    <button type="submit" class="btn px-4" style="background-color:#fe424d; color:#fff; border-color:#fe424d;">Save Changes</button>
+                </div>
             </form>
         </div>
+        <div class="mb-5 pb-5"></div>
     </div>
+</div>
