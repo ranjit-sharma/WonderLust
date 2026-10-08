@@ -1,0 +1,24 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="booking-confirmation">
+    <div class="booking-confirmation-icon"><i class="fa-solid fa-check"></i></div>
+    <p class="text-muted mb-1">Reservation confirmed</p>
+    <h2>Your stay at <%= listing.title %> is booked</h2>
+    <p class="text-muted">We look forward to hosting you.</p>
+
+    <div class="booking-summary">
+        <p><span>Check-in</span><strong><%= booking.checkIn.toISOString().slice(0, 10) %></strong></p>
+        <p><span>Check-out</span><strong><%= booking.checkOut.toISOString().slice(0, 10) %></strong></p>
+        <p><span>Guests</span><strong><%= booking.guests %></strong></p>
+        <hr>
+        <p><span><%= nights %> night(s) × &#8377;<%= listing.price.toLocaleString("en-IN") %></span>
+            <strong>&#8377;<%= basePrice.toLocaleString("en-IN") %></strong></p>
+        <p><span>GST</span><strong>&#8377;<%= gst.toLocaleString("en-IN") %></strong></p>
+        <p class="booking-total"><span>Total</span><strong>&#8377;<%= booking.totalPrice.toLocaleString("en-IN") %></strong></p>
+    </div>
+
+    <form action="/listings/<%= listing._id %>/bookings/<%= booking._id %>/cancel" method="POST" class="mb-3">
+        <button type="submit" class="btn btn-outline-danger">Cancel booking</button>
+    </form>
+    <a href="/listings/<%= listing._id %>" class="btn btn-dark">Back to listing</a>
+</div>

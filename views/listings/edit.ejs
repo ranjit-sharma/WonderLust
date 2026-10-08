@@ -1,0 +1,78 @@
+<% layout("layouts/boilerplate") %>
+    <div class="row mt-3">
+        <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
+            <h3>Edit Your Listing</h3>
+            <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation listing-form"
+                enctype="multipart/form-data">
+
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input name="listing[title]" value="<%= listing.title %>" type="text" class="form-control" required>
+                    <div class="valid-feedback">Title looks good!</div>
+                    <div class="invalid-feedback">Please enter a short title</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea name="listing[description]" type="text" class="form-control"
+                        required><%= listing.description %></textarea>
+                    <div class="invalid-feedback">Please enter a short description</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select name="listing[category]" class="form-select" required>
+                        <option value="" disabled <%= listing.category ? '' : 'selected' %>>Select a category</option>
+                        <% categories.forEach(category => { %>
+                            <option value="<%= category %>" <%= listing.category === category ? 'selected' : '' %>><%= category %></option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    Original Listing Image <br>
+                    <img src="<%= originalImageUrl %>" class="edit-img" alt="listing_image" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Upload New Image</label>
+                    <input name="listing[image]" type="file" class="form-control" />
+                </div>
+
+                <div class="row">
+                    <div class="mb-3 col-md-4">
+                        <label for="price" class="form-label">Price</label>
+                        <input name="listing[price]" value="<%= listing.price %>" class="form-control" required />
+                        <div class="invalid-feedback">please enter a valid price</div>
+                    </div>
+
+                    <div class="mb-3 col-md-8">
+                        <label for="country" class="form-label">Country</label>
+                        <select name="listing[country]" class="form-select" required>
+                            <% if (listing.country && !countries.includes(listing.country)) { %>
+                                <option value="<%= listing.country %>" selected><%= listing.country %></option>
+                            <% } %>
+                            <% countries.forEach(country => { %>
+                                <option value="<%= country %>" <%= listing.country === country ? 'selected' : '' %>><%= country %></option>
+                            <% }) %>
+                        </select>
+                        <div class="invalid-feedback">please enter the valid country</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="state" class="form-label">State / Region</label>
+                        <input name="listing[state]" value="<%= listing.state || '' %>" placeholder="Enter state or region" type="text" class="form-control">
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="location" class="form-label">City</label>
+                        <input name="listing[location]" value="<%= listing.location %>" placeholder="Enter city" type="text" class="form-control" required>
+                        <div class="invalid-feedback">please enter a valid city</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-dark edit-btn mt-3">Edit</button>
+            </form>
+        </div>
+    </div>

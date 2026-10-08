@@ -1,0 +1,32 @@
+<% layout("layouts/boilerplate") %>
+
+<main class="info-page">
+    <section class="info-hero">
+        <span class="info-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+        <p class="info-eyebrow">Community support</p>
+        <h1>Report a neighbourhood concern</h1>
+        <p>Tell us about a serious issue connected to a WonderLust listing or stay. We will review the details you provide.</p>
+    </section>
+
+    <form class="info-card support-form" method="POST" action="/support/neighbourhood-concern">
+        <div class="support-form-grid">
+            <div>
+                <label for="support-name" class="form-label">Your name</label>
+                <input id="support-name" name="name" class="form-control" type="text" required>
+            </div>
+            <div>
+                <label for="support-email" class="form-label">Email address</label>
+                <input id="support-email" name="email" class="form-control" type="email" required>
+            </div>
+        </div>
+        <div class="mt-3">
+            <label for="support-booking" class="form-label">Listing or booking reference <span>(optional)</span></label>
+            <input id="support-booking" name="reference" class="form-control" type="text">
+        </div>
+        <div class="mt-3">
+            <label for="support-concern" class="form-label">What happened?</label>
+            <textarea id="support-concern" name="concern" class="form-control" rows="6" required></textarea>
+        </div>
+        <button class="btn info-primary-btn mt-4" type="submit">Submit concern</button>
+    </form>
+</main>

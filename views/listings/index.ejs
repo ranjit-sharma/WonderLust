@@ -1,0 +1,218 @@
+<% layout("layouts/boilerplate") %>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .container {
+            padding-top: 0 !important;
+        }
+    </style>
+    <% const categoryIcons = {
+        "Trending": "fa-solid fa-fire",
+        "Rooms": "fa-solid fa-bed",
+        "Iconic Cities": "fa-solid fa-mountain-city",
+        "Mountain": "fa-solid fa-mountain",
+        "Castles": "fa-brands fa-fort-awesome",
+        "Camping": "fa-solid fa-campground",
+        "Farms": "fa-solid fa-tractor",
+        "Arctic": "fa-solid fa-snowman",
+        "Amazing Pools": "fa-solid fa-person-swimming",
+        "Domes": "fa-solid fa-igloo",
+        "Boats": "fa-solid fa-sailboat"
+    }; %>
+    <% const filterUrl = (selectedCategory) => {
+        const params = new URLSearchParams();
+        if (selectedCategory) params.set("category", selectedCategory);
+        if (location) params.set("location", location);
+        if (country) params.set("country", country);
+        if (minPrice) params.set("minPrice", minPrice);
+        if (maxPrice) params.set("maxPrice", maxPrice);
+        if (minRating) params.set("minRating", minRating);
+        return `/listings?${params.toString()}`;
+    }; %>
+
+    <!-- ================= MOBILE FILTER TOGGLER ================= -->
+
+    <div class="filter-toggler">
+        <button class="filter-toggler-btn" type="button" data-bs-toggle="collapse" data-bs-target="#filters"
+            aria-expanded="false" aria-controls="filters">
+            <span class="filter-toggler-left">
+                <i class="fa-solid fa-sliders"></i>
+                Explore Categories
+            </span>
+            <i class="fa-solid fa-chevron-down filter-toggler-chevron"></i>
+        </button>
+    </div>
+
+
+    <!-- ================= FILTERS ================= -->
+
+    <div id="filters" class="collapse d-md-flex">
+
+        <div class="categories-scroll-wrapper">
+            <% ["Trending", ...categories].forEach(categoryName => { %>
+                <a href="<%= filterUrl(categoryName) %>"
+                    class="filter <%= category === categoryName ? 'active' : '' %>">
+                    <div>
+                        <i class="<%= categoryIcons[categoryName] %>"></i>
+                    </div>
+                    <p><%= categoryName %></p>
+                </a>
+            <% }) %>
+        </div>
+
+        <button class="category-filter-toggle" type="button" data-bs-toggle="collapse"
+            data-bs-target="#advanced-filters" aria-controls="advanced-filters" aria-label="Open filters"
+            title="Filters">
+            <i class="fa-solid fa-sliders"></i>
+            <span>Filters</span>
+        </button>
+
+        <!-- Tax Switch -->
+        <div class="filter-controls">
+            <div class="text-toggle">
+                <div class="form-check-reverse form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Display taxes</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form action="/listings" method="GET"
+        class="listing-filters collapse <%= country || minPrice || maxPrice || minRating ? 'show' : '' %>"
+        id="advanced-filters">
+
+        <div class="filter-panel-header">
+            <div class="filter-panel-title">
+                <i class="fa-solid fa-sliders"></i>
+                <strong>Filters</strong>
+            </div>
+            <button type="button" class="filter-close" data-bs-toggle="collapse" data-bs-target="#advanced-filters"
+                aria-label="Close filters">&times;</button>
+        </div>
+
+        <%- /* Location */ '' %>
+        <div class="filter-panel-section">
+            <label for="filter-location" class="filter-label">
+                <i class="fa-solid fa-location-dot"></i> Location
+            </label>
+            <input id="filter-location" type="search" name="location" value="<%= location %>"
+                class="form-control filter-input" placeholder="Search destination…">
+            <input id="filter-country" type="hidden" name="country" value="<%= country %>">
+        </div>
+
+        <%- /* Price Range Slider */ '' %>
+        <div class="filter-panel-section">
+            <label class="filter-label">
+                <i class="fa-solid fa-indian-rupee-sign"></i> Price range
+            </label>
+            <div class="price-range-display">
+                <span id="price-range-label">
+                    ₹<span id="price-min-display"><%= minPrice || 0 %></span>
+                    &ndash;
+                    ₹<span id="price-max-display"><%= maxPrice || 50000 %></span>
+                </span>
+            </div>
+            <div class="price-slider-wrapper">
+                <div class="price-slider-track">
+                    <div class="price-slider-range" id="price-slider-range"></div>
+                </div>
+                <input type="range" id="slider-min" class="price-slider" min="0" max="50000" step="500"
+                    value="<%= minPrice || 0 %>">
+                <input type="range" id="slider-max" class="price-slider" min="0" max="50000" step="500"
+                    value="<%= maxPrice || 50000 %>">
+            </div>
+            <input type="hidden" name="minPrice" id="minPrice-input" value="<%= minPrice %>">
+            <input type="hidden" name="maxPrice" id="maxPrice-input" value="<%= maxPrice %>">
+        </div>
+
+        <%- /* Category */ '' %>
+        <div class="filter-panel-section">
+            <label for="filter-category" class="filter-label">
+                <i class="fa-solid fa-tag"></i> Category
+            </label>
+            <select id="filter-category" name="category" class="form-select filter-input">
+                <option value="">All categories</option>
+                <% ["Trending", ...categories].forEach(categoryName => { %>
+                    <option value="<%= categoryName %>" <%= category === categoryName ? 'selected' : '' %>><%= categoryName %></option>
+                <% }) %>
+            </select>
+        </div>
+
+        <%- /* Rating */ '' %>
+        <div class="filter-panel-section">
+            <label for="min-rating" class="filter-label">
+                <i class="fa-solid fa-star"></i> Minimum rating
+            </label>
+            <select id="min-rating" name="minRating" class="form-select filter-input">
+                <option value="">Any rating</option>
+                <% [4, 3, 2, 1].forEach(rating => { %>
+                    <option value="<%= rating %>" <%= minRating === String(rating) ? 'selected' : '' %>>
+                        <%= "★".repeat(rating) %><%= "☆".repeat(5 - rating) %> &nbsp;<%= rating %>+
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+
+        <div class="filter-panel-actions">
+            <a href="/listings" class="filter-clear-btn">
+                <i class="fa-solid fa-rotate-left"></i> Clear all
+            </a>
+            <button type="submit" class="filter-apply-btn">
+                Show Results
+            </button>
+        </div>
+    </form>
+
+
+    <!-- ================= LISTINGS ================= -->
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 mt-1">
+        <% for(let listing of allListings){ %>
+            <div class="listing-link">
+                <div class="card col listing-card index-listing-card">
+                    <a href="/listings/<%= listing._id %>">
+                        <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image">
+                    </a>
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body">
+                        <div class="listing-title-row">
+                            <a href="/listings/<%= listing._id %>" class="listing-card-link">
+                                <b><%= listing.title %></b>
+                            </a>
+                            <% if (currUser) { %>
+                                <form method="POST" action="/listings/<%= listing._id %>/wishlist" class="wishlist-form">
+                                    <button type="submit" class="wishlist-btn" aria-label="Toggle wishlist">
+                                        <%= currUser.wishlist && currUser.wishlist.some(savedId => savedId.equals(listing._id)) ? '♥' : '♡' %>
+                                    </button>
+                                </form>
+                            <% } %>
+                        </div>
+                        <a href="/listings/<%= listing._id %>" class="listing-card-link">
+                        <p class="card-text">
+                            <span class="listing-location"><%= listing.location %></span>
+                            <% if (listing.category) { %>
+                                <span class="listing-category"><%= listing.category %></span>
+                            <% } %>
+                            <br>
+                            <span class="price-amount">&#8377;<%= listing.price.toLocaleString("en-IN") %></span> <span class="price-unit">/ night</span>
+                                <i class="tax-info">&nbsp; &nbsp; +18% GST</i>
+                            <br>
+                            <span class="average-rating">
+                                <% if (listing.reviewCount > 0) { %>
+                                    ⭐ <%= listing.averageRating.toFixed(1) %> (<%= listing.reviewCount %> reviews)
+                                <% } else { %>
+                                    No reviews yet
+                                <% } %>
+                            </span>
+                        </p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+    </div>
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <script src="/js/script.js"></script>

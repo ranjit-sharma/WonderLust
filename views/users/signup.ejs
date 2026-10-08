@@ -1,0 +1,51 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="auth-page">
+        <div class="auth-card">
+            <div class="auth-heading">
+                <div class="auth-brand-logo">
+                    <i class="fa-regular fa-compass"></i> WonderLust
+                </div>
+                <h1>Join WonderLust</h1>
+                <p>From quiet escapes to unforgettable adventures, create an account and find a place that feels like yours.</p>
+            </div>
+            <form action="/signup" method="POST" class="needs-validation auth-form" novalidate>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input 
+                      name="username"
+                      id="username" 
+                      type="text"
+                      class="form-control"
+                      required
+                    />
+                    <div class="valid-feedback">Looks good!</div>
+                    <div class="invalid-feedback">Please enter the username</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input 
+                      name="email"
+                      id="email" 
+                      type="email"
+                      class="form-control"
+                      required
+                    />
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input 
+                      name="password"
+                      id="password" 
+                      type="password"
+                      class="form-control"
+                      required
+                    />
+                </div>
+                <button class="btn auth-submit" type="submit">Create account</button>
+            </form>
+            <p class="auth-switch">Already have an account? <a href="/login">Log in</a></p>
+        </div>
+    </div>

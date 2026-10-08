@@ -1,0 +1,160 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="profile-page">
+    <div class="profile-header mt-4 mb-4">
+        <p class="text-muted mb-1">Your dashboard</p>
+        <h2>Welcome, <%= profileUser.username %> 👋</h2>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-12 col-md-4">
+            <div class="profile-stat">
+                <span class="profile-stat-icon"><i class="fa-solid fa-house"></i></span>
+                <div>
+                    <strong><%= myListings.length %></strong>
+                    <span>My Listings</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="profile-stat">
+                <span class="profile-stat-icon"><i class="fa-solid fa-star"></i></span>
+                <div>
+                    <strong><%= myReviews.length %></strong>
+                    <span>My Reviews</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="profile-stat">
+                <span class="profile-stat-icon"><i class="fa-solid fa-heart"></i></span>
+                <div>
+                    <strong><%= wishlist.length %></strong>
+                    <span>Wishlist</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12 col-lg-8">
+            <section class="profile-section">
+                <div class="profile-section-heading">
+                    <h4>My Listings</h4>
+                    <a href="/listings/new" class="btn btn-sm add-btn">Add listing</a>
+                </div>
+                <% if (myListings.length === 0) { %>
+                    <p class="text-muted mb-0">You have not created any listings yet.</p>
+                <% } else { %>
+                    <div class="profile-list">
+                        <% myListings.forEach(listing => { %>
+                            <a href="/listings/<%= listing._id %>" class="profile-list-item">
+                                <span><%= listing.title %></span>
+                                <span class="text-muted">&#8377;<%= listing.price.toLocaleString("en-IN") %></span>
+                            </a>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </section>
+
+            <section class="profile-section mt-4">
+                <div class="profile-section-heading">
+                    <h4>My Reviews</h4>
+                </div>
+                <% if (myReviews.length === 0) { %>
+                    <p class="text-muted mb-0">You have not written any reviews yet.</p>
+                <% } else { %>
+                    <div class="profile-list">
+                        <% myReviews.forEach(item => { %>
+                            <div class="profile-review">
+                                <div>
+                                    <% if (item.listing) { %>
+                                        <a href="/listings/<%= item.listing._id %>"><b><%= item.listing.title %></b></a>
+                                    <% } else { %>
+                                        <b>Listing review</b>
+                                    <% } %>
+                                    <p class="mb-0 text-muted"><%= item.review.comment %></p>
+                                </div>
+                                <span class="profile-rating"><%= item.review.rating %>/5</span>
+                            </div>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </section>
+
+            <section class="profile-section mt-4">
+                <div class="profile-section-heading">
+                    <h4>My Bookings</h4>
+                </div>
+                <% if (myBookings.length === 0) { %>
+                    <p class="text-muted mb-0">You have not booked any stays yet.</p>
+                <% } else { %>
+                    <div class="profile-list">
+                        <% myBookings.forEach(booking => { %>
+                            <div class="profile-booking">
+                                <div>
+                                    <% if (booking.listing) { %>
+                                        <a href="/listings/<%= booking.listing._id %>"><b><%= booking.listing.title %></b></a>
+                                    <% } else { %>
+                                        <b>Listing no longer available</b>
+                                    <% } %>
+                                    <p class="mb-0 text-muted">
+                                        <%= booking.checkIn.toISOString().slice(0, 10) %>
+                                        to
+                                        <%= booking.checkOut.toISOString().slice(0, 10) %>
+                                        · <%= booking.guests %> guest<%= booking.guests === 1 ? '' : 's' %>
+                                    </p>
+                                </div>
+                                <div class="text-end">
+                                    <span class="profile-booking-status <%= booking.status === 'cancelled' ? 'cancelled' : '' %>">
+                                        <%= booking.status %>
+                                    </span>
+                                    <strong class="d-block">&#8377;<%= booking.totalPrice.toLocaleString("en-IN") %></strong>
+                                    <% if (booking.status !== "cancelled" && booking.listing) { %>
+                                        <form action="/listings/<%= booking.listing._id %>/bookings/<%= booking._id %>/cancel"
+                                            method="POST" class="mt-2">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm booking-action-btn">Cancel</button>
+                                        </form>
+                                    <% } else if (booking.status === "cancelled" && booking.listing) { %>
+                                        <form action="/listings/<%= booking.listing._id %>/bookings/<%= booking._id %>?_method=DELETE"
+                                            method="POST" class="mt-2">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm booking-action-btn">Delete</button>
+                                        </form>
+                                    <% } %>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </section>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <section class="profile-section">
+                <div class="profile-section-heading">
+                    <h4>Wishlist</h4>
+                    <a href="/wishlist" class="btn btn-sm btn-outline-danger">View all</a>
+                </div>
+                <% if (wishlist.length === 0) { %>
+                    <p class="text-muted mb-0">Your wishlist is empty.</p>
+                <% } else { %>
+                    <div class="profile-list">
+                        <% wishlist.slice(0, 5).forEach(listing => { %>
+                            <a href="/listings/<%= listing._id %>" class="profile-list-item">
+                                <span><i class="fa-solid fa-heart profile-heart"></i> <%= listing.title %></span>
+                            </a>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </section>
+
+            <section class="profile-section mt-4">
+                <h4>Profile Settings</h4>
+                <div class="profile-settings">
+                    <p><span>Username</span><b><%= profileUser.username %></b></p>
+                    <p><span>Email</span><b><%= profileUser.email %></b></p>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

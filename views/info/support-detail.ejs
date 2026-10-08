@@ -1,0 +1,20 @@
+<% layout("layouts/boilerplate") %>
+
+<main class="info-page">
+    <section class="info-hero">
+        <span class="info-icon"><i class="fa-solid <%= page.icon %>"></i></span>
+        <p class="info-eyebrow"><%= page.eyebrow %></p>
+        <h1><%= page.title %></h1>
+        <p><%= page.summary %></p>
+    </section>
+
+    <section class="info-card support-detail-card">
+        <% page.sections.forEach(section => { %>
+            <div class="support-detail-section">
+                <h2><%= section[0] %></h2>
+                <p><%= section[1] %></p>
+            </div>
+        <% }) %>
+        <a href="/help" class="btn info-primary-btn">Visit Help Center</a>
+    </section>
+</main>

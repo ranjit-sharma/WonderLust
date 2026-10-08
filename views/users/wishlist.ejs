@@ -1,0 +1,57 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="wishlist-page">
+    <div class="wishlist-heading">
+        <div>
+            <p class="wishlist-eyebrow">Places you love</p>
+            <h1>My Wishlist</h1>
+            <p class="wishlist-subtitle">Keep your favorite stays close for your next escape.</p>
+        </div>
+        <a href="/listings" class="btn wishlist-explore-btn">Explore stays</a>
+    </div>
+
+    <% if (listings.length === 0) { %>
+        <div class="wishlist-empty">
+            <i class="fa-regular fa-heart"></i>
+            <h2>Your wishlist is waiting</h2>
+            <p>Save a listing with the heart icon and it will appear here.</p>
+            <a href="/listings" class="btn wishlist-explore-btn">Find a stay</a>
+        </div>
+    <% } else { %>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-1">
+            <% listings.forEach(listing => { %>
+                <div class="listing-link">
+                    <div class="card col listing-card index-listing-card">
+                        <a href="/listings/<%= listing._id %>">
+                            <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>">
+                        </a>
+                        <div class="card-img-overlay"></div>
+                        <div class="card-body">
+                            <div class="listing-title-row">
+                                <a href="/listings/<%= listing._id %>" class="listing-card-link">
+                                    <b><%= listing.title %></b>
+                                </a>
+                                <form method="POST" action="/listings/<%= listing._id %>/wishlist" class="wishlist-form">
+                                    <button type="submit" class="wishlist-btn" aria-label="Remove from wishlist"
+                                        title="Remove from wishlist">♥</button>
+                                </form>
+                            </div>
+                            <a href="/listings/<%= listing._id %>" class="listing-card-link">
+                                <p class="card-text">
+                                    <span class="listing-location"><%= listing.location %></span>
+                                    <% if (listing.category) { %>
+                                        <span class="listing-category"><%= listing.category %></span>
+                                    <% } %>
+                                    <br>
+                                    <span class="price-amount">&#8377;<%= listing.price.toLocaleString("en-IN") %></span> <span class="price-unit">/ night</span>
+                                    <br>
+                                    <span class="average-rating">Saved to your wishlist</span>
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+</div>

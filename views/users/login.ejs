@@ -1,0 +1,38 @@
+<% layout("layouts/boilerplate") %>
+
+ <div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-heading">
+            <div class="auth-brand-logo">
+                <i class="fa-regular fa-compass"></i> WonderLust
+            </div>
+            <h1>Welcome back</h1>
+            <p>Your next great adventure awaits. Log in to unlock exclusive stays and connect with hosts around the world.</p>
+        </div>
+        <form action="/login" method="POST" class="needs-validation auth-form" novalidate>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                    <input 
+                      name="username"
+                      id="username"
+                      type="text"
+                      class="form-control"
+                      required
+                    />
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                    <input 
+                      name="password"
+                      id="password" 
+                      type="password"
+                      class="form-control"
+                      required
+                    />
+            </div>
+            <button class="btn auth-submit" type="submit">Login</button>
+        </form>
+        <p class="auth-switch">New to WonderLust? <a href="/signup">Create an account</a></p>
+    </div>
+</div>

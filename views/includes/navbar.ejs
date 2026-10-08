@@ -1,0 +1,90 @@
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/listings" aria-label="WonderLust home">
+      <i class="fa-regular fa-compass"></i>
+      <span>WonderLust</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav ms-auto search-nav">
+        <form class="d-flex search-form" action="/listings" method="GET" role="search">
+          <% if (typeof category !== "undefined" && category) { %>
+            <input type="hidden" name="category" value="<%= category %>">
+          <% } %>
+          <% if (typeof country !== "undefined" && country) { %>
+            <input type="hidden" name="country" value="<%= country %>">
+          <% } %>
+          <% if (typeof minPrice !== "undefined" && minPrice) { %>
+            <input type="hidden" name="minPrice" value="<%= minPrice %>">
+          <% } %>
+          <% if (typeof maxPrice !== "undefined" && maxPrice) { %>
+            <input type="hidden" name="maxPrice" value="<%= maxPrice %>">
+          <% } %>
+          <% if (typeof minRating !== "undefined" && minRating) { %>
+            <input type="hidden" name="minRating" value="<%= minRating %>">
+          <% } %>
+          <input class="form-control search-inp" type="search" name="q"
+            value="<%= typeof q !== 'undefined' ? q : (typeof location !== 'undefined' ? location : '') %>" placeholder="Search anywhere...">
+          <button class="btn search-btn" type="submit" aria-label="Search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </form>
+      </div>
+
+      <div class="navbar-nav ms-auto navbar-actions">
+        <a class="nav-link host-link" href="/listings/new">Become a host</a>
+        <div class="nav-item dropdown account-menu">
+          <button class="btn account-profile" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+            aria-label="Open account menu">
+            <i class="fa-regular fa-user"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end account-dropdown">
+            <% if(currUser){ %>
+              <li><a class="dropdown-item" href="/profile"><i class="fa-regular fa-user"></i> Profile</a></li>
+              <li><a class="dropdown-item" href="/wishlist"><i class="fa-regular fa-heart"></i> My Wishlist</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/logout">Log out</a></li>
+            <% } else { %>
+              <li><a class="dropdown-item" href="/login">Log in or sign up</a></li>
+            <% } %>
+          </ul>
+        </div>
+        <div class="nav-item dropdown menu-dropdown-wrapper">
+          <button class="btn navbar-menu-button" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+            aria-expanded="false" aria-label="Open navigation menu">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end account-dropdown menu-dropdown">
+            <li><a class="dropdown-item" href="/listings"><i class="fa-solid fa-compass"></i> Explore stays</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li class="host-promo">
+              <a class="dropdown-item" href="/listings/new">
+                <span>
+                  <strong>Become a host</strong>
+                  <small>It's easy to start hosting and earn extra income.</small>
+                </span>
+                <i class="fa-solid fa-person-walking-luggage"></i>
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/refer-host">Refer a host</a></li>
+            <li><a class="dropdown-item" href="/co-hosts">Find a co-host</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/help"><i class="fa-regular fa-circle-question"></i> Help Centre</a></li>
+            <li><a class="dropdown-item" href="/about"><i class="fa-solid fa-circle-info"></i> About WonderLust</a></li>
+            <li>
+              <button class="dropdown-item theme-menu-toggle" type="button" id="theme-toggle"
+                aria-label="Switch to dark mode">
+                <i class="fa-solid fa-moon"></i>
+                <span>Dark mode</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

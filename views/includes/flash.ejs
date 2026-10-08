@@ -1,0 +1,15 @@
+<% if (success && success.length) { %>
+    <div class="flash-toast flash-success temporary-alert" role="alert">
+        <i class="fa-solid fa-circle-check flash-icon"></i>
+        <span class="flash-msg"><%= success %></span>
+        <button type="button" class="flash-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
+    </div>
+<% } %>
+
+<% if (error && error.length) { %>
+    <div class="flash-toast flash-error temporary-alert" role="alert">
+        <i class="fa-solid fa-circle-exclamation flash-icon"></i>
+        <span class="flash-msg"><%= error %></span>
+        <button type="button" class="flash-close" data-bs-dismiss="alert" aria-label="Close">&times;</button>
+    </div>
+<% } %>
