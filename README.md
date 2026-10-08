@@ -70,7 +70,7 @@ A modern full-stack travel and staycation accommodation web application inspired
 ## 🌐 Live Application
 
 **Live Demo:**  
-[https://wonderlust-1tk1.onrender.com/](https://wonderlust-yppn.onrender.com/)
+https://wonderlust-yppn.onrender.com
 
 **GitHub Repository:**  
 https://github.com/ranjit-sharma/WonderLust
@@ -851,7 +851,7 @@ https://github.com/ranjit-sharma
 
 ### Project Repository
 
-[https://github.com/ranjit-sharma/MajorProject](https://github.com/ranjit-sharma/WonderLust)
+https://github.com/ranjit-sharma/WonderLust
 
 ---
 
