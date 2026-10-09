@@ -69,19 +69,11 @@ A modern full-stack travel and staycation accommodation web application inspired
 
 ## 🌐 Live Application
 
-**Live Demo:**  
+**Live:**  
 https://wonderlust-yppn.onrender.com
 
 **GitHub Repository:**  
 https://github.com/ranjit-sharma/WonderLust
-
-The deployed root URL redirects to the main listings page:
-
-```text
-https://wonderlust-1tk1.onrender.com/
-                    ↓
-                /listings
-```
 
 ---
 
