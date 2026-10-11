@@ -132,17 +132,6 @@ const sampleListings = [
     country: "United States",
   },
   {
-    title: "Riverside Retreat",
-    description: "Spend your vacation beside a peaceful river surrounded by nature.",
-    image: {
-      filename: "listingimage",
-      url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
-    },
-    price: 1600,
-    location: "Bend",
-    country: "United States",
-  },
-  {
     title: "Modern Beach House",
     description: "A stylish beach house with spacious rooms and incredible ocean views.",
     image: {
