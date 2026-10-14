@@ -189,7 +189,7 @@ A user cannot edit or delete another user's listing.
 Complete CRUD functionality:
 
 ```text
-Create → Read → Update → Delete
+Create → Read → Update → Delete.
 ```
 
 Listing information includes:
