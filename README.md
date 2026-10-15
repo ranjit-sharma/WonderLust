@@ -77,7 +77,7 @@ https://github.com/ranjit-sharma/WonderLust
 
 ---
 
-## 📖 Table of Contents
+## 📖 Table of Contents.
 
 - [About the Project](#-about-the-project)
 - [What Users Can Do](#-what-users-can-do)
