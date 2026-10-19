@@ -303,7 +303,7 @@ Application ────────┤
 
 # 🛠️ Technology Stack
 
-## Core Backend
+## Core Backend.
 
 - **Node.js**
 - **Express.js 5**
