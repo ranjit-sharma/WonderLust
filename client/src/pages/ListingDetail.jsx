@@ -252,7 +252,7 @@ export default function ListingDetail() {
           </Reveal>
 
           {/* Small screens: the booking card sits in the page flow; wide screens: sticky sidebar */}
-          {!wide && bookingCard}
+          {!wide && <div className="max-w-xl mx-auto w-full">{bookingCard}</div>}
 
           <Reveal className="border-t border-neutral-200 pt-10 dark:border-neutral-800">
             <div className="mb-4 flex flex-wrap items-end justify-between gap-2">

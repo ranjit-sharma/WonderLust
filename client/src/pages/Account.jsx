@@ -307,7 +307,7 @@ export function Profile() {
     <div className="container-page py-5 sm:py-10">
       <PageHeader eyebrow="Your dashboard" title={`Welcome, ${user.username || authUser?.username || "Guest"} 👋`} />
 
-      <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-4">
         {stats.map((s, i) => (
           <motion.div
             key={s.label}
@@ -328,7 +328,7 @@ export function Profile() {
         ))}
       </div>
 
-      <div className="mt-5 sm:mt-6 grid gap-5 sm:gap-6 lg:grid-cols-[1fr_340px]">
+      <div className="mt-5 sm:mt-6 grid gap-5 sm:gap-6 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_340px]">
         <div className="min-w-0 space-y-5 sm:space-y-6">
           {/* Host Reservations Section */}
           {isHost && (
@@ -485,7 +485,7 @@ export function Profile() {
               <p className="text-neutral-500 text-xs sm:text-sm">Your wishlist is empty.</p>
             ) : (
               <>
-                <ul className="grid grid-cols-2 gap-2 sm:grid-cols-1 sm:gap-3">
+                <ul className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-1 sm:gap-3">
                   {visibleWishlist.map((l) => (
                     <li key={l._id} className="min-w-0">
                       <Link to={`/listings/${l._id}`} className="group flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 rounded-xl border border-neutral-100 p-2 sm:border-0 sm:p-0 dark:border-neutral-800">

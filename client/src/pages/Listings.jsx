@@ -23,7 +23,7 @@ function Hero() {
         transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_30%_45%_at_25%_50%,rgb(254_66_77/0.13),transparent_70%),radial-gradient(ellipse_30%_45%_at_55%_40%,rgb(139_92_246/0.11),transparent_70%),radial-gradient(ellipse_25%_40%_at_80%_60%,rgb(14_165_233/0.10),transparent_70%)]"
       />
-      <h1 className="text-3xl leading-[1.08] font-extrabold tracking-tight [perspective:800px] sm:text-4xl lg:text-[2.6rem] lg:whitespace-nowrap xl:text-[3.25rem] 2xl:text-6xl">
+      <h1 className="text-3xl leading-[1.08] font-extrabold tracking-tight [perspective:800px] sm:text-4xl lg:text-[2.6rem] xl:text-[3.25rem] 2xl:text-6xl">
         {words.map((word, i) => (
           <motion.span
             key={i}
@@ -42,7 +42,7 @@ function Hero() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.5, ease }}
-        className="mt-4 max-w-none text-neutral-500 sm:text-lg md:whitespace-nowrap dark:text-neutral-400"
+        className="mt-4 max-w-2xl text-neutral-500 sm:text-lg dark:text-neutral-400"
       >
         Stays with character, welcoming hosts, and destinations that turn ordinary trips into stories worth telling.
       </motion.p>
@@ -185,7 +185,8 @@ function TaxSwitch({ checked, onChange, className }) {
   return (
     <label className={`pill cursor-pointer has-focus-visible:ring-4 has-focus-visible:ring-brand-500/25 ${checked ? "pill-active" : ""} ${className}`}>
       <BadgePercent className={`size-4 transition-colors duration-300 ${checked ? "text-brand-500" : "text-neutral-500"}`} />
-      <span>Show prices with GST</span>
+      <span className="hidden xl:inline">Show prices with GST</span>
+      <span className="xl:hidden">Incl. GST</span>
       <input type="checkbox" className="sr-only" checked={checked} onChange={(e) => onChange(e.target.checked)} />
       <span
         className={`relative ml-1 h-6 w-11 shrink-0 rounded-full transition-colors duration-300 ease-smooth ${

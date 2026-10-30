@@ -520,7 +520,7 @@ export default function Navbar() {
     >
       <div className="container-wide flex flex-wrap items-center gap-x-4 gap-y-3 py-3 md:flex-nowrap md:py-4">
         <Logo clickable={true} />
-        <SearchBar className="order-last w-full md:order-none md:mx-auto md:max-w-md lg:max-w-lg" />
+        <SearchBar className="order-last w-full md:order-none md:mx-auto md:max-w-xs lg:max-w-md xl:max-w-lg" />
         <nav className="ml-auto flex items-center gap-1 sm:gap-2 md:ml-0">
           <NavLink
             to="/listings/new"
