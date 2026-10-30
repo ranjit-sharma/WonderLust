@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router";
 import { MotionConfig } from "motion/react";
 import { ToastProvider } from "./lib/toast.jsx";
 import { AuthProvider } from "./lib/auth.jsx";
+import { ErrorBoundary } from "./components/ErrorBoundary.jsx";
 import App from "./App.jsx";
 import "./index.css";
 
@@ -12,11 +13,13 @@ createRoot(document.getElementById("root")).render(
     {/* reducedMotion="never" ensures animations always play smoothly */}
     <MotionConfig reducedMotion="never">
       <BrowserRouter>
-        <ToastProvider>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </ToastProvider>
+        <ErrorBoundary>
+          <ToastProvider>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </ToastProvider>
+        </ErrorBoundary>
       </BrowserRouter>
     </MotionConfig>
   </StrictMode>,

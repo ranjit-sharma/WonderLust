@@ -5,6 +5,7 @@ import { useAuth } from "./lib/auth.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import { PageLoader, ease } from "./components/ui.jsx";
+import { ErrorBoundary } from "./components/ErrorBoundary.jsx";
 import Listings from "./pages/Listings.jsx";
 import ListingDetail from "./pages/ListingDetail.jsx";
 import ListingForm from "./pages/ListingForm.jsx";
@@ -56,32 +57,34 @@ export default function App() {
         transition={{ duration: 0.5, ease }}
         className="flex-1"
       >
-        <Routes>
-          <Route path="/" element={<Navigate to="/listings" replace />} />
-          <Route path="/listings" element={<Listings />} />
-          <Route path="/listings/new" element={<RequireAuth><ListingForm /></RequireAuth>} />
-          <Route path="/listings/:id" element={<ListingDetail />} />
-          <Route path="/listings/:id/edit" element={<RequireAuth><ListingForm /></RequireAuth>} />
-          <Route path="/booking-confirmed" element={<BookingConfirmation />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
-          <Route path="/wishlist" element={<RequireAuth><Wishlist /></RequireAuth>} />
-          <Route path="/about" element={<About />} />
-          <Route path="/co-hosts" element={<CoHosts />} />
-          <Route path="/refer-host" element={<ReferHost />} />
-          <Route path="/help" element={<Help />} />
-          <Route path="/help-center" element={<Navigate to="/help" replace />} />
-          <Route path="/questions" element={<Questions />} />
-          <Route path="/q-and-a" element={<Navigate to="/questions" replace />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/feedback" element={<Feedback />} />
-          <Route path="/support/neighbourhood-concern" element={<NeighbourhoodConcern />} />
-          <Route path="/support/:slug" element={<SupportDetail />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-    </motion.main>
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={<Navigate to="/listings" replace />} />
+            <Route path="/listings" element={<Listings />} />
+            <Route path="/listings/new" element={<RequireAuth><ListingForm /></RequireAuth>} />
+            <Route path="/listings/:id" element={<ListingDetail />} />
+            <Route path="/listings/:id/edit" element={<RequireAuth><ListingForm /></RequireAuth>} />
+            <Route path="/booking-confirmed" element={<BookingConfirmation />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
+            <Route path="/wishlist" element={<RequireAuth><Wishlist /></RequireAuth>} />
+            <Route path="/about" element={<About />} />
+            <Route path="/co-hosts" element={<CoHosts />} />
+            <Route path="/refer-host" element={<ReferHost />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/help-center" element={<Navigate to="/help" replace />} />
+            <Route path="/questions" element={<Questions />} />
+            <Route path="/q-and-a" element={<Navigate to="/questions" replace />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/feedback" element={<Feedback />} />
+            <Route path="/support/neighbourhood-concern" element={<NeighbourhoodConcern />} />
+            <Route path="/support/:slug" element={<SupportDetail />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </ErrorBoundary>
+      </motion.main>
       <Footer />
     </div>
   );

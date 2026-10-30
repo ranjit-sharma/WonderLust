@@ -54,6 +54,7 @@ const statusStyles = {
 };
 
 function BookingRow({ booking, onCancel, onDelete }) {
+  if (!booking) return null;
   const listing = booking?.listing;
   return (
     <motion.li
@@ -111,6 +112,7 @@ function BookingRow({ booking, onCancel, onDelete }) {
 }
 
 function HostBookingRow({ booking, onCancel, onDelete }) {
+  if (!booking) return null;
   const listing = booking?.listing;
   const guest = booking?.user;
   const nights = nightsBetween(booking?.checkIn, booking?.checkOut);
@@ -224,6 +226,7 @@ export function Profile() {
   const hostBookings = Array.isArray(data?.hostBookings) ? data.hostBookings : [];
 
   const initialListingCount = isDesktop ? 3 : 2;
+  const initialCount = initialListingCount;
 
   // 2 reservations shown initially, rest in show/view options
   const visibleHostBookings = showAllHostBookings ? hostBookings : hostBookings.slice(0, 2);
@@ -419,7 +422,7 @@ export function Profile() {
                     {visibleListings.map((l, i) => <ListingCard key={l._id} listing={l} index={i} />)}
                   </AnimatePresence>
                 </div>
-                {listings.length > initialCount && (
+                {listings.length > initialListingCount && (
                   <div className="mt-4 pt-1">
                     <button
                       type="button"
@@ -452,7 +455,7 @@ export function Profile() {
                     </li>
                   ))}
                 </ul>
-                {validReviews.length > initialCount && (
+                {validReviews.length > initialListingCount && (
                   <div className="mt-4 pt-1">
                     <button
                       type="button"

@@ -7,7 +7,8 @@ import SmoothImage from "./SmoothImage.jsx";
 import { ease, Rating } from "./ui.jsx";
 
 export default function ListingCard({ listing, index = 0, showTax = false, onWishlistChange }) {
-  const price = showTax ? listing.price * (1 + GST_RATE) : listing.price;
+  if (!listing) return null;
+  const price = showTax ? (Number(listing.price) || 0) * (1 + GST_RATE) : (Number(listing.price) || 0);
 
   return (
     <motion.article
