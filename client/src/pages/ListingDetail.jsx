@@ -101,23 +101,29 @@ function ReviewCard({ review, canDelete, onDelete }) {
         {review.comment}
       </p>
 
-      {(isClamped || (!expanded && review.comment?.length > 130)) && (
-        <button
-          type="button"
-          onClick={() => setExpanded((prev) => !prev)}
-          className="mt-2 self-start cursor-pointer text-sm font-semibold text-neutral-900 underline underline-offset-4 transition hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-300"
-        >
-          {expanded ? "Show less" : "Show more"}
-        </button>
-      )}
+      {((isClamped || (!expanded && review.comment?.length > 130)) || canDelete) && (
+        <div className="mt-3 flex items-center justify-between gap-3 pt-1">
+          <div>
+            {(isClamped || (!expanded && review.comment?.length > 130)) && (
+              <button
+                type="button"
+                onClick={() => setExpanded((prev) => !prev)}
+                className="cursor-pointer text-sm font-semibold text-neutral-900 underline underline-offset-4 transition hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-300"
+              >
+                {expanded ? "Show less" : "Show more"}
+              </button>
+            )}
+          </div>
 
-      {canDelete && (
-        <button
-          onClick={onDelete}
-          className="mt-4 inline-flex items-center gap-1.5 self-start text-sm font-semibold text-brand-600 hover:underline dark:text-brand-400"
-        >
-          <Trash2 className="size-4" /> Delete review
-        </button>
+          {canDelete && (
+            <button
+              onClick={onDelete}
+              className="ml-auto inline-flex items-center gap-1.5 cursor-pointer text-sm font-semibold text-brand-600 hover:underline dark:text-brand-400"
+            >
+              <Trash2 className="size-4" /> Delete review
+            </button>
+          )}
+        </div>
       )}
     </motion.article>
   );
