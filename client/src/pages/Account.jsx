@@ -56,35 +56,51 @@ const statusStyles = {
 function BookingRow({ booking, onCancel, onDelete }) {
   const listing = booking?.listing;
   return (
-    <motion.li layout exit={{ opacity: 0, x: -20 }} className="flex flex-col gap-3.5 sm:gap-4 rounded-card border border-neutral-200 p-3.5 sm:p-4 sm:flex-row sm:items-center dark:border-neutral-800">
-      {listing?.image?.url && (
-        <img
-          src={imageUrl(listing.image.url, 320)}
-          alt=""
-          className="h-36 w-full rounded-xl object-cover sm:h-20 sm:w-28 shrink-0 bg-neutral-100 dark:bg-neutral-800"
-        />
-      )}
-      <div className="min-w-0 flex-1">
-        {listing?._id ? (
-          <Link to={`/listings/${listing._id}`} className="font-bold text-sm sm:text-base hover:underline line-clamp-1">
-            {listing.title || "Listing"}
-          </Link>
-        ) : (
-          <b className="text-sm sm:text-base">Listing no longer available</b>
+    <motion.li
+      layout
+      exit={{ opacity: 0, x: -20 }}
+      className="flex flex-col justify-between gap-2.5 sm:gap-3.5 rounded-xl sm:rounded-card border border-neutral-200 bg-white p-2.5 sm:p-4 shadow-xs dark:border-neutral-800 dark:bg-neutral-900/60"
+    >
+      <div className="space-y-2">
+        {listing?.image?.url && (
+          <img
+            src={imageUrl(listing.image.url, 320)}
+            alt=""
+            className="aspect-[16/10] w-full rounded-lg sm:rounded-xl object-cover bg-neutral-100 dark:bg-neutral-800 shrink-0"
+          />
         )}
-        <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
-          {formatDate(booking?.checkIn)} → {formatDate(booking?.checkOut)} · {booking?.guests || 1} guest{(booking?.guests || 1) === 1 ? "" : "s"}
-        </p>
+        <div className="min-w-0 space-y-1">
+          <div className="flex items-start justify-between gap-1.5">
+            {listing?._id ? (
+              <Link to={`/listings/${listing._id}`} className="font-bold text-xs sm:text-base hover:underline line-clamp-1 min-w-0 flex-1">
+                {listing.title || "Listing"}
+              </Link>
+            ) : (
+              <b className="text-xs sm:text-base min-w-0 flex-1">Listing unavailable</b>
+            )}
+            <span className={`rounded-full px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-bold capitalize shrink-0 ${statusStyles[booking?.status] || statusStyles.pending}`}>
+              {booking?.status || "pending"}
+            </span>
+          </div>
+          {listing && (
+            <p className="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 truncate">
+              {[listing.location, listing.country].filter(Boolean).join(", ")}
+            </p>
+          )}
+          <p className="text-[10px] sm:text-xs text-neutral-600 dark:text-neutral-300 pt-0.5">
+            {formatDate(booking?.checkIn)} → {formatDate(booking?.checkOut)} · {booking?.guests || 1} guest{(booking?.guests || 1) === 1 ? "" : "s"}
+          </p>
+        </div>
       </div>
-      <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
-        <span className={`rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-bold capitalize ${statusStyles[booking?.status] || statusStyles.pending}`}>
-          {booking?.status || "pending"}
-        </span>
-        <strong className="text-sm sm:text-base">{formatPrice(booking?.totalPrice)}</strong>
+
+      <div className="flex flex-wrap items-center justify-between gap-1.5 border-t border-neutral-100 pt-2 text-xs dark:border-neutral-800">
+        <strong className="text-xs sm:text-base font-extrabold text-neutral-900 dark:text-white">
+          {formatPrice(booking?.totalPrice)}
+        </strong>
         {listing?._id && (
           <button
             onClick={booking?.status === "cancelled" ? onDelete : onCancel}
-            className="text-xs sm:text-sm font-semibold text-brand-600 hover:underline sm:ml-0 dark:text-brand-400 cursor-pointer"
+            className="text-[10px] sm:text-xs font-semibold text-brand-600 hover:underline dark:text-brand-400 cursor-pointer"
           >
             {booking?.status === "cancelled" ? "Delete" : "Cancel"}
           </button>
@@ -103,99 +119,83 @@ function HostBookingRow({ booking, onCancel, onDelete }) {
     <motion.li
       layout
       exit={{ opacity: 0, x: -20 }}
-      className="flex flex-col gap-3.5 sm:gap-4 rounded-card border border-neutral-200 bg-white p-3.5 sm:p-5 shadow-xs dark:border-neutral-800 dark:bg-neutral-900/60"
+      className="flex flex-col justify-between gap-2.5 sm:gap-3.5 rounded-xl sm:rounded-card border border-neutral-200 bg-white p-2.5 sm:p-4 shadow-xs dark:border-neutral-800 dark:bg-neutral-900/60"
     >
-      <div className="flex flex-col gap-3.5 sm:gap-4 sm:flex-row sm:items-start">
+      <div className="space-y-2">
         {listing?.image?.url && (
           <img
             src={imageUrl(listing.image.url, 320)}
             alt=""
-            className="h-36 w-full rounded-xl object-cover sm:h-24 sm:w-32 shrink-0 bg-neutral-100 dark:bg-neutral-800"
+            className="aspect-[16/10] w-full rounded-lg sm:rounded-xl object-cover bg-neutral-100 dark:bg-neutral-800 shrink-0"
           />
         )}
-        <div className="min-w-0 flex-1 space-y-2">
-          <div className="flex flex-wrap items-start justify-between gap-2">
-            <div className="min-w-0 flex-1">
-              {listing?._id ? (
-                <Link to={`/listings/${listing._id}`} className="font-bold text-sm sm:text-base hover:underline line-clamp-1">
-                  {listing.title || "Listing"}
-                </Link>
-              ) : (
-                <b className="text-sm sm:text-base">Listing no longer available</b>
-              )}
-              {listing && (
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
-                  {[listing.location, listing.country].filter(Boolean).join(", ")}
-                </p>
-              )}
-            </div>
-            <span className={`rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-bold capitalize shrink-0 ${statusStyles[booking?.status] || statusStyles.pending}`}>
+        <div className="min-w-0 space-y-1">
+          <div className="flex items-start justify-between gap-1.5">
+            {listing?._id ? (
+              <Link to={`/listings/${listing._id}`} className="font-bold text-xs sm:text-base hover:underline line-clamp-1 min-w-0 flex-1">
+                {listing.title || "Listing"}
+              </Link>
+            ) : (
+              <b className="text-xs sm:text-base min-w-0 flex-1">Listing unavailable</b>
+            )}
+            <span className={`rounded-full px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-bold capitalize shrink-0 ${statusStyles[booking?.status] || statusStyles.pending}`}>
               {booking?.status || "pending"}
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm pt-0.5">
-            <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300 min-w-0">
-              <User className="size-3.5 sm:size-4 text-brand-500 shrink-0" />
-              <span className="truncate">
-                Guest: <strong className="text-neutral-900 dark:text-white">{guest?.username || "Guest"}</strong>
-              </span>
+          {listing && (
+            <p className="text-[10px] sm:text-xs text-neutral-500 dark:text-neutral-400 truncate">
+              {[listing.location, listing.country].filter(Boolean).join(", ")}
+            </p>
+          )}
+
+          <div className="pt-1 space-y-1 text-[10px] sm:text-xs text-neutral-700 dark:text-neutral-300">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <User className="size-3 text-brand-500 shrink-0" />
+              <span className="truncate">Guest: <strong className="text-neutral-900 dark:text-white">{guest?.username || "Guest"}</strong></span>
             </div>
             {guest?.email && (
-              <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300 min-w-0">
-                <Mail className="size-3.5 sm:size-4 text-brand-500 shrink-0" />
-                <a
-                  href={`mailto:${guest.email}`}
-                  title={`Email ${guest.email}`}
-                  className="truncate font-medium text-brand-600 hover:underline dark:text-brand-400"
-                >
+              <div className="flex items-center gap-1.5 min-w-0">
+                <Mail className="size-3 text-brand-500 shrink-0" />
+                <a href={`mailto:${guest.email}`} className="truncate text-brand-600 hover:underline dark:text-brand-400">
                   {guest.email}
                 </a>
               </div>
             )}
-            <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
-              <Calendar className="size-3.5 sm:size-4 text-brand-500 shrink-0" />
-              <span>
-                {formatDate(booking?.checkIn)} → {formatDate(booking?.checkOut)} ({nights} night{nights === 1 ? "" : "s"})
-              </span>
+            <div className="flex items-center gap-1.5">
+              <Calendar className="size-3 text-brand-500 shrink-0" />
+              <span className="truncate">{formatDate(booking?.checkIn)} → {formatDate(booking?.checkOut)} ({nights}n)</span>
             </div>
-            <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
-              <Users className="size-3.5 sm:size-4 text-brand-500 shrink-0" />
-              <span>
-                {booking?.guests || 1} guest{(booking?.guests || 1) === 1 ? "" : "s"}
-              </span>
+            <div className="flex items-center gap-1.5">
+              <Users className="size-3 text-brand-500 shrink-0" />
+              <span>{booking?.guests || 1} guest{(booking?.guests || 1) === 1 ? "" : "s"}</span>
             </div>
           </div>
 
           {booking?.specialRequests && (
-            <div className="mt-1.5 rounded-xl bg-neutral-50 p-2.5 text-xs text-neutral-600 dark:bg-neutral-800/80 dark:text-neutral-300 border border-neutral-100 dark:border-neutral-800">
-              <span className="font-semibold text-neutral-900 dark:text-neutral-100">Guest note: </span>
+            <div className="mt-1.5 rounded-lg bg-neutral-50 p-2 text-[10px] sm:text-xs text-neutral-600 dark:bg-neutral-800/80 dark:text-neutral-300 border border-neutral-100 dark:border-neutral-800 line-clamp-2">
+              <span className="font-semibold text-neutral-900 dark:text-neutral-100">Note: </span>
               "{booking.specialRequests}"
             </div>
           )}
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 border-t border-neutral-100 pt-3 text-xs sm:text-sm dark:border-neutral-800">
-        <span className="text-[11px] sm:text-xs text-neutral-400">
-          Reserved on {formatDate(booking?.createdAt)}
-        </span>
-        <div className="flex items-center gap-3 sm:gap-4 ml-auto sm:ml-0">
-          <p>
-            <span className="text-xs text-neutral-500 dark:text-neutral-400">Payout: </span>
-            <strong className="text-sm sm:text-base font-extrabold text-neutral-900 dark:text-neutral-100">
-              {formatPrice(booking?.totalPrice)}
-            </strong>
-          </p>
-          {listing?._id && (
-            <button
-              onClick={booking?.status === "cancelled" ? onDelete : onCancel}
-              className="text-xs sm:text-sm font-semibold text-brand-600 hover:underline dark:text-brand-400 cursor-pointer"
-            >
-              {booking?.status === "cancelled" ? "Delete record" : "Cancel booking"}
-            </button>
-          )}
+      <div className="flex flex-wrap items-center justify-between gap-1.5 border-t border-neutral-100 pt-2 text-xs dark:border-neutral-800">
+        <div>
+          <span className="text-[10px] text-neutral-400 block sm:inline">Payout </span>
+          <strong className="text-xs sm:text-base font-extrabold text-neutral-900 dark:text-neutral-100">
+            {formatPrice(booking?.totalPrice)}
+          </strong>
         </div>
+        {listing?._id && (
+          <button
+            onClick={booking?.status === "cancelled" ? onDelete : onCancel}
+            className="text-[10px] sm:text-xs font-semibold text-brand-600 hover:underline dark:text-brand-400 cursor-pointer"
+          >
+            {booking?.status === "cancelled" ? "Delete" : "Cancel"}
+          </button>
+        )}
       </div>
     </motion.li>
   );
@@ -211,6 +211,7 @@ export function Profile() {
   const [showAllTrips, setShowAllTrips] = useState(false);
   const [showAllListings, setShowAllListings] = useState(false);
   const [showAllReviews, setShowAllReviews] = useState(false);
+  const [showAllWishlist, setShowAllWishlist] = useState(false);
 
   if (error) return <div className="container-page py-16"><ErrorState error={error} onRetry={reload} /></div>;
   if (!data) return <PageLoader />;
@@ -222,14 +223,22 @@ export function Profile() {
   const bookings = Array.isArray(data?.bookings) ? data.bookings : [];
   const hostBookings = Array.isArray(data?.hostBookings) ? data.hostBookings : [];
 
-  const initialCount = isDesktop ? 3 : 2;
+  const initialListingCount = isDesktop ? 3 : 2;
 
-  const visibleHostBookings = showAllHostBookings ? hostBookings : hostBookings.slice(0, initialCount);
-  const visibleTrips = showAllTrips ? bookings : bookings.slice(0, initialCount);
-  const visibleListings = showAllListings ? listings : listings.slice(0, initialCount);
+  // 2 reservations shown initially, rest in show/view options
+  const visibleHostBookings = showAllHostBookings ? hostBookings : hostBookings.slice(0, 2);
+  const visibleTrips = showAllTrips ? bookings : bookings.slice(0, 2);
 
+  // listings: 3 on desktop, 2 on mobile
+  const visibleListings = showAllListings ? listings : listings.slice(0, initialListingCount);
+
+  // reviews: 3 on desktop, 2 on mobile
   const validReviews = reviews.filter((item) => item?.review);
-  const visibleReviews = showAllReviews ? validReviews : validReviews.slice(0, initialCount);
+  const visibleReviews = showAllReviews ? validReviews : validReviews.slice(0, initialListingCount);
+
+  // 4 wishlist items shown initially, rest in show/view options
+  const cleanWishlist = wishlist.filter(Boolean);
+  const visibleWishlist = showAllWishlist ? cleanWishlist : cleanWishlist.slice(0, 4);
 
   const bookingAction = async (booking, action, isHost = false) => {
     const verb = action === "cancel" ? "Cancel" : "Delete";
@@ -336,7 +345,7 @@ export function Profile() {
                 </p>
               ) : (
                 <>
-                  <ul className="space-y-3.5 sm:space-y-4">
+                  <ul className="grid grid-cols-2 gap-2.5 sm:gap-4">
                     <AnimatePresence>
                       {visibleHostBookings.map((b) => (
                         <HostBookingRow
@@ -348,7 +357,7 @@ export function Profile() {
                       ))}
                     </AnimatePresence>
                   </ul>
-                  {hostBookings.length > initialCount && (
+                  {hostBookings.length > 2 && (
                     <div className="mt-4 pt-1">
                       <button
                         type="button"
@@ -369,7 +378,7 @@ export function Profile() {
               <p className="text-neutral-500 text-xs sm:text-sm">You have not booked any stays yet.</p>
             ) : (
               <>
-                <ul className="space-y-3">
+                <ul className="grid grid-cols-2 gap-2.5 sm:gap-4">
                   <AnimatePresence>
                     {visibleTrips.map((b) => (
                       <BookingRow
@@ -381,7 +390,7 @@ export function Profile() {
                     ))}
                   </AnimatePresence>
                 </ul>
-                {bookings.length > initialCount && (
+                {bookings.length > 2 && (
                   <div className="mt-4 pt-1">
                     <button
                       type="button"
@@ -460,23 +469,50 @@ export function Profile() {
         </div>
 
         <div className="space-y-6">
-          <Section title="Wishlist" action={<Link to="/wishlist" className="text-xs sm:text-sm font-semibold underline-offset-4 hover:underline">View all</Link>}>
-            {wishlist.length === 0 ? (
+          <Section
+            title="Wishlist"
+            action={
+              <Link to="/wishlist" className="text-xs sm:text-sm font-semibold underline-offset-4 hover:underline">
+                View all ({cleanWishlist.length})
+              </Link>
+            }
+          >
+            {cleanWishlist.length === 0 ? (
               <p className="text-neutral-500 text-xs sm:text-sm">Your wishlist is empty.</p>
             ) : (
-              <ul className="space-y-3">
-                {wishlist.filter(Boolean).slice(0, initialCount).map((l) => (
-                  <li key={l._id}>
-                    <Link to={`/listings/${l._id}`} className="group flex items-center gap-3">
-                      <img src={imageUrl(l.image?.url, 160)} alt="" className="size-12 sm:size-14 rounded-xl object-cover transition group-hover:scale-105 bg-neutral-100 dark:bg-neutral-800 shrink-0" />
-                      <span className="min-w-0">
-                        <span className="block truncate text-sm font-semibold group-hover:underline">{l.title}</span>
-                        <span className="text-xs sm:text-sm text-neutral-500">{formatPrice(l.price)} / night</span>
-                      </span>
+              <>
+                <ul className="space-y-3">
+                  {visibleWishlist.map((l) => (
+                    <li key={l._id}>
+                      <Link to={`/listings/${l._id}`} className="group flex items-center gap-3">
+                        <img
+                          src={imageUrl(l.image?.url, 160)}
+                          alt=""
+                          className="size-12 sm:size-14 rounded-xl object-cover transition group-hover:scale-105 bg-neutral-100 dark:bg-neutral-800 shrink-0"
+                        />
+                        <span className="min-w-0">
+                          <span className="block truncate text-sm font-semibold group-hover:underline">{l.title}</span>
+                          <span className="text-xs sm:text-sm text-neutral-500">{formatPrice(l.price)} / night</span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                {cleanWishlist.length > 4 && (
+                  <div className="mt-3 pt-2 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={() => setShowAllWishlist((prev) => !prev)}
+                      className="cursor-pointer text-xs sm:text-sm font-semibold text-neutral-900 underline underline-offset-4 transition hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-300"
+                    >
+                      {showAllWishlist ? "Show less" : `Show all ${cleanWishlist.length} saved`}
+                    </button>
+                    <Link to="/wishlist" className="text-xs font-medium text-brand-600 hover:underline dark:text-brand-400">
+                      Full page →
                     </Link>
-                  </li>
-                ))}
-              </ul>
+                  </div>
+                )}
+              </>
             )}
           </Section>
 
