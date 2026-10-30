@@ -3,7 +3,6 @@ import { Link, NavLink, useLocation, useNavigate, useSearchParams } from "react-
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } from "motion/react";
 import {
   ArrowRight,
-  Compass,
   Heart,
   Info,
   LifeBuoy,
@@ -473,7 +472,6 @@ function AccountMenu() {
               </>
             )}
             {divider}
-            <MenuLink to="/listings" icon={Compass}>Explore stays</MenuLink>
             <Link
               to="/listings/new"
               role="menuitem"
