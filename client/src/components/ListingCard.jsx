@@ -33,11 +33,6 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
           {/* soft shade so the tag and heart read on bright photos */}
           <div className="absolute inset-x-0 top-0 h-20 bg-linear-to-b from-black/25 to-transparent" />
 
-          {listing.category && (
-            <span className="absolute top-3 left-3 max-w-[calc(100%-4rem)] truncate rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-neutral-800 shadow-sm backdrop-blur dark:bg-neutral-900/80 dark:text-neutral-100">
-              {listing.category}
-            </span>
-          )}
         </div>
 
         <div className="mt-3 px-1">
@@ -64,8 +59,18 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
           </p>
         </div>
       </Link>
-      <div className="absolute top-2 right-2">
-        <WishlistButton listingId={listing._id} onChange={onWishlistChange} />
+      {/* Top bar: category tag and wishlist button aligned on the same horizontal line */}
+      <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-center justify-between gap-2">
+        {listing.category ? (
+          <span className="pointer-events-auto max-w-[calc(100%-3rem)] truncate rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-neutral-800 shadow-sm backdrop-blur dark:bg-neutral-900/80 dark:text-neutral-100">
+            {listing.category}
+          </span>
+        ) : (
+          <span />
+        )}
+        <div className="pointer-events-auto">
+          <WishlistButton listingId={listing._id} onChange={onWishlistChange} />
+        </div>
       </div>
     </motion.article>
   );

@@ -63,7 +63,7 @@ export default function WishlistButton({ listingId, variant = "overlay", onChang
         aria-label={label}
         aria-pressed={saved}
         title={label}
-        className="grid size-10 place-items-center rounded-full transition hover:scale-110"
+        className="grid size-8 place-items-center rounded-full transition hover:scale-110"
       >
         {heart}
       </motion.button>
