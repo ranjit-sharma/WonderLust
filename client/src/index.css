@@ -101,9 +101,9 @@
 @utility pill-active {
   @apply border-brand-200 bg-brand-50 text-brand-700 hover:border-brand-300 dark:border-brand-500/40 dark:bg-brand-500/10 dark:text-brand-300;
 }
-/* Browse pages, navbar and footer use the full screen width, up to 110rem */
+/* Browse pages, navbar and footer use the full screen width, up to 110rem, maintaining 1 inch side gap */
 @utility container-wide {
-  @apply mx-auto w-full max-w-[110rem] px-4 sm:px-6 lg:px-10;
+  @apply mx-auto w-full max-w-[110rem] px-4 sm:px-6 md:px-[1in];
 }
 /* 2 cards per row on phones, up to 7 on large screens */
 @utility listing-grid {

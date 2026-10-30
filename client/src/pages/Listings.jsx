@@ -209,7 +209,7 @@ export default function Listings() {
     <div className="container-wide">
       <Hero />
 
-      <div className="z-30 -mx-4 mt-4 md:sticky md:top-[81px] border-b border-neutral-200 bg-white/90 px-4 backdrop-blur-xl sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10 dark:border-neutral-800 dark:bg-ink/90">
+      <div className="z-30 -mx-4 mt-4 md:sticky md:top-[81px] border-b border-neutral-200 bg-white/90 px-4 backdrop-blur-xl sm:-mx-6 sm:px-6 md:-mx-[1in] md:px-[1in] dark:border-neutral-800 dark:bg-ink/90">
         <div className="flex items-center gap-3 pt-2">
           <div className="min-w-0 flex-1">
             <CategoryBar categories={categories} active={category} onSelect={(c) => update({ category: c })} />
