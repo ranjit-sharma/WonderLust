@@ -97,7 +97,7 @@ function FooterCta() {
 
 export default function Footer() {
   return (
-    <footer className="mt-32 border-t border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950">
+    <footer className="mt-32 border-t border-neutral-200/80 bg-[#e3ebf4] dark:border-neutral-800 dark:bg-neutral-950">
       <div className="container-wide">
         <FooterCta />
 

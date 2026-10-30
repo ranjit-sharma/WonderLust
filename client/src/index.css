@@ -47,7 +47,13 @@
     -webkit-tap-highlight-color: transparent;
   }
   body {
-    @apply bg-white text-neutral-900 antialiased dark:bg-ink dark:text-neutral-100;
+    background-color: #ebf0f7;
+    color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+  }
+  .dark body {
+    background-color: #0b0b0f;
+    color: #f8fafc;
   }
   ::selection {
     @apply bg-brand-500 text-white;
