@@ -103,7 +103,7 @@ export default function Footer() {
 
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 py-14 sm:grid-cols-3 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
           <Reveal className="col-span-2 max-w-sm sm:col-span-3 lg:col-span-1">
-            <Logo />
+            <Logo clickable={false} />
             <p className="mt-4 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
               <strong className="text-neutral-900 dark:text-neutral-100">Some places you visit. Some places you remember.</strong>{" "}
               WonderLust helps you discover stays with character, welcoming hosts, and destinations that turn ordinary trips
