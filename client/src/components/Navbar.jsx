@@ -208,16 +208,33 @@ function SearchBar({ className = "" }) {
           placeholder="Search destinations, stays, categories…"
           aria-label="Search listings"
           autoComplete="off"
-          className="h-12 w-full rounded-full border border-neutral-200 bg-white pr-14 pl-5 text-sm shadow-card transition outline-none placeholder:text-neutral-400 hover:shadow-lift focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 focus:shadow-lift dark:border-neutral-800 dark:bg-neutral-900 dark:focus:border-brand-500/50"
+          className="h-12 w-full rounded-full border border-neutral-200 bg-white pr-20 pl-5 text-sm shadow-card transition outline-none placeholder:text-neutral-400 hover:shadow-lift focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 focus:shadow-lift dark:border-neutral-800 dark:bg-neutral-900 dark:focus:border-brand-500/50"
         />
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          type="submit"
-          aria-label="Search"
-          className="absolute top-1.5 right-1.5 grid size-9 place-items-center rounded-full bg-linear-to-br from-brand-500 to-brand-600 text-white shadow-sm"
-        >
-          <Search className="size-4" strokeWidth={2.6} />
-        </motion.button>
+
+        <div className="absolute top-1.5 right-1.5 flex items-center gap-1">
+          {q && (
+            <motion.button
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              whileTap={{ scale: 0.85 }}
+              type="button"
+              onClick={handleClear}
+              aria-label="Clear search"
+              className="grid size-9 place-items-center rounded-full text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-200 transition-colors"
+            >
+              <X className="size-4" strokeWidth={2.2} />
+            </motion.button>
+          )}
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            type="submit"
+            aria-label="Search"
+            className="grid size-9 place-items-center rounded-full bg-linear-to-br from-brand-500 to-brand-600 text-white shadow-sm"
+          >
+            <Search className="size-4" strokeWidth={2.6} />
+          </motion.button>
+        </div>
       </form>
 
       {/* Search Suggestions Dropdown */}
