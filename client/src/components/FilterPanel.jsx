@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { IndianRupee, MapPin, RotateCcw, SlidersHorizontal, Star, Tag, X } from "lucide-react";
+import { api } from "../lib/api.js";
 import { formatPrice } from "../lib/format.js";
 import SearchableSelect from "./SearchableSelect.jsx";
 import { categoryIcons } from "../lib/categories.js";
@@ -62,6 +63,67 @@ function Section({ icon: Icon, title, children }) {
 
 export default function FilterPanel({ open, onClose, params, categories, onApply }) {
   const [draft, setDraft] = useState({});
+  const [allListings, setAllListings] = useState([]);
+  const [showLocSuggestions, setShowLocSuggestions] = useState(false);
+  const locRef = useRef(null);
+
+  // Load existing listings for location suggestions
+  useEffect(() => {
+    let active = true;
+    api("/listings")
+      .then((data) => {
+        if (active && Array.isArray(data)) {
+          setAllListings(data);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // Close location suggestions when clicking outside
+  useEffect(() => {
+    if (!showLocSuggestions) return;
+    const onPointerDown = (e) => {
+      if (!locRef.current?.contains(e.target)) {
+        setShowLocSuggestions(false);
+      }
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [showLocSuggestions]);
+
+  // Matching location suggestions from existing listings (after >= 2 characters)
+  const locationSuggestions = useMemo(() => {
+    const locQuery = (draft.location || "").trim().toLowerCase();
+    if (locQuery.length < 2) return [];
+
+    const map = new Map();
+    allListings.forEach((l) => {
+      if (l.location) {
+        const full = [l.location, l.country].filter(Boolean).join(", ");
+        const loc = l.location.trim();
+        if (
+          loc.toLowerCase().includes(locQuery) ||
+          full.toLowerCase().includes(locQuery) ||
+          l.country?.toLowerCase().includes(locQuery)
+        ) {
+          if (!map.has(loc)) {
+            map.set(loc, {
+              location: loc,
+              full: full !== loc ? full : loc,
+              count: 1,
+            });
+          } else {
+            map.get(loc).count += 1;
+          }
+        }
+      }
+    });
+
+    return Array.from(map.values()).slice(0, 5);
+  }, [allListings, draft.location]);
   const desktop = useMediaQuery("(min-width: 768px)");
   const hidden = desktop ? { x: "100%" } : { y: "100%" };
 
@@ -129,13 +191,68 @@ export default function FilterPanel({ open, onClose, params, categories, onApply
 
             <div className="flex-1 overflow-y-auto px-6 pb-28">
               <Section icon={MapPin} title="Location">
-                <input
-                  type="search"
-                  className="field"
-                  placeholder="Search destination…"
-                  value={draft.location ?? ""}
-                  onChange={(e) => setDraft((d) => ({ ...d, location: e.target.value }))}
-                />
+                <div ref={locRef} className="relative">
+                  <input
+                    type="search"
+                    className="field"
+                    placeholder="Search destination…"
+                    value={draft.location ?? ""}
+                    onFocus={() => {
+                      if ((draft.location || "").trim().length >= 2) {
+                        setShowLocSuggestions(true);
+                      }
+                    }}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setDraft((d) => ({ ...d, location: val }));
+                      setShowLocSuggestions(val.trim().length >= 2);
+                    }}
+                    autoComplete="off"
+                  />
+
+                  {/* Location suggestions after 2 letters */}
+                  <AnimatePresence>
+                    {showLocSuggestions && locationSuggestions.length > 0 && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute left-0 right-0 top-full z-50 mt-1.5 overflow-hidden rounded-2xl border border-neutral-200/90 bg-white p-1.5 shadow-lift backdrop-blur-xl dark:border-neutral-800 dark:bg-neutral-900"
+                      >
+                        <div className="px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+                          Matching Locations
+                        </div>
+                        <ul className="space-y-0.5">
+                          {locationSuggestions.map((item) => (
+                            <li key={item.location}>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setDraft((d) => ({ ...d, location: item.location }));
+                                  setShowLocSuggestions(false);
+                                }}
+                                className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                              >
+                                <div className="flex items-center gap-2.5 min-w-0">
+                                  <div className="grid size-7 shrink-0 place-items-center rounded-lg bg-neutral-100 text-brand-500 dark:bg-neutral-800">
+                                    <MapPin className="size-3.5" />
+                                  </div>
+                                  <span className="truncate font-medium text-neutral-900 dark:text-neutral-100">
+                                    {item.full}
+                                  </span>
+                                </div>
+                                <span className="ml-2 text-xs text-neutral-400 shrink-0">
+                                  {item.count} {item.count === 1 ? "stay" : "stays"}
+                                </span>
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </Section>
               <Section icon={IndianRupee} title="Price per night">
                 <PriceRange
