@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { AnimatePresence, animate, motion } from "motion/react";
-import { BadgePercent, ChevronLeft, ChevronRight, SearchX, SlidersHorizontal } from "lucide-react";
+import { BadgePercent, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, SearchX, SlidersHorizontal } from "lucide-react";
 import { getMeta } from "../lib/api.js";
 import { useApi } from "../lib/useApi.js";
+import { useMediaQuery } from "../lib/useMediaQuery.js";
 import { categoryIcons } from "../lib/categories.js";
 import ListingCard, { ListingCardSkeleton } from "../components/ListingCard.jsx";
 import FilterPanel from "../components/FilterPanel.jsx";
@@ -260,6 +261,22 @@ export default function Listings() {
   const [showTax, setShowTax] = useState(false);
   const { data: listings, error, loading, reload } = useApi(`/listings?${params}`);
 
+  // Dynamic responsive columns: 6 on desktop (xl), 4 on landscape tablet (lg), 3 on portrait tablet (md), 2 on mobile
+  const isXl = useMediaQuery("(min-width: 1280px)");
+  const isLg = useMediaQuery("(min-width: 1024px)");
+  const isMd = useMediaQuery("(min-width: 768px)");
+
+  const columns = isXl ? 6 : isLg ? 4 : isMd ? 3 : 2;
+  const initialListingCount = columns * 4; // Exactly 4 lines of listings across all views
+
+  const [showAll, setShowAll] = useState(false);
+  const gridTopRef = useRef(null);
+
+  // Reset showAll when filters or search query change
+  useEffect(() => {
+    setShowAll(false);
+  }, [params]);
+
   useEffect(() => {
     getMeta().then((m) => setCategories(m.categories)).catch(() => {});
   }, []);
@@ -279,6 +296,23 @@ export default function Listings() {
     setFiltersOpen(false);
     if (values === null) return setParams({});
     update(values);
+  };
+
+  const allListings = Array.isArray(listings) ? listings : [];
+  const visibleListings = showAll ? allListings : allListings.slice(0, initialListingCount);
+  const hasMore = allListings.length > initialListingCount;
+  const remainingCount = allListings.length - initialListingCount;
+
+  const handleToggleShow = () => {
+    if (showAll) {
+      setShowAll(false);
+      if (gridTopRef.current) {
+        const topOffset = gridTopRef.current.getBoundingClientRect().top + window.scrollY - 100;
+        window.scrollTo({ top: Math.max(0, topOffset), behavior: "smooth" });
+      }
+    } else {
+      setShowAll(true);
+    }
   };
 
   return (
@@ -336,14 +370,14 @@ export default function Listings() {
         </p>
       )}
 
-      <div className="mt-8">
+      <div ref={gridTopRef} className="mt-8 scroll-mt-28">
         {error ? (
           <ErrorState error={error} onRetry={reload} />
         ) : loading && !listings ? (
           <div className="listing-grid">
-            {Array.from({ length: 18 }, (_, i) => <ListingCardSkeleton key={i} />)}
+            {Array.from({ length: initialListingCount }, (_, i) => <ListingCardSkeleton key={i} />)}
           </div>
-        ) : listings.length === 0 ? (
+        ) : allListings.length === 0 ? (
           <EmptyState
             icon={SearchX}
             title="No stays match your search"
@@ -351,14 +385,43 @@ export default function Listings() {
             action={<button className="btn-dark" onClick={() => setParams({})}>Clear all filters</button>}
           />
         ) : (
-          <motion.div
-            animate={{ opacity: loading ? 0.5 : 1 }}
-            className="listing-grid"
-          >
-            {listings.map((listing, i) => (
-              <ListingCard key={listing._id} listing={listing} index={i} showTax={showTax} />
-            ))}
-          </motion.div>
+          <>
+            <motion.div
+              animate={{ opacity: loading ? 0.5 : 1 }}
+              className="listing-grid"
+            >
+              {visibleListings.map((listing, i) => (
+                <ListingCard key={listing._id} listing={listing} index={i} showTax={showTax} />
+              ))}
+            </motion.div>
+
+            {hasMore && (
+              <div className="mt-12 mb-8 flex flex-col items-center justify-center gap-3">
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleToggleShow}
+                  className="group inline-flex cursor-pointer items-center gap-2.5 rounded-full border border-neutral-300/80 bg-white px-7 py-3.5 text-sm font-semibold text-neutral-900 shadow-xs transition duration-300 ease-smooth hover:border-neutral-900 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:hover:border-neutral-500"
+                >
+                  {showAll ? (
+                    <>
+                      <span>Show less</span>
+                      <ChevronUp className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
+                    </>
+                  ) : (
+                    <>
+                      <span>View more ({remainingCount} more stay{remainingCount === 1 ? "" : "s"})</span>
+                      <ChevronDown className="size-4 transition-transform duration-300 group-hover:translate-y-0.5" />
+                    </>
+                  )}
+                </motion.button>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                  Showing {visibleListings.length} of {allListings.length} stays
+                </p>
+              </div>
+            )}
+          </>
         )}
       </div>
 
