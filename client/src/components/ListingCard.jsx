@@ -62,7 +62,7 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
       {/* Top bar: category tag and wishlist button aligned on the same horizontal line */}
       <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-center justify-between gap-2">
         {listing.category ? (
-          <span className="pointer-events-auto max-w-[calc(100%-3rem)] truncate rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-neutral-800 shadow-sm backdrop-blur dark:bg-neutral-900/80 dark:text-neutral-100">
+          <span className="pointer-events-auto inline-flex h-7 items-center max-w-[calc(100%-3rem)] truncate rounded-full bg-white/90 px-3 text-xs font-bold text-neutral-800 shadow-sm backdrop-blur dark:bg-neutral-900/80 dark:text-neutral-100">
             {listing.category}
           </span>
         ) : (
