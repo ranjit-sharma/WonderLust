@@ -27,7 +27,7 @@ export default function ListingMap({ coordinates, title, location = "" }) {
           style: dark ? styles.dark : styles.light,
           center: coordinates,
           zoom: 9,
-          cooperativeGestures: false,
+          cooperativeGestures: true,
         });
         map.current.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-right");
 

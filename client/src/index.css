@@ -341,7 +341,14 @@ select.field option {
   border-color: rgba(255, 255, 255, 0.06);
 }
 
-/* Disable "Use ctrl + scroll to zoom the map" overlay */
+/* Mapbox cooperative gesture screen ("Use ctrl + scroll to zoom" / "Use two fingers to move") */
 .mapboxgl-ctrl-cooperative-gesture-screen {
-  display: none !important;
+  background: rgba(0, 0, 0, 0.65) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #ffffff !important;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  border-radius: 1rem;
 }
