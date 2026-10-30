@@ -51,29 +51,39 @@ const statusStyles = {
 };
 
 function BookingRow({ booking, onCancel, onDelete }) {
-  const listing = booking.listing;
+  const listing = booking?.listing;
   return (
     <motion.li layout exit={{ opacity: 0, x: -20 }} className="flex flex-col gap-3.5 sm:gap-4 rounded-card border border-neutral-200 p-3.5 sm:p-4 sm:flex-row sm:items-center dark:border-neutral-800">
-      {listing?.image?.url && <img src={imageUrl(listing.image.url, 320)} alt="" className="h-36 w-full rounded-xl object-cover sm:h-20 sm:w-28 shrink-0 bg-neutral-100 dark:bg-neutral-800" />}
+      {listing?.image?.url && (
+        <img
+          src={imageUrl(listing.image.url, 320)}
+          alt=""
+          className="h-36 w-full rounded-xl object-cover sm:h-20 sm:w-28 shrink-0 bg-neutral-100 dark:bg-neutral-800"
+        />
+      )}
       <div className="min-w-0 flex-1">
-        {listing ? (
-          <Link to={`/listings/${listing._id}`} className="font-bold text-sm sm:text-base hover:underline line-clamp-1">{listing.title}</Link>
+        {listing?._id ? (
+          <Link to={`/listings/${listing._id}`} className="font-bold text-sm sm:text-base hover:underline line-clamp-1">
+            {listing.title || "Listing"}
+          </Link>
         ) : (
           <b className="text-sm sm:text-base">Listing no longer available</b>
         )}
         <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">
-          {formatDate(booking.checkIn)} → {formatDate(booking.checkOut)} · {booking.guests} guest{booking.guests === 1 ? "" : "s"}
+          {formatDate(booking?.checkIn)} → {formatDate(booking?.checkOut)} · {booking?.guests || 1} guest{(booking?.guests || 1) === 1 ? "" : "s"}
         </p>
       </div>
       <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
-        <span className={`rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-bold capitalize ${statusStyles[booking.status]}`}>{booking.status}</span>
-        <strong className="text-sm sm:text-base">{formatPrice(booking.totalPrice)}</strong>
-        {listing && (
+        <span className={`rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-bold capitalize ${statusStyles[booking?.status] || statusStyles.pending}`}>
+          {booking?.status || "pending"}
+        </span>
+        <strong className="text-sm sm:text-base">{formatPrice(booking?.totalPrice)}</strong>
+        {listing?._id && (
           <button
-            onClick={booking.status === "cancelled" ? onDelete : onCancel}
+            onClick={booking?.status === "cancelled" ? onDelete : onCancel}
             className="text-xs sm:text-sm font-semibold text-brand-600 hover:underline sm:ml-0 dark:text-brand-400 cursor-pointer"
           >
-            {booking.status === "cancelled" ? "Delete" : "Cancel"}
+            {booking?.status === "cancelled" ? "Delete" : "Cancel"}
           </button>
         )}
       </div>
@@ -82,9 +92,9 @@ function BookingRow({ booking, onCancel, onDelete }) {
 }
 
 function HostBookingRow({ booking, onCancel, onDelete }) {
-  const listing = booking.listing;
-  const guest = booking.user;
-  const nights = nightsBetween(booking.checkIn, booking.checkOut);
+  const listing = booking?.listing;
+  const guest = booking?.user;
+  const nights = nightsBetween(booking?.checkIn, booking?.checkOut);
 
   return (
     <motion.li
@@ -103,9 +113,9 @@ function HostBookingRow({ booking, onCancel, onDelete }) {
         <div className="min-w-0 flex-1 space-y-2">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div className="min-w-0 flex-1">
-              {listing ? (
+              {listing?._id ? (
                 <Link to={`/listings/${listing._id}`} className="font-bold text-sm sm:text-base hover:underline line-clamp-1">
-                  {listing.title}
+                  {listing.title || "Listing"}
                 </Link>
               ) : (
                 <b className="text-sm sm:text-base">Listing no longer available</b>
@@ -116,8 +126,8 @@ function HostBookingRow({ booking, onCancel, onDelete }) {
                 </p>
               )}
             </div>
-            <span className={`rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-bold capitalize shrink-0 ${statusStyles[booking.status]}`}>
-              {booking.status}
+            <span className={`rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-bold capitalize shrink-0 ${statusStyles[booking?.status] || statusStyles.pending}`}>
+              {booking?.status || "pending"}
             </span>
           </div>
 
@@ -143,18 +153,18 @@ function HostBookingRow({ booking, onCancel, onDelete }) {
             <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
               <Calendar className="size-3.5 sm:size-4 text-brand-500 shrink-0" />
               <span>
-                {formatDate(booking.checkIn)} → {formatDate(booking.checkOut)} ({nights} night{nights === 1 ? "" : "s"})
+                {formatDate(booking?.checkIn)} → {formatDate(booking?.checkOut)} ({nights} night{nights === 1 ? "" : "s"})
               </span>
             </div>
             <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
               <Users className="size-3.5 sm:size-4 text-brand-500 shrink-0" />
               <span>
-                {booking.guests} guest{booking.guests === 1 ? "" : "s"}
+                {booking?.guests || 1} guest{(booking?.guests || 1) === 1 ? "" : "s"}
               </span>
             </div>
           </div>
 
-          {booking.specialRequests && (
+          {booking?.specialRequests && (
             <div className="mt-1.5 rounded-xl bg-neutral-50 p-2.5 text-xs text-neutral-600 dark:bg-neutral-800/80 dark:text-neutral-300 border border-neutral-100 dark:border-neutral-800">
               <span className="font-semibold text-neutral-900 dark:text-neutral-100">Guest note: </span>
               "{booking.specialRequests}"
@@ -165,21 +175,21 @@ function HostBookingRow({ booking, onCancel, onDelete }) {
 
       <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 border-t border-neutral-100 pt-3 text-xs sm:text-sm dark:border-neutral-800">
         <span className="text-[11px] sm:text-xs text-neutral-400">
-          Reserved on {formatDate(booking.createdAt)}
+          Reserved on {formatDate(booking?.createdAt)}
         </span>
         <div className="flex items-center gap-3 sm:gap-4 ml-auto sm:ml-0">
           <p>
             <span className="text-xs text-neutral-500 dark:text-neutral-400">Payout: </span>
             <strong className="text-sm sm:text-base font-extrabold text-neutral-900 dark:text-neutral-100">
-              {formatPrice(booking.totalPrice)}
+              {formatPrice(booking?.totalPrice)}
             </strong>
           </p>
-          {listing && (
+          {listing?._id && (
             <button
-              onClick={booking.status === "cancelled" ? onDelete : onCancel}
+              onClick={booking?.status === "cancelled" ? onDelete : onCancel}
               className="text-xs sm:text-sm font-semibold text-brand-600 hover:underline dark:text-brand-400 cursor-pointer"
             >
-              {booking.status === "cancelled" ? "Delete record" : "Cancel booking"}
+              {booking?.status === "cancelled" ? "Delete record" : "Cancel booking"}
             </button>
           )}
         </div>
@@ -190,12 +200,18 @@ function HostBookingRow({ booking, onCancel, onDelete }) {
 
 export function Profile() {
   const { data, error, reload, setData } = useApi("/profile");
+  const { user: authUser } = useAuth();
   const toast = useToast();
 
   if (error) return <div className="container-page py-16"><ErrorState error={error} onRetry={reload} /></div>;
   if (!data) return <PageLoader />;
 
-  const { user, listings, reviews, wishlist, bookings, hostBookings = [] } = data;
+  const user = data?.user || authUser || {};
+  const listings = Array.isArray(data?.listings) ? data.listings : [];
+  const reviews = Array.isArray(data?.reviews) ? data.reviews : [];
+  const wishlist = Array.isArray(data?.wishlist) ? data.wishlist : [];
+  const bookings = Array.isArray(data?.bookings) ? data.bookings : [];
+  const hostBookings = Array.isArray(data?.hostBookings) ? data.hostBookings : [];
 
   const [showAllHostBookings, setShowAllHostBookings] = useState(false);
   const [showAllTrips, setShowAllTrips] = useState(false);
@@ -209,7 +225,12 @@ export function Profile() {
     const verb = action === "cancel" ? "Cancel" : "Delete";
     if (!confirm(`${verb} this reservation?`)) return;
     try {
-      const base = `/listings/${booking.listing._id}/bookings/${booking._id}`;
+      const listingId = booking?.listing?._id || booking?.listing;
+      if (!listingId) {
+        toast("Listing information is unavailable.", "error");
+        return;
+      }
+      const base = `/listings/${listingId}/bookings/${booking._id}`;
       if (action === "cancel") {
         const updated = await api(`${base}/cancel`, { method: "POST" });
         if (isHost) {
@@ -261,7 +282,7 @@ export function Profile() {
 
   return (
     <div className="container-page py-6 sm:py-10">
-      <PageHeader eyebrow="Your dashboard" title={`Welcome, ${user.username} 👋`} />
+      <PageHeader eyebrow="Your dashboard" title={`Welcome, ${user.username || authUser?.username || "Guest"} 👋`} />
 
       <div className="grid grid-cols-2 gap-2.5 sm:gap-4 lg:grid-cols-4">
         {stats.map((s, i) => (
@@ -399,7 +420,7 @@ export function Profile() {
               <p className="text-neutral-500 text-xs sm:text-sm">You have not written any reviews yet.</p>
             ) : (
               <ul className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                {reviews.map(({ review, listing }) => (
+                {reviews.filter((item) => item?.review).map(({ review, listing }) => (
                   <li key={review._id} className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4 py-3.5 sm:py-4 first:pt-0 last:pb-0">
                     <div className="min-w-0 flex-1">
                       {listing ? <Link to={`/listings/${listing._id}`} className="font-bold text-sm sm:text-base hover:underline line-clamp-1">{listing.title}</Link> : <b className="text-sm sm:text-base">Listing review</b>}
@@ -421,7 +442,7 @@ export function Profile() {
               <p className="text-neutral-500 text-xs sm:text-sm">Your wishlist is empty.</p>
             ) : (
               <ul className="space-y-3">
-                {wishlist.slice(0, 5).map((l) => (
+                {wishlist.filter(Boolean).slice(0, 5).map((l) => (
                   <li key={l._id}>
                     <Link to={`/listings/${l._id}`} className="group flex items-center gap-3">
                       <img src={imageUrl(l.image?.url, 160)} alt="" className="size-12 sm:size-14 rounded-xl object-cover transition group-hover:scale-105 bg-neutral-100 dark:bg-neutral-800 shrink-0" />
@@ -440,11 +461,11 @@ export function Profile() {
             <dl className="space-y-3 text-xs sm:text-sm">
               <div className="flex flex-wrap justify-between gap-1 sm:gap-4">
                 <dt className="text-neutral-500">Username</dt>
-                <dd className="font-semibold text-neutral-900 dark:text-neutral-100 break-all">{user.username}</dd>
+                <dd className="font-semibold text-neutral-900 dark:text-neutral-100 break-all">{user.username || authUser?.username || "—"}</dd>
               </div>
               <div className="flex flex-wrap justify-between gap-1 sm:gap-4">
                 <dt className="text-neutral-500">Email</dt>
-                <dd className="font-semibold text-neutral-900 dark:text-neutral-100 break-all">{user.email}</dd>
+                <dd className="font-semibold text-neutral-900 dark:text-neutral-100 break-all">{user.email || authUser?.email || "—"}</dd>
               </div>
             </dl>
           </Section>

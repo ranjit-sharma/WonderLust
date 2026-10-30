@@ -10,7 +10,10 @@ export default function WishlistButton({ listingId, variant = "overlay", onChang
   const requireLogin = useRequireLogin();
   const toast = useToast();
   const [busy, setBusy] = useState(false);
-  const saved = Boolean(user?.wishlist.includes(listingId));
+  const saved = Boolean(
+    Array.isArray(user?.wishlist) &&
+      user.wishlist.some((item) => (typeof item === "string" ? item === listingId : item?._id === listingId))
+  );
 
   const toggle = async (e) => {
     e.preventDefault();

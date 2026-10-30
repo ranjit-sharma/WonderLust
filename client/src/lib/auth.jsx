@@ -22,12 +22,16 @@ export function AuthProvider({ children }) {
   }, []);
 
   const setWishlisted = useCallback((listingId, saved) => {
-    setUser((u) =>
-      u && {
+    setUser((u) => {
+      if (!u) return u;
+      const current = Array.isArray(u.wishlist) ? u.wishlist : [];
+      return {
         ...u,
-        wishlist: saved ? [...u.wishlist, listingId] : u.wishlist.filter((id) => id !== listingId),
-      },
-    );
+        wishlist: saved
+          ? [...current, listingId]
+          : current.filter((item) => (typeof item === "string" ? item !== listingId : item?._id !== listingId)),
+      };
+    });
   }, []);
 
   return (
