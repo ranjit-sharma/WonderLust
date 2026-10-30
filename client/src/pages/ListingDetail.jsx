@@ -86,7 +86,7 @@ function ReviewCard({ review, canDelete, onDelete }) {
       <div className="flex items-center gap-3">
         <Avatar name={review.author?.username} className="size-10" />
         <div className="min-w-0 flex-1">
-          <p className="truncate font-bold">@{review.author?.username || "deleted-user"}</p>
+          <p className="truncate font-bold">{review.author?.username || "deleted-user"}</p>
           <p className="text-xs text-neutral-500">{formatDate(review.createdAt)}</p>
         </div>
         <Stars value={review.rating} className="size-3.5" />
