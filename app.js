@@ -1,3 +1,4 @@
+// Application entry point: Express server, MongoStore sessions, and REST API routing
 if (process.env.NODE_ENV != "production") {
   require("dotenv").config();
 }
