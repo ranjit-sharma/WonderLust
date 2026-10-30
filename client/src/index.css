@@ -52,6 +52,49 @@
   ::selection {
     @apply bg-brand-500 text-white;
   }
+
+  /* Replace text (I-beam) cursor with the default arrow cursor across all pages */
+  *,
+  *::before,
+  *::after {
+    cursor: default;
+  }
+
+  /* Interactive elements retain pointer cursor */
+  a,
+  a *,
+  button,
+  button *,
+  [role="button"],
+  [role="button"] *,
+  [type="button"],
+  [type="submit"],
+  [type="reset"],
+  [type="checkbox"],
+  [type="radio"],
+  select,
+  summary,
+  .cursor-pointer,
+  .cursor-pointer * {
+    cursor: pointer;
+  }
+
+  /* Drag and range handles */
+  .range-thumb,
+  .cursor-grab {
+    cursor: grab;
+  }
+  .range-thumb:active,
+  .cursor-grabbing {
+    cursor: grabbing;
+  }
+
+  /* Disabled elements */
+  :disabled,
+  [aria-disabled="true"],
+  .cursor-not-allowed {
+    cursor: not-allowed;
+  }
   /* Suppress default browser cancel/clear 'X' button on search inputs */
   input[type="search"]::-webkit-search-cancel-button,
   input[type="search"]::-webkit-search-decoration,
