@@ -226,19 +226,9 @@ export default function ListingDetail() {
                     <button
                       type="button"
                       onClick={() => setShowAllReviews((prev) => !prev)}
-                      className="btn-ghost inline-flex items-center gap-2 rounded-xl border border-neutral-300 px-5 py-2.5 text-sm font-semibold transition hover:border-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-300"
+                      className="inline-block cursor-pointer text-base font-semibold text-neutral-900 underline underline-offset-4 transition hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-300"
                     >
-                      {showAllReviews ? (
-                        <>
-                          <span>Show fewer reviews</span>
-                          <ChevronUp className="size-4" />
-                        </>
-                      ) : (
-                        <>
-                          <span>Show more reviews ({listing.reviews.length - 4} more)</span>
-                          <ChevronDown className="size-4" />
-                        </>
-                      )}
+                      {showAllReviews ? "Show less" : "Show more"}
                     </button>
                   </div>
                 )}
