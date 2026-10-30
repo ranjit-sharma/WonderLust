@@ -66,7 +66,7 @@ export default function WishlistButton({ listingId, variant = "overlay", onChang
         aria-label={label}
         aria-pressed={saved}
         title={label}
-        className="relative grid size-6 sm:size-7 place-items-center rounded-full transition hover:scale-110 after:absolute after:-inset-2 after:content-['']"
+        className="relative grid size-6 sm:size-7 place-items-center rounded-full bg-[#ebf0f7]/90 dark:bg-[#181b25]/90 border border-white/60 dark:border-white/10 shadow-sm transition hover:scale-110 active:scale-95 backdrop-blur-md after:absolute after:-inset-2 after:content-['']"
       >
         {heart}
       </motion.button>

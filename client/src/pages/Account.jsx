@@ -60,7 +60,7 @@ function BookingRow({ booking, onCancel, onDelete }) {
     <motion.li
       layout
       exit={{ opacity: 0, x: -20 }}
-      className="flex flex-col justify-between gap-2 sm:gap-3.5 rounded-xl sm:rounded-card border border-neutral-200 bg-white p-2 sm:p-4 shadow-xs dark:border-neutral-800 dark:bg-neutral-900/60 min-w-0 overflow-hidden"
+      className="flex flex-col justify-between gap-2 sm:gap-3.5 rounded-xl sm:rounded-card border border-white/70 bg-[#ebf0f7] p-2 sm:p-4 shadow-card hover:shadow-lift transition-all duration-300 dark:border-white/5 dark:bg-[#181b25] min-w-0 overflow-hidden"
     >
       <div className="space-y-1.5 sm:space-y-2 min-w-0">
         {listing?.image?.url && (
@@ -122,7 +122,7 @@ function HostBookingRow({ booking, onCancel, onDelete }) {
     <motion.li
       layout
       exit={{ opacity: 0, x: -20 }}
-      className="flex flex-col justify-between gap-2 sm:gap-3.5 rounded-xl sm:rounded-card border border-neutral-200 bg-white p-2 sm:p-4 shadow-xs dark:border-neutral-800 dark:bg-neutral-900/60 min-w-0 overflow-hidden"
+      className="flex flex-col justify-between gap-2 sm:gap-3.5 rounded-xl sm:rounded-card border border-white/70 bg-[#ebf0f7] p-2 sm:p-4 shadow-card hover:shadow-lift transition-all duration-300 dark:border-white/5 dark:bg-[#181b25] min-w-0 overflow-hidden"
     >
       <div className="space-y-1.5 sm:space-y-2 min-w-0">
         {listing?.image?.url && (
@@ -488,7 +488,7 @@ export function Profile() {
                 <ul className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-1 sm:gap-3">
                   {visibleWishlist.map((l) => (
                     <li key={l._id} className="min-w-0">
-                      <Link to={`/listings/${l._id}`} className="group flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 rounded-xl border border-neutral-100 p-2 sm:border-0 sm:p-0 dark:border-neutral-800">
+                      <Link to={`/listings/${l._id}`} className="group flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 rounded-xl border border-white/60 bg-[#ebf0f7] p-2 shadow-sm hover:shadow-card transition dark:border-white/5 dark:bg-[#181b25]">
                         <img
                           src={imageUrl(l.image?.url, 200)}
                           alt=""

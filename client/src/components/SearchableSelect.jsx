@@ -210,7 +210,7 @@ export default function SearchableSelect({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
-            className="absolute left-0 right-0 top-full z-50 mt-1.5 overflow-hidden rounded-2xl border border-neutral-200/90 bg-white shadow-lift backdrop-blur-xl dark:border-neutral-800 dark:bg-neutral-900"
+            className="absolute left-0 right-0 top-full z-50 mt-1.5 overflow-hidden rounded-2xl border border-white/80 bg-[#ebf0f7] shadow-lift backdrop-blur-xl dark:border-white/5 dark:bg-[#181b25]"
           >
             {/* Search Input */}
             {showSearch && (

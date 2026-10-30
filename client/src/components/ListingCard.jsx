@@ -18,13 +18,13 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
       viewport={{ once: true, margin: "-40px" }}
       // stagger across a row of up to 6 cards
       transition={{ duration: 0.6, delay: (index % 6) * 0.05, ease }}
-      className="group relative"
+      className="group relative rounded-2xl sm:rounded-card p-1.5 sm:p-2 bg-[#ebf0f7] dark:bg-[#181b25] border border-white/70 dark:border-white/5 shadow-card transition-all duration-300 ease-smooth hover:shadow-lift hover:-translate-y-1"
     >
       <Link
         to={`/listings/${listing._id}`}
         className="block rounded-card focus-visible:ring-4 focus-visible:ring-brand-500/30 focus-visible:outline-none"
       >
-        <div className="relative aspect-[4/3.6] overflow-hidden rounded-card bg-neutral-200 dark:bg-neutral-800">
+        <div className="relative aspect-[4/3.6] overflow-hidden rounded-xl sm:rounded-2xl bg-neutral-200 dark:bg-neutral-800 shadow-[inset_0_2px_4px_rgba(0,0,0,0.12)]">
           <SmoothImage
             src={imageUrl(listing.image?.url, 600)}
             alt={listing.title}
@@ -64,8 +64,8 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
       {/* Top bar: category tag and wishlist button aligned responsively on both mobile and desktop */}
       <div className="pointer-events-none absolute inset-x-1.5 top-1.5 z-10 flex items-center justify-between gap-1 sm:inset-x-3 sm:top-3 sm:gap-2">
         {listing.category ? (
-          <span className="pointer-events-auto inline-flex h-5 sm:h-7 items-center gap-1 sm:gap-1.5 max-w-[calc(100%-2rem)] sm:max-w-[calc(100%-3rem)] truncate rounded-full bg-black/55 px-2 sm:px-3 text-[10px] sm:text-xs font-semibold text-white shadow-sm ring-1 ring-white/15 backdrop-blur-md">
-            <Tag className="size-2.5 sm:size-3 shrink-0 stroke-[2.2] text-white" />
+          <span className="pointer-events-auto inline-flex h-5 sm:h-7 items-center gap-1 sm:gap-1.5 max-w-[calc(100%-2rem)] sm:max-w-[calc(100%-3rem)] truncate rounded-full bg-[#ebf0f7]/90 dark:bg-[#181b25]/90 px-2 sm:px-3 text-[10px] sm:text-xs font-semibold text-neutral-800 dark:text-neutral-100 shadow-sm border border-white/60 dark:border-white/10 backdrop-blur-md">
+            <Tag className="size-2.5 sm:size-3 shrink-0 stroke-[2.2] text-brand-500" />
             <span className="truncate">{listing.category}</span>
           </span>
         ) : (
@@ -82,8 +82,8 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
 export function ListingCardSkeleton() {
   const bar = "rounded-full bg-linear-to-r from-neutral-200 via-neutral-100 to-neutral-200 bg-[length:200%_100%] animate-shimmer dark:from-neutral-800 dark:via-neutral-700 dark:to-neutral-800";
   return (
-    <div aria-hidden="true">
-      <div className={`aspect-[4/3.6] rounded-card ${bar.replace("rounded-full ", "")}`} />
+    <div aria-hidden="true" className="rounded-2xl sm:rounded-card p-1.5 sm:p-2 bg-[#ebf0f7] dark:bg-[#181b25] border border-white/70 dark:border-white/5 shadow-card">
+      <div className={`aspect-[4/3.6] rounded-xl sm:rounded-2xl ${bar.replace("rounded-full ", "")}`} />
       <div className="mt-3 space-y-2 px-1">
         <div className={`h-4 w-3/4 ${bar}`} />
         <div className={`h-3 w-1/2 ${bar}`} />

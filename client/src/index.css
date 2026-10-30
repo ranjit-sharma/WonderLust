@@ -2,6 +2,37 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Neumorphic Design Tokens (Soft UI) */
+:root {
+  --neu-bg: #ebf0f7;
+  --neu-surface: #ebf0f7;
+  --neu-surface-hover: #f1f5fa;
+  --neu-surface-soft: #e2e8f0;
+  --neu-shadow-raised: 6px 6px 14px rgba(166, 178, 195, 0.5), -6px -6px 14px rgba(255, 255, 255, 0.95);
+  --neu-shadow-lift: 9px 9px 22px rgba(166, 178, 195, 0.6), -9px -9px 22px rgba(255, 255, 255, 1);
+  --neu-shadow-inset: inset 3px 3px 6px rgba(166, 178, 195, 0.5), inset -3px -3px 6px rgba(255, 255, 255, 0.95);
+  --neu-shadow-sm: 3px 3px 8px rgba(166, 178, 195, 0.45), -3px -3px 8px rgba(255, 255, 255, 0.95);
+  --neu-border: 1px solid rgba(255, 255, 255, 0.7);
+  --neu-border-inset: 1px solid rgba(166, 178, 195, 0.28);
+  --neu-btn-primary: 5px 5px 14px rgba(235, 28, 42, 0.38), -4px -4px 10px rgba(255, 255, 255, 0.85);
+  --neu-btn-primary-active: inset 3px 3px 6px rgba(150, 10, 20, 0.75), inset -3px -3px 6px rgba(255, 120, 130, 0.45);
+}
+
+.dark {
+  --neu-bg: #141720;
+  --neu-surface: #181b25;
+  --neu-surface-hover: #1e222e;
+  --neu-surface-soft: #12141c;
+  --neu-shadow-raised: 6px 6px 16px rgba(0, 0, 0, 0.75), -6px -6px 16px rgba(255, 255, 255, 0.04);
+  --neu-shadow-lift: 10px 10px 24px rgba(0, 0, 0, 0.88), -10px -10px 22px rgba(255, 255, 255, 0.055);
+  --neu-shadow-inset: inset 3px 3px 6px rgba(0, 0, 0, 0.8), inset -3px -3px 6px rgba(255, 255, 255, 0.035);
+  --neu-shadow-sm: 3px 3px 8px rgba(0, 0, 0, 0.7), -3px -3px 8px rgba(255, 255, 255, 0.035);
+  --neu-border: 1px solid rgba(255, 255, 255, 0.05);
+  --neu-border-inset: 1px solid rgba(0, 0, 0, 0.5);
+  --neu-btn-primary: 5px 5px 16px rgba(235, 28, 42, 0.5), -4px -4px 12px rgba(255, 255, 255, 0.05);
+  --neu-btn-primary-active: inset 3px 3px 6px rgba(130, 10, 20, 0.9), inset -3px -3px 6px rgba(255, 100, 110, 0.25);
+}
+
 @theme {
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --color-brand-50: #fff1f2;
@@ -12,14 +43,16 @@
   --color-brand-500: #fe424d;
   --color-brand-600: #eb1c2a;
   --color-brand-700: #c61220;
-  --color-ink: #0b0b0f;
+  --color-ink: #141720;
+  --color-neu-bg: var(--neu-bg);
+  --color-neu-surface: var(--neu-surface);
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1); /* one easing curve for every transition */
   --animate-shimmer: shimmer 1.6s ease-in-out infinite;
   --animate-pan: pan 9s ease-in-out infinite;
   --breakpoint-3xl: 112rem; /* 1792px: room for 7 cards a row */
   --radius-card: 1.5rem; /* every card on the site uses this */
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px -12px rgb(0 0 0 / 0.18);
-  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.04), 0 22px 40px -18px rgb(0 0 0 / 0.35);
+  --shadow-card: var(--neu-shadow-raised);
+  --shadow-lift: var(--neu-shadow-lift);
 }
 
 /* slow drift of a 200%-wide gradient, e.g. the footer call-to-action */
@@ -47,7 +80,13 @@
     -webkit-tap-highlight-color: transparent;
   }
   body {
-    @apply bg-white text-neutral-900 antialiased dark:bg-ink dark:text-neutral-100;
+    background-color: var(--neu-bg);
+    color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+  }
+  .dark body {
+    background-color: var(--neu-bg);
+    color: #f8fafc;
   }
   ::selection {
     @apply bg-brand-500 text-white;
@@ -109,7 +148,6 @@
   }
 }
 
-
 /* Global styling for select fields to match brand theme */
 select.field {
   appearance: none;
@@ -122,27 +160,81 @@ select.field {
 }
 
 select.field option {
-  background-color: #ffffff;
-  color: #171717;
+  background-color: var(--neu-surface);
+  color: #0f172a;
   padding: 8px 12px;
 }
 
 .dark select.field option {
-  background-color: #171717;
-  color: #f5f5f5;
+  background-color: var(--neu-surface);
+  color: #f8fafc;
 }
 
+/* Neumorphic Form Field (Recessed/Inset) */
 @utility field {
-  @apply w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-[15px] text-neutral-900 transition duration-300 ease-smooth outline-none placeholder:text-neutral-400 focus:border-neutral-900 focus:ring-4 focus:ring-neutral-900/10 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-neutral-300 dark:focus:ring-white/10;
+  width: 100%;
+  border-radius: 0.875rem;
+  background-color: var(--neu-surface);
+  border: var(--neu-border-inset);
+  box-shadow: var(--neu-shadow-inset);
+  padding: 0.75rem 1rem;
+  font-size: 15px;
+  color: #0f172a;
+  transition: all 0.25s var(--ease-smooth);
+  outline: none;
+  &::placeholder {
+    color: #94a3b8;
+  }
+  &:focus {
+    border-color: rgba(254, 66, 77, 0.55);
+    box-shadow: var(--neu-shadow-inset), 0 0 0 3px rgba(254, 66, 77, 0.15);
+  }
 }
+.dark .field {
+  color: #f8fafc;
+  &::placeholder {
+    color: #64748b;
+  }
+}
+
 @utility label {
   @apply mb-1.5 block text-sm font-semibold text-neutral-700 dark:text-neutral-300;
 }
+
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition duration-300 ease-smooth select-none focus-visible:ring-4 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.875rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.25s var(--ease-smooth);
+  user-select: none;
+  outline: none;
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba(254, 66, 77, 0.35);
+  }
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.6;
+  }
 }
+
 @utility btn-primary {
-  @apply btn relative overflow-hidden bg-linear-to-r from-brand-500 to-brand-600 text-white shadow-[0_8px_20px_-8px_rgb(254_66_77/0.7)] hover:brightness-105 focus-visible:ring-brand-500/30 active:scale-[0.98];
+  @apply btn relative overflow-hidden bg-linear-to-r from-brand-500 to-brand-600 text-white;
+  box-shadow: var(--neu-btn-primary);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  &:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+    box-shadow: 6px 6px 18px rgba(235, 28, 42, 0.45), -5px -5px 12px rgba(255, 255, 255, 0.85);
+  }
+  &:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: var(--neu-btn-primary-active) !important;
+  }
   /* light sweep across the button on hover */
   &::after {
     content: "";
@@ -157,12 +249,43 @@ select.field option {
     transform: translateX(120%);
   }
 }
+
 @utility btn-dark {
-  @apply btn bg-neutral-900 text-white hover:bg-neutral-800 focus-visible:ring-neutral-900/20 active:scale-[0.98] dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200;
+  @apply btn text-white dark:text-neutral-900;
+  background-color: #1e2430;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--neu-shadow-sm);
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--neu-shadow-raised);
+  }
+  &:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: var(--neu-shadow-inset);
+  }
 }
+.dark .btn-dark {
+  background-color: #ebf0f7;
+  color: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
 @utility btn-ghost {
-  @apply btn border border-neutral-300 bg-transparent text-neutral-800 hover:border-neutral-900 hover:bg-neutral-50 focus-visible:ring-neutral-900/10 dark:border-neutral-700 dark:text-neutral-200 dark:hover:border-neutral-400 dark:hover:bg-neutral-900;
+  @apply btn;
+  background-color: var(--neu-surface);
+  color: inherit;
+  border: var(--neu-border);
+  box-shadow: var(--neu-shadow-sm);
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--neu-shadow-raised);
+  }
+  &:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: var(--neu-shadow-inset);
+  }
 }
+
 @utility line-clamp-3 {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -175,19 +298,81 @@ select.field option {
   -webkit-line-clamp: 10;
   overflow: hidden;
 }
+
+/* Neumorphic Card (Raised Soft 3D) */
 @utility card {
-  @apply rounded-card border border-neutral-200/80 bg-white shadow-card dark:border-neutral-800 dark:bg-neutral-900/70;
+  border-radius: var(--radius-card);
+  background-color: var(--neu-surface);
+  border: var(--neu-border);
+  box-shadow: var(--neu-shadow-raised);
+  transition: all 0.3s var(--ease-smooth);
 }
+.card {
+  background-color: var(--neu-surface) !important;
+  border: var(--neu-border) !important;
+  box-shadow: var(--neu-shadow-raised) !important;
+}
+
+/* Dedicated Neumorphic Utility Classes */
+@utility neu-raised {
+  background-color: var(--neu-surface);
+  border: var(--neu-border);
+  box-shadow: var(--neu-shadow-raised);
+}
+@utility neu-lift {
+  background-color: var(--neu-surface);
+  border: var(--neu-border);
+  box-shadow: var(--neu-shadow-lift);
+}
+@utility neu-inset {
+  background-color: var(--neu-surface);
+  border: var(--neu-border-inset);
+  box-shadow: var(--neu-shadow-inset);
+}
+@utility neu-sm {
+  background-color: var(--neu-surface);
+  border: var(--neu-border);
+  box-shadow: var(--neu-shadow-sm);
+}
+
 @utility container-page {
   @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10;
 }
-/* Pill controls next to the category bar, styled like the search bar */
+
+/* Neumorphic Pills */
 @utility pill {
-  @apply inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-sm font-semibold whitespace-nowrap text-neutral-800 shadow-card transition duration-300 ease-smooth select-none hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-lift dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:border-neutral-700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background-color: var(--neu-surface);
+  border: var(--neu-border);
+  box-shadow: var(--neu-shadow-sm);
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  user-select: none;
+  transition: all 0.25s var(--ease-smooth);
+  color: inherit;
+  &:hover {
+    box-shadow: var(--neu-shadow-raised);
+    transform: translateY(-1px);
+  }
+  &:active {
+    box-shadow: var(--neu-shadow-inset);
+    transform: translateY(0);
+  }
 }
 @utility pill-active {
-  @apply border-brand-200 bg-brand-50 text-brand-700 hover:border-brand-300 dark:border-brand-500/40 dark:bg-brand-500/10 dark:text-brand-300;
+  box-shadow: var(--neu-shadow-inset) !important;
+  color: #fe424d !important;
+  border-color: rgba(254, 66, 77, 0.35) !important;
 }
+.dark .pill-active {
+  color: #ff9ea5 !important;
+}
+
 /* Browse pages, navbar and footer use the full screen width, up to 110rem, maintaining 1 inch side gap */
 @utility container-wide {
   @apply mx-auto w-full max-w-[110rem] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-[1in];
@@ -208,10 +393,24 @@ select.field option {
   @apply pointer-events-none absolute inset-0 h-full w-full appearance-none bg-transparent;
 }
 .range-thumb::-webkit-slider-thumb {
-  @apply pointer-events-auto h-6 w-6 cursor-grab appearance-none rounded-full border-2 border-white bg-neutral-900 shadow-md transition active:scale-110 active:cursor-grabbing dark:border-neutral-900 dark:bg-white;
+  @apply pointer-events-auto h-6 w-6 cursor-grab appearance-none rounded-full bg-linear-to-b from-white to-neutral-200 transition active:scale-110 active:cursor-grabbing;
+  box-shadow: 3px 3px 8px rgba(166, 178, 195, 0.6), -3px -3px 8px rgba(255, 255, 255, 0.95);
+  border: 2px solid white;
 }
 .range-thumb::-moz-range-thumb {
-  @apply pointer-events-auto h-6 w-6 cursor-grab rounded-full border-2 border-white bg-neutral-900 shadow-md dark:border-neutral-900 dark:bg-white;
+  @apply pointer-events-auto h-6 w-6 cursor-grab rounded-full bg-linear-to-b from-white to-neutral-200;
+  box-shadow: 3px 3px 8px rgba(166, 178, 195, 0.6), -3px -3px 8px rgba(255, 255, 255, 0.95);
+  border: 2px solid white;
+}
+.dark .range-thumb::-webkit-slider-thumb {
+  background: linear-gradient(to bottom, #2a2f3d, #1e222e);
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8), -3px -3px 8px rgba(255, 255, 255, 0.05);
+  border-color: #3b4252;
+}
+.dark .range-thumb::-moz-range-thumb {
+  background: linear-gradient(to bottom, #2a2f3d, #1e222e);
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8), -3px -3px 8px rgba(255, 255, 255, 0.05);
+  border-color: #3b4252;
 }
 
 /* Modern Mapbox popup styling */
@@ -223,24 +422,24 @@ select.field option {
   border-radius: 1.25rem !important;
   padding: 1rem 1.15rem !important;
   font-family: var(--font-sans) !important;
-  background: white !important;
-  border: 1px solid rgba(0, 0, 0, 0.08) !important;
-  box-shadow: 0 14px 36px -8px rgba(0, 0, 0, 0.16), 0 4px 12px -2px rgba(0, 0, 0, 0.08) !important;
+  background: var(--neu-surface) !important;
+  border: var(--neu-border) !important;
+  box-shadow: var(--neu-shadow-lift) !important;
 }
 
 .dark .mapboxgl-popup-content {
-  background: #171717 !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: var(--neu-surface) !important;
+  border: var(--neu-border) !important;
   color: #f5f5f5 !important;
-  box-shadow: 0 18px 40px -8px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: var(--neu-shadow-lift) !important;
 }
 
 .mapboxgl-popup-tip {
-  border-top-color: white !important;
+  border-top-color: var(--neu-surface) !important;
 }
 
 .dark .mapboxgl-popup-tip {
-  border-top-color: #171717 !important;
+  border-top-color: var(--neu-surface) !important;
 }
 
 /* Polished Close button */
