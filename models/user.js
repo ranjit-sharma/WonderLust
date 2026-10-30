@@ -15,5 +15,6 @@ const userSchema = new Schema({
     ],
 });
 
-userSchema.plugin(passportLocalMongoose);
+// Each failed login lengthens the wait before the next try (~4s after 5, capped at 5 min); never locks permanently.
+userSchema.plugin(passportLocalMongoose, { limitAttempts: true });
 module.exports = mongoose.model("User", userSchema);

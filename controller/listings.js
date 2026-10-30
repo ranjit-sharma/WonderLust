@@ -1,8 +1,7 @@
 const Listing = require("../models/listing");
 const Review = require("../models/review.js");
 const Booking = require("../models/booking.js");
-const categories = require("../utils/categories.js");
-const locationOptions = require("../utils/locationOptions.js");
+const ExpressError = require("../utils/ExpressError.js");
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const { cloudinary } = require("../cloudConfig.js");
 const mapToken = process.env.MAP_TOKEN;
@@ -21,6 +20,15 @@ const deleteCloudinaryImage = async (image) => {
         throw new Error(`Cloudinary image deletion failed: ${result.result}`);
     }
 };
+
+const geocode = async (location) => {
+    const response = await geocodingClient
+        .forwardGeocode({ query: location, limit: 1 })
+        .send();
+    return response.body.features[0]?.geometry;
+};
+
+const uploadedImage = (file) => file && { url: file.path, filename: file.filename };
 
 module.exports.index = async (req, res) => {
     const q = typeof req.query.q === "string" ? req.query.q : "";
@@ -113,23 +121,13 @@ module.exports.index = async (req, res) => {
                 },
             },
         );
-        ratingPipeline.push({ $sort: { bookingCount: -1, createdAt: -1 } });
+        // Listings have no timestamps; _id order is creation order.
+        ratingPipeline.push({ $sort: { bookingCount: -1, _id: -1 } });
     }
 
-    const allListings = await Listing.aggregate(ratingPipeline);
-
-    res.render("listings/index.ejs", {
-        allListings,
-        categories,
-        category,
-        location,
-        country,
-        minPrice,
-        maxPrice,
-        minRating,
-        q,
-        showFilters: true,
-    });
+    // reviewDocs/bookingStats were only needed to compute the fields above.
+    ratingPipeline.push({ $project: { reviewDocs: 0, bookingStats: 0 } });
+    res.json(await Listing.aggregate(ratingPipeline));
 }
 
 module.exports.toggleWishlist = async (req, res) => {
@@ -137,8 +135,7 @@ module.exports.toggleWishlist = async (req, res) => {
     const listing = await Listing.findById(id);
 
     if (!listing) {
-        req.flash("error", "Listing does not exist!");
-        return res.redirect("/listings");
+        throw new ExpressError(404, "Listing does not exist!");
     }
 
     const isSaved = (req.user.wishlist || []).some((listingId) => listingId.equals(id));
@@ -147,90 +144,50 @@ module.exports.toggleWishlist = async (req, res) => {
         : { $addToSet: { wishlist: id } };
 
     await req.user.updateOne(update);
-    req.flash("success", isSaved ? "Removed from your wishlist." : "Added to your wishlist.");
-    res.redirect(req.get("Referrer") || `/listings/${id}`);
-}
-
-module.exports.renderNewForm = (req, res) => {
-    res.render("listings/new.ejs", { categories, ...locationOptions });
+    res.json({ saved: !isSaved });
 }
 
 module.exports.showListing = async (req, res) => {
     let { id } = req.params;
+    // Only usernames: emails and wishlists must not reach other visitors.
     const listing = await Listing.findById(id)
         .populate({
             path: "reviews",
             populate: {
                 path: "author",
+                select: "username",
             },
         })
-        .populate("owner");
+        .populate("owner", "username");
     if (!listing) {
-        req.flash("error", "Listing you requested for does not exist!");
-        return res.redirect("/listings");
+        throw new ExpressError(404, "Listing you requested for does not exist!");
     }
     const reviewCount = listing.reviews.length;
     const validReviews = listing.reviews.filter(r => r && typeof r.rating === 'number');
     const averageRating = validReviews.length
         ? validReviews.reduce((total, review) => total + review.rating, 0) / validReviews.length
         : 0;
-    console.log(listing);
-    res.render("listings/show.ejs", { listing, averageRating, reviewCount });
+    res.json({ listing, averageRating, reviewCount });
 }
 
-
-
-
-
-
-module.exports.createListing = async (req, res, next) => {
+module.exports.createListing = async (req, res) => {
     if (!req.file) {
-        req.flash("error", "Listing image is required!");
-        return res.redirect("/listings/new");
+        throw new ExpressError(400, "Listing image is required!");
     }
 
-    let response = await geocodingClient
-        .forwardGeocode({
-            query: req.body.listing.location,
-            limit: 1,
-        })
-        .send();
-
-    if (!response.body.features.length) {
-        req.flash("error", "Invalid location provided. Please try a different location.");
-        return res.redirect("/listings/new");
+    const geometry = await geocode(req.body.listing.location);
+    if (!geometry) {
+        await deleteCloudinaryImage(uploadedImage(req.file));
+        throw new ExpressError(400, "Invalid location provided. Please try a different location.");
     }
 
-    let url = req.file.path;
-    let filename = req.file.filename;
     const newListing = new Listing(req.body.listing);
     newListing.owner = req.user._id;
-    newListing.image = { url, filename };
+    newListing.image = uploadedImage(req.file);
+    newListing.geometry = geometry;
+    await newListing.save();
 
-    newListing.geometry = response.body.features[0].geometry;
-
-    let savedListing = await newListing.save();
-    console.log(savedListing);
-
-    req.flash("success", "New listing created!");
-    res.redirect("/listings");
-}
-
-module.exports.renderEditForm = async (req, res) => {
-    let { id } = req.params;
-    const listing = await Listing.findById(id);
-    if (!listing) {
-        req.flash("error", "Listing you are represented for does not exist!");
-        return res.redirect("/listings");
-    }
-
-    let originalImageUrl = listing.image?.url?.replace("/upload", "/upload/w_250,") || "";
-    res.render("listings/edit.ejs", {
-        listing,
-        originalImageUrl,
-        categories,
-        ...locationOptions,
-    });
+    res.status(201).json(newListing);
 }
 
 module.exports.updateListing = async (req, res) => {
@@ -238,18 +195,24 @@ module.exports.updateListing = async (req, res) => {
     let listing = await Listing.findById(id);
 
     if (!listing) {
-        req.flash("error", "Listing you requested for does not exist!");
-        return res.redirect("/listings");
+        throw new ExpressError(404, "Listing you requested for does not exist!");
     }
 
     const oldImage = listing.image;
+    const locationChanged = req.body.listing.location !== listing.location;
     Object.assign(listing, req.body.listing);
 
-    if (typeof req.file !== "undefined") {
-        let url = req.file.path;
-        let filename = req.file.filename;
+    if (locationChanged) {
+        const geometry = await geocode(listing.location);
+        if (!geometry) {
+            await deleteCloudinaryImage(uploadedImage(req.file));
+            throw new ExpressError(400, "Invalid location provided. Please try a different location.");
+        }
+        listing.geometry = geometry;
+    }
 
-        listing.image = { url, filename };
+    if (typeof req.file !== "undefined") {
+        listing.image = uploadedImage(req.file);
     }
 
     await listing.save();
@@ -258,8 +221,7 @@ module.exports.updateListing = async (req, res) => {
         await deleteCloudinaryImage(oldImage);
     }
 
-    req.flash("success", "Listing Updated!");
-    res.redirect(`/listings/${id}`);
+    res.json(listing);
 }
 
 module.exports.destroyListing = async (req, res) => {
@@ -267,13 +229,11 @@ module.exports.destroyListing = async (req, res) => {
     const listing = await Listing.findById(id);
 
     if (!listing) {
-        req.flash("error", "Listing you requested for does not exist!");
-        return res.redirect("/listings");
+        throw new ExpressError(404, "Listing you requested for does not exist!");
     }
 
     await Listing.findByIdAndDelete(id);
     await deleteCloudinaryImage(listing.image);
 
-    req.flash("success", "Listing Deleted!");
-    res.redirect("/listings");
+    res.json({ ok: true });
 }

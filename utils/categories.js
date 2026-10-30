@@ -1,3 +1,6 @@
+// Single source for listing categories: the Listing model enum, Joi validation,
+// and /api/meta (which feeds the category bar, filters and listing form) all read this.
+// Each one needs an icon in client/src/lib/categories.js.
 module.exports = [
     "Rooms",
     "Iconic Cities",
@@ -9,4 +12,16 @@ module.exports = [
     "Amazing Pools",
     "Domes",
     "Boats",
+    "Beachfront",
+    "Cabins",
+    "Treehouses",
+    "Lakefront",
+    "Countryside",
+    "Skiing",
+    "Desert",
+    "Islands",
+    "Vineyards",
+    "Luxe",
+    "Historical Homes",
+    "Tiny Homes",
 ];

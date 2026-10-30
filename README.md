@@ -6,7 +6,7 @@
 
 ### 🌍 Discover • Create • Review • Explore
 
-A modern full-stack travel and staycation accommodation web application inspired by Airbnb, engineered with **Node.js, Express.js, MongoDB, Mongoose, Passport.js, EJS, and EJS-Mate**.
+A modern full-stack travel and staycation accommodation web application inspired by Airbnb, engineered with **Node.js, Express.js, MongoDB, Mongoose, Passport.js, React, Tailwind CSS, and Motion**.
 
 </p>
 
@@ -21,12 +21,13 @@ A modern full-stack travel and staycation accommodation web application inspired
 <br>
 
 <!-- Frontend -->
-<img src="https://img.shields.io/badge/EJS-Templates-B4CA65?style=for-the-badge&logo=ejs&logoColor=black" alt="EJS">
-<img src="https://img.shields.io/badge/EJS--Mate-Layouts-B4CA65?style=for-the-badge" alt="EJS-Mate">
+<img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React">
+<img src="https://img.shields.io/badge/Vite-Build-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite">
+<img src="https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
+<img src="https://img.shields.io/badge/Motion-Animation-FFF312?style=for-the-badge" alt="Motion">
 <img src="https://img.shields.io/badge/HTML5-Markup-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
 <img src="https://img.shields.io/badge/CSS3-Styling-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
 <img src="https://img.shields.io/badge/JavaScript-ES6%2B-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript">
-<img src="https://img.shields.io/badge/Bootstrap-5.x-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap">
 
 <br>
 
@@ -34,8 +35,6 @@ A modern full-stack travel and staycation accommodation web application inspired
 <img src="https://img.shields.io/badge/Passport.js-Authentication-34E27A?style=for-the-badge&logo=passport&logoColor=black" alt="Passport.js">
 <img src="https://img.shields.io/badge/Express%20Session-Sessions-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express Session">
 <img src="https://img.shields.io/badge/Connect--Mongo-Session%20Store-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="Connect Mongo">
-<img src="https://img.shields.io/badge/Connect%20Flash-Flash%20Messages-000000?style=for-the-badge" alt="Connect Flash">
-<img src="https://img.shields.io/badge/Method--Override-HTTP%20Methods-444444?style=for-the-badge" alt="Method Override">
 <img src="https://img.shields.io/badge/Dotenv-Environment-ecd53f?style=for-the-badge" alt="Dotenv">
 
 <br>
@@ -54,7 +53,7 @@ A modern full-stack travel and staycation accommodation web application inspired
 <img src="https://img.shields.io/badge/Render-Deployment-46E3B7?style=for-the-badge&logo=render&logoColor=black" alt="Render">
 <img src="https://img.shields.io/badge/Git-Version%20Control-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git">
 <img src="https://img.shields.io/badge/GitHub-Code%20Hosting-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
-<img src="https://img.shields.io/badge/Font%20Awesome-Icons-528DD7?style=for-the-badge&logo=fontawesome&logoColor=white" alt="Font Awesome">
+<img src="https://img.shields.io/badge/Lucide-Icons-F56565?style=for-the-badge" alt="Lucide">
 
 </p>
 
@@ -62,7 +61,7 @@ A modern full-stack travel and staycation accommodation web application inspired
   <img src="https://img.shields.io/badge/Repo%20Size-179%20KB-blue?style=flat-square" alt="Repository size">
   <img src="https://img.shields.io/badge/Status-Active-success?style=flat-square" alt="Status">
   <img src="https://img.shields.io/badge/Architecture-MVC-orange?style=flat-square" alt="Architecture">
-  <img src="https://img.shields.io/badge/Rendering-Server--Side%20EJS-B4CA65?style=flat-square" alt="Server-side EJS">
+  <img src="https://img.shields.io/badge/Frontend-React%20SPA-61DAFB?style=flat-square" alt="React SPA">
 </p>
 
 ---
@@ -113,7 +112,7 @@ https://github.com/ranjit-sharma/WonderLust
 
 The application provides a complete flow for discovering properties, viewing detailed accommodation information, creating listings, uploading property images, adding reviews, managing ownership permissions, and visualizing listing locations on an interactive map.
 
-The project is built using a **Node.js + Express.js backend**, **MongoDB/Mongoose database layer**, and **EJS server-side rendering**, with external integrations for **Cloudinary image storage** and **Mapbox maps/geocoding**.
+The project is built using a **Node.js + Express.js backend**, **MongoDB/Mongoose database layer**, and a **React single-page frontend (Vite + Tailwind CSS + Motion)** that talks to a JSON API, with external integrations for **Cloudinary image storage** and **Mapbox maps/geocoding**.
 
 The project follows an **MVC architecture** and uses reusable middleware for authentication, authorization, validation, and error handling.
 
@@ -183,7 +182,7 @@ A user cannot edit or delete another user's listing.
 - MongoDB-backed sessions using Connect Mongo.
 - Protected routes.
 - Login redirect handling.
-- Flash messages.
+- Toast notifications.
 
 ## 🏠 Property Listings
 Complete CRUD functionality:
@@ -260,7 +259,7 @@ Includes:
 - Custom `ExpressError`.
 - `wrapAsync`.
 - Centralized Express error handling.
-- Flash messages.
+- Toast notifications.
 - Missing-resource handling.
 
 ---
@@ -309,17 +308,16 @@ Application ────────┤
 - **Express.js 5**
 - **Mongoose**
 - **MongoDB**
-- **EJS**
-- **EJS-Mate**
+- **JSON REST API** under `/api`
 
 ## Frontend
 
-- **HTML5**
-- **CSS3**
-- **JavaScript**
-- **Bootstrap**
-- **Font Awesome**
-- **EJS**
+- **React 19** + **React Router**
+- **Vite** (dev server and build)
+- **Tailwind CSS 4**
+- **Motion** (animations, page transitions)
+- **Lucide** icons
+- **Mapbox GL JS**
 
 ## Authentication & Sessions
 
@@ -327,7 +325,6 @@ Application ────────┤
 - **Passport Local Strategy**
 - **Express Session**
 - **Connect Mongo**
-- **Connect Flash**
 
 ## Validation & Middleware
 
@@ -335,7 +332,6 @@ Application ────────┤
 - **Custom Express Middleware**
 - **ExpressError**
 - **wrapAsync**
-- **Method Override**
 - **dotenv**
 
 ## Image Upload & Storage
@@ -371,7 +367,7 @@ WonderLust follows an **MVC (Model–View–Controller)** architecture.
           ▼           ▼           ▼
         Model       View      Controller
           │           │           │
-      MongoDB        EJS      Business Logic
+      MongoDB       React     Business Logic
           │           │           │
           └───────────┼───────────┘
                       ▼
@@ -543,7 +539,7 @@ Wraps asynchronous route/controller functions so rejected promises are forwarded
 
 ## Centralized Error Handler
 
-Application errors are handled through centralized Express middleware and displayed through `views/error.ejs`.
+Application errors are handled through centralized Express middleware and returned as JSON (`{ "error": "..." }`), which the React app shows as a toast or error state.
 
 ---
 
@@ -607,6 +603,7 @@ cd MajorProject
 
 ```bash
 npm install
+npm install --prefix client
 ```
 
 ## 3. Configure environment variables
@@ -621,15 +618,24 @@ and add the required variables.
 
 ## 4. Start the application
 
-```bash
-node app.js
-```
-
-For development:
+Production-style (Express serves the built React app on port 8080):
 
 ```bash
-nodemon app.js
+npm run build
+npm start
 ```
+
+For development, run the API and the Vite dev server in two terminals:
+
+```bash
+npm run dev
+```
+
+```bash
+npm run dev --prefix client
+```
+
+Then open the Vite URL (http://localhost:5173). It proxies `/api` to Express on port 8080.
 
 ---
 
@@ -672,6 +678,15 @@ External Services
 ├── Cloudinary
 └── Mapbox
 ```
+
+### Render Build Settings
+
+```text
+Build Command:  npm install && npm run build
+Start Command:  npm start
+```
+
+`npm run build` installs the client's dependencies and builds the React app into `client/dist`, which Express serves.
 
 ### Render Environment Variables
 
@@ -716,8 +731,9 @@ The frontend is designed for:
 
 Responsive implementation uses:
 
-- Bootstrap grid.
-- CSS media queries.
+- Tailwind CSS responsive utilities (mobile-first).
+- A bottom-sheet filter panel on phones and a side drawer on larger screens.
+- A sticky booking card on desktop and a pinned "Reserve" bar on phones.
 - Responsive listing cards.
 - Mobile category filters.
 - Responsive navigation.
@@ -775,7 +791,6 @@ This project provided practical experience with:
 - Passport Local Strategy
 - Express Session
 - Connect Mongo
-- Connect Flash
 - Authorization middleware
 
 ### Cloud Integration
@@ -792,10 +807,11 @@ This project provided practical experience with:
 - HTML5
 - CSS3
 - JavaScript
-- EJS
-- EJS-Mate
-- Bootstrap
-- Font Awesome
+- React
+- React Router
+- Tailwind CSS
+- Motion (Framer Motion)
+- Vite
 - Responsive design
 
 ### Development
@@ -854,5 +870,5 @@ If you find this project useful or interesting, consider giving the repository a
 ---
 
 <p align="center">
-  Built with ❤️ using Node.js, Express.js, MongoDB, Mongoose, EJS and modern web technologies.
+  Built with ❤️ using Node.js, Express.js, MongoDB, Mongoose, React, Tailwind CSS and modern web technologies.
 </p>

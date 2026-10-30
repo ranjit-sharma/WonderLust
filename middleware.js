@@ -2,20 +2,11 @@ const Listing = require("./models/listing");
 const Review = require("./models/review.js");
 const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema, reviewSchema, } = require("./schema.js");
+const { cloudinary } = require("./cloudConfig.js");
 
 module.exports.isLoggedIn = (req, res, next) => {
-    // console.log(req.path,"........",req.originalUrl);//used for tracking 
     if (!req.isAuthenticated()) {
-        req.session.redirectUrl = req.originalUrl;
-        req.flash("error", "You must be logged in to create a listing!");
-        return res.redirect("/login");
-    }
-    next();
-};
-
-module.exports.saveRedirectUrl = (req, res, next) => {
-    if (req.session.redirectUrl) {
-        res.locals.redirectUrl = req.session.redirectUrl;
+        throw new ExpressError(401, "You must be logged in to do that!");
     }
     next();
 };
@@ -24,19 +15,21 @@ module.exports.isOwner = async (req, res, next) => {
     let { id } = req.params;
     let listing = await Listing.findById(id);
     if (!listing) {
-        req.flash("error", "Listing does not exist!");
-        return res.redirect("/listings");
+        throw new ExpressError(404, "Listing does not exist!");
     }
-    if (!listing.owner || !listing.owner.equals(res.locals.currUser._id)) {
-        req.flash("error", "You are not the owner of this listing");
-        return res.redirect(`/listings/${id}`);
+    if (!listing.owner || !listing.owner.equals(req.user._id)) {
+        throw new ExpressError(403, "You are not the owner of this listing");
     }
     next();
 };
 
-module.exports.validateListing = (req, res, next) => {
+module.exports.validateListing = async (req, res, next) => {
     let { error } = listingSchema.validate(req.body);
     if (error) {
+        // multer has already uploaded the image; don't leave it orphaned in Cloudinary.
+        if (req.file) {
+            await cloudinary.uploader.destroy(req.file.filename);
+        }
         let errMsg = error.details.map((el) => el.message).join(",");
         throw new ExpressError(400, errMsg);
     }
@@ -54,17 +47,15 @@ module.exports.validateReview = (req, res, next) => {
 };
 
 module.exports.isReviewAuthor = async (req, res, next) => {
-    let { id, reviewId } = req.params;
+    let { reviewId } = req.params;
     let review = await Review.findById(reviewId);
 
     if (!review) {
-        req.flash("error", "Review does not exist!");
-        return res.redirect(`/listings/${id}`);
+        throw new ExpressError(404, "Review does not exist!");
     }
 
-    if (!review.author || !review.author.equals(res.locals.currUser._id)) {
-        req.flash("error", "You did not create the review");
-        return res.redirect(`/listings/${id}`);
+    if (!review.author || !review.author.equals(req.user._id)) {
+        throw new ExpressError(403, "You did not create the review");
     }
     next();
 };

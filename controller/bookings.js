@@ -20,23 +20,37 @@ module.exports.createBooking = async (req, res) => {
         throw new ExpressError(404, "Listing does not exist!");
     }
 
+    const fail = (message) => {
+        throw new ExpressError(400, message);
+    };
+
+    if (listing.owner?.equals(req.user._id)) {
+        return fail("You cannot book your own listing.");
+    }
+
     const arrival = parseDate(checkIn);
     const departure = parseDate(checkOut);
     const guestCount = Number(guests);
+    const today = parseDate(new Date().toISOString().slice(0, 10));
 
     if (!arrival || !departure || departure <= arrival) {
-        throw new ExpressError(400, "Please select valid check-in and check-out dates.");
+        return fail("Please select valid check-in and check-out dates.");
+    }
+
+    if (arrival < today) {
+        return fail("Check-in date cannot be in the past.");
     }
 
     if (!Number.isInteger(guestCount) || guestCount < 1) {
-        throw new ExpressError(400, "Guests must be at least 1.");
+        return fail("Guests must be at least 1.");
     }
 
     const bookingNotes = typeof specialRequests === "string" ? specialRequests.trim() : "";
     if (bookingNotes.length > 300) {
-        throw new ExpressError(400, "Special requests must be 300 characters or fewer.");
+        return fail("Special requests must be 300 characters or fewer.");
     }
 
+    // shortcut: check-then-insert can race two simultaneous requests into a double booking; add a lock or unique index if traffic grows.
     const existingBooking = await Booking.findOne({
         listing: id,
         status: { $ne: "cancelled" },
@@ -45,7 +59,7 @@ module.exports.createBooking = async (req, res) => {
     });
 
     if (existingBooking) {
-        throw new ExpressError(400, "This listing is already booked for those dates.");
+        return fail("This listing is already booked for those dates.");
     }
 
     const nights = Math.ceil((departure - arrival) / (1000 * 60 * 60 * 24));
@@ -63,9 +77,9 @@ module.exports.createBooking = async (req, res) => {
         status: "confirmed",
     });
 
-    res.render("bookings/confirmation.ejs", {
+    res.status(201).json({
         booking,
-        listing,
+        listing: { _id: listing._id, title: listing.title, price: listing.price, image: listing.image },
         nights,
         basePrice,
         gst: totalPrice - basePrice,
@@ -83,14 +97,12 @@ module.exports.cancelBooking = async (req, res) => {
     }
 
     if (booking.status === "cancelled") {
-        req.flash("error", "This booking is already cancelled.");
-        return res.redirect("/profile");
+        throw new ExpressError(400, "This booking is already cancelled.");
     }
 
     booking.status = "cancelled";
     await booking.save();
-    req.flash("success", "Your booking has been cancelled.");
-    res.redirect("/profile");
+    res.json(booking);
 };
 
 module.exports.deleteBooking = async (req, res) => {
@@ -108,6 +120,5 @@ module.exports.deleteBooking = async (req, res) => {
     }
 
     await booking.deleteOne();
-    req.flash("success", "Cancelled booking deleted.");
-    res.redirect("/profile");
+    res.json({ ok: true });
 };

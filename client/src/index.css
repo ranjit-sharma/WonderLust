@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-brand-50: #fff1f2;
+  --color-brand-100: #ffe1e3;
+  --color-brand-200: #ffc7cb;
+  --color-brand-300: #ff9ea5;
+  --color-brand-400: #ff6871;
+  --color-brand-500: #fe424d;
+  --color-brand-600: #eb1c2a;
+  --color-brand-700: #c61220;
+  --color-ink: #0b0b0f;
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1); /* one easing curve for every transition */
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+  --animate-pan: pan 9s ease-in-out infinite;
+  --breakpoint-3xl: 112rem; /* 1792px: room for 7 cards a row */
+  --radius-card: 1.5rem; /* every card on the site uses this */
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px -12px rgb(0 0 0 / 0.18);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.04), 0 22px 40px -18px rgb(0 0 0 / 0.35);
+}
+
+/* slow drift of a 200%-wide gradient, e.g. the footer call-to-action */
+@keyframes pan {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -50% 0;
+  }
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-white text-neutral-900 antialiased dark:bg-ink dark:text-neutral-100;
+  }
+  ::selection {
+    @apply bg-brand-500 text-white;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    @apply cursor-pointer dark:invert;
+  }
+}
+
+@utility field {
+  @apply w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-[15px] text-neutral-900 transition duration-300 ease-smooth outline-none placeholder:text-neutral-400 focus:border-neutral-900 focus:ring-4 focus:ring-neutral-900/10 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-neutral-300 dark:focus:ring-white/10;
+}
+@utility label {
+  @apply mb-1.5 block text-sm font-semibold text-neutral-700 dark:text-neutral-300;
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition duration-300 ease-smooth select-none focus-visible:ring-4 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60;
+}
+@utility btn-primary {
+  @apply btn relative overflow-hidden bg-linear-to-r from-brand-500 to-brand-600 text-white shadow-[0_8px_20px_-8px_rgb(254_66_77/0.7)] hover:brightness-105 focus-visible:ring-brand-500/30 active:scale-[0.98];
+  /* light sweep across the button on hover */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(100deg, transparent 20%, rgb(255 255 255 / 0.35) 50%, transparent 80%);
+    transform: translateX(-120%);
+    transition: transform 0.8s var(--ease-smooth);
+  }
+  &:hover::after {
+    transform: translateX(120%);
+  }
+}
+@utility btn-dark {
+  @apply btn bg-neutral-900 text-white hover:bg-neutral-800 focus-visible:ring-neutral-900/20 active:scale-[0.98] dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200;
+}
+@utility btn-ghost {
+  @apply btn border border-neutral-300 bg-transparent text-neutral-800 hover:border-neutral-900 hover:bg-neutral-50 focus-visible:ring-neutral-900/10 dark:border-neutral-700 dark:text-neutral-200 dark:hover:border-neutral-400 dark:hover:bg-neutral-900;
+}
+@utility card {
+  @apply rounded-card border border-neutral-200/80 bg-white shadow-card dark:border-neutral-800 dark:bg-neutral-900/70;
+}
+@utility container-page {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10;
+}
+/* Pill controls next to the category bar, styled like the search bar */
+@utility pill {
+  @apply inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2.5 text-sm font-semibold whitespace-nowrap text-neutral-800 shadow-card transition duration-300 ease-smooth select-none hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-lift dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100 dark:hover:border-neutral-700;
+}
+@utility pill-active {
+  @apply border-brand-200 bg-brand-50 text-brand-700 hover:border-brand-300 dark:border-brand-500/40 dark:bg-brand-500/10 dark:text-brand-300;
+}
+/* Browse pages, navbar and footer use the full screen width, up to 110rem */
+@utility container-wide {
+  @apply mx-auto w-full max-w-[110rem] px-4 sm:px-6 lg:px-10;
+}
+/* 2 cards per row on phones, up to 7 on large screens */
+@utility listing-grid {
+  @apply grid grid-cols-2 gap-x-3 gap-y-7 sm:gap-x-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7;
+}
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Dual-thumb price slider: two stacked range inputs, only the thumbs take clicks. */
+.range-thumb {
+  @apply pointer-events-none absolute inset-0 h-full w-full appearance-none bg-transparent;
+}
+.range-thumb::-webkit-slider-thumb {
+  @apply pointer-events-auto h-6 w-6 cursor-grab appearance-none rounded-full border-2 border-white bg-neutral-900 shadow-md transition active:scale-110 active:cursor-grabbing dark:border-neutral-900 dark:bg-white;
+}
+.range-thumb::-moz-range-thumb {
+  @apply pointer-events-auto h-6 w-6 cursor-grab rounded-full border-2 border-white bg-neutral-900 shadow-md dark:border-neutral-900 dark:bg-white;
+}
+
+/* Mapbox popup in the site's style */
+.mapboxgl-popup-content {
+  @apply rounded-2xl! px-4! py-3! font-sans shadow-lift!;
+}
+.dark .mapboxgl-popup-content {
+  @apply bg-neutral-900! text-neutral-100!;
+}
+.dark .mapboxgl-popup-tip {
+  @apply border-t-neutral-900!;
+}
