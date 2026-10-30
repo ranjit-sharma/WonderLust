@@ -45,6 +45,8 @@
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
   body {
     background-color: #ebf0f7;
@@ -369,4 +371,15 @@ select.field option {
   font-size: 0.92rem;
   font-weight: 600;
   border-radius: 1rem;
+}
+
+
+/* Hardware accelerate sticky navigation and smooth scrollers */
+header.sticky, .sticky {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+article.group {
+  contain: layout style;
 }

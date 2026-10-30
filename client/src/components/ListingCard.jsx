@@ -12,13 +12,13 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.92, transition: { duration: 0.25, ease } }}
-      viewport={{ once: true, margin: "-40px" }}
-      // stagger across a row of up to 6 cards
-      transition={{ duration: 0.6, delay: (index % 6) * 0.05, ease }}
-      className="group relative"
+      exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.2, ease } }}
+      viewport={{ once: true, margin: "160px" }}
+      // Stagger only the initial viewport row so scroll remains silky smooth without hitching
+      transition={{ duration: 0.35, delay: index < 6 ? (index % 6) * 0.04 : 0, ease }}
+      className="group relative will-change-transform"
     >
       <Link
         to={`/listings/${listing._id}`}
@@ -30,11 +30,10 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
             alt={listing.title}
             // first rows are on screen right away; the rest load as they scroll near
             loading={index < 12 ? "eager" : "lazy"}
-            className="size-full object-cover transition-transform duration-[1.1s] ease-smooth group-hover:scale-[1.05]"
+            className="size-full object-cover transition-transform duration-[0.8s] ease-smooth group-hover:scale-[1.04]"
           />
           {/* soft shade so the tag and heart read on bright photos */}
-          <div className="absolute inset-x-0 top-0 h-20 bg-linear-to-b from-black/25 to-transparent" />
-
+          <div className="absolute inset-x-0 top-0 h-20 bg-linear-to-b from-black/25 to-transparent pointer-events-none" />
         </div>
 
         <div className="mt-2 sm:mt-3 px-0.5 sm:px-1">

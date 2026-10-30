@@ -155,20 +155,31 @@ module.exports.index = async (req, res) => {
 
 module.exports.toggleWishlist = async (req, res) => {
     const { id } = req.params;
-    const listing = await Listing.findById(id);
+    const exists = await Listing.exists({ _id: id });
 
-    if (!listing) {
+    if (!exists) {
         throw new ExpressError(404, "Listing does not exist!");
     }
 
-    const isSaved = (req.user.wishlist || []).some((listingId) => listingId.equals(id));
+    const isSaved = (req.user.wishlist || []).some((listingId) =>
+        (typeof listingId === "string" ? listingId === id : (listingId?._id ? listingId._id.equals(id) : listingId.equals(id)))
+    );
     const update = isSaved
         ? { $pull: { wishlist: id } }
         : { $addToSet: { wishlist: id } };
 
-    await req.user.updateOne(update);
+    await User.updateOne({ _id: req.user._id }, update);
+
+    if (isSaved) {
+        req.user.wishlist = (req.user.wishlist || []).filter((item) =>
+            (typeof item === "string" ? item !== id : (item?._id ? !item._id.equals(id) : !item.equals(id)))
+        );
+    } else {
+        req.user.wishlist = [...(req.user.wishlist || []), id];
+    }
+
     res.json({ saved: !isSaved });
-}
+};
 
 module.exports.showListing = async (req, res) => {
     let { id } = req.params;

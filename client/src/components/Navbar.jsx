@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate, useSearchParams } from "react-router";
-import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } from "motion/react";
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import {
   ArrowRight,
   Heart,
@@ -506,16 +506,22 @@ function AccountMenu() {
 
 export default function Navbar() {
   const { scrollY, scrollYProgress } = useScroll();
-  // spring-smoothed so the progress bar glides instead of jumping with each wheel tick
-  const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 30, restDelta: 0.001 });
   const [scrolled, setScrolled] = useState(false);
+  const lastScrolled = useRef(false);
   const { dark, toggle } = useTheme();
-  useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 8));
+
+  useMotionValueEvent(scrollY, "change", (y) => {
+    const isScrolled = y > 8;
+    if (isScrolled !== lastScrolled.current) {
+      lastScrolled.current = isScrolled;
+      setScrolled(isScrolled);
+    }
+  });
 
   return (
     <header
-      className={`sticky top-0 z-40 border-b bg-[#ebf0f7]/90 backdrop-blur-xl transition-[box-shadow,border-color] duration-300 dark:bg-[#12151d]/90 ${
-        scrolled ? "border-neutral-200 shadow-[0_6px_24px_-16px_rgb(0_0_0/0.35)] dark:border-neutral-800" : "border-transparent"
+      className={`sticky top-0 z-40 border-b bg-[#ebf0f7]/90 backdrop-blur-md transition-[box-shadow,border-color] duration-300 dark:bg-[#12151d]/90 will-change-transform ${
+        scrolled ? "border-neutral-200/80 shadow-[0_4px_20px_-8px_rgba(0,0,0,0.1)] dark:border-neutral-800" : "border-transparent"
       }`}
     >
       <div className="container-wide flex flex-wrap items-center gap-x-4 gap-y-3 py-3 md:flex-nowrap md:py-4">
@@ -552,8 +558,8 @@ export default function Navbar() {
       {/* reading-progress bar along the bottom edge of the navbar */}
       <motion.div
         aria-hidden="true"
-        style={{ scaleX: progress }}
-        className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-linear-to-r from-brand-500 to-brand-600"
+        style={{ scaleX: scrollYProgress, transformOrigin: "0%" }}
+        className="absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-brand-500 to-brand-600"
       />
     </header>
   );
