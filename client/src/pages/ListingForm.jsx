@@ -7,6 +7,7 @@ import { useAuth } from "../lib/auth.jsx";
 import { useToast } from "../lib/toast.jsx";
 import { imageUrl } from "../lib/format.js";
 import { ErrorState, PageHeader, PageLoader, Spinner, ease } from "../components/ui.jsx";
+import SearchableSelect from "../components/SearchableSelect.jsx";
 
 const empty = { title: "", description: "", category: "", price: "", country: "", state: "", location: "" };
 
@@ -175,10 +176,14 @@ export default function ListingForm() {
           <div key="row2" className="grid gap-6 sm:grid-cols-3">
             <div>
               <label htmlFor="country" className="label">Country</label>
-              <select id="country" required className="field" value={values.country} onChange={set("country")}>
-                <option value="" disabled>Select a country</option>
-                {countries.map((c) => <option key={c}>{c}</option>)}
-              </select>
+              <SearchableSelect
+                id="country"
+                required
+                value={values.country}
+                onChange={(val) => setValues((v) => ({ ...v, country: val }))}
+                options={countries}
+                placeholder="Select a country"
+              />
             </div>
             <div>
               <label htmlFor="state" className="label">State / Region</label>
