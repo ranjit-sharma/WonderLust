@@ -1,3 +1,4 @@
+// Routes: RESTful endpoints for listing management, exploration, and search
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
