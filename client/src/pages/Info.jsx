@@ -442,7 +442,7 @@ export function Feedback() {
         endpoint="/feedback"
         formSubmitEmail="ctrl.ranjit@gmail.com"
         submitLabel="Send feedback"
-        successMessage="Thank you! Your feedback has been sent to ctrl.ranjit@gmail.com."
+        successMessage="Thank you! Your feedback has been sent."
         onSuccess={() => setRating("")}
         fields={
           <>
