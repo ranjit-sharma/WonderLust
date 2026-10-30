@@ -346,7 +346,14 @@ export function SupportDetail() {
   );
 }
 
-function SupportForm({ endpoint, fields, submitLabel, successMessage }) {
+function SupportForm({
+  endpoint,
+  fields,
+  submitLabel,
+  successMessage,
+  formSubmitEmail,
+  onSuccess,
+}) {
   const toast = useToast();
   const [busy, setBusy] = useState(false);
 
@@ -355,9 +362,39 @@ function SupportForm({ endpoint, fields, submitLabel, successMessage }) {
     const form = e.currentTarget;
     setBusy(true);
     try {
-      await api(endpoint, { method: "POST", body: Object.fromEntries(new FormData(form)) });
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData);
+
+      if (formSubmitEmail) {
+        // Send email via FormSubmit AJAX endpoint
+        const payload = {
+          ...data,
+          _subject: `WonderLust Feedback: ${data.name || "A User"} (${data.rating ? data.rating + "/5 stars" : "Rating"})`,
+          _template: "table",
+          _captcha: "false",
+        };
+
+        const formSubmitPromise = fetch(`https://formsubmit.co/ajax/${formSubmitEmail}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(payload),
+        }).catch((err) => console.warn("FormSubmit notice:", err));
+
+        const dbPromise = api(endpoint, { method: "POST", body: data }).catch((err) =>
+          console.warn("DB notice:", err)
+        );
+
+        await Promise.allSettled([formSubmitPromise, dbPromise]);
+      } else {
+        await api(endpoint, { method: "POST", body: data });
+      }
+
       toast(successMessage);
       form.reset();
+      onSuccess?.();
     } catch (err) {
       toast(err.message, "error");
     } finally {
@@ -367,7 +404,18 @@ function SupportForm({ endpoint, fields, submitLabel, successMessage }) {
 
   return (
     <Reveal>
-      <form onSubmit={submit} className="card mx-auto grid max-w-2xl gap-5 p-6 sm:grid-cols-2 sm:p-10">
+      <form
+        onSubmit={submit}
+        action={formSubmitEmail ? `https://formsubmit.co/${formSubmitEmail}` : undefined}
+        method="POST"
+        className="card mx-auto grid max-w-2xl gap-5 p-6 sm:grid-cols-2 sm:p-10"
+      >
+        {formSubmitEmail && (
+          <>
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_captcha" value="false" />
+          </>
+        )}
         <div>
           <label htmlFor="name" className="label">Your name</label>
           <input id="name" name="name" required className="field" autoComplete="name" />
@@ -392,8 +440,10 @@ export function Feedback() {
       <Hero icon={MessageSquareText} eyebrow="Help us improve" title="Share your feedback" text="Tell us what you enjoyed, what we can improve, or what would make your WonderLust experience better." />
       <SupportForm
         endpoint="/feedback"
+        formSubmitEmail="ctrl.ranjit@gmail.com"
         submitLabel="Send feedback"
-        successMessage="Thank you for sharing your feedback with WonderLust."
+        successMessage="Thank you! Your feedback has been sent to ctrl.ranjit@gmail.com."
+        onSuccess={() => setRating("")}
         fields={
           <>
             <div className="sm:col-span-2">
