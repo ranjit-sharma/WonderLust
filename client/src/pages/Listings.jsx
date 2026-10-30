@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, animate, motion } from "motion/react";
 import { BadgePercent, ChevronLeft, ChevronRight, SearchX, SlidersHorizontal } from "lucide-react";
 import { getMeta } from "../lib/api.js";
 import { useApi } from "../lib/useApi.js";
@@ -74,7 +74,28 @@ function CategoryBar({ categories, active, onSelect }) {
     if (tab) el.scrollTo({ left: tab.offsetLeft - el.clientWidth / 2 + tab.offsetWidth / 2, behavior: "smooth" });
   }, [active, categories]);
 
-  const scrollBy = (dir) => scroller.current?.scrollBy({ left: dir * scroller.current.clientWidth * 0.7, behavior: "smooth" });
+  const animRef = useRef(null);
+
+  const scrollBy = (dir) => {
+    const el = scroller.current;
+    if (!el) return;
+    const distance = dir * Math.max(el.clientWidth * 0.65, 260);
+    const start = el.scrollLeft;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    const target = Math.max(0, Math.min(start + distance, maxScroll));
+
+    if (animRef.current) {
+      animRef.current.stop();
+    }
+
+    animRef.current = animate(start, target, {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1],
+      onUpdate: (val) => {
+        el.scrollLeft = val;
+      },
+    });
+  };
   const fade = `linear-gradient(to right, ${edges.left ? "transparent, black 56px" : "black"}, ${edges.right ? "black calc(100% - 56px), transparent" : "black"})`;
   const arrow =
     "absolute top-1/2 z-10 hidden size-8 -translate-y-1/2 place-items-center rounded-full border border-neutral-200 bg-white text-neutral-700 shadow-card transition duration-300 ease-smooth hover:scale-110 hover:shadow-lift md:grid dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200";
@@ -87,6 +108,8 @@ function CategoryBar({ categories, active, onSelect }) {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.88 }}
             onClick={() => scrollBy(-1)}
             aria-label="Scroll categories left"
             className={`${arrow} left-0`}
@@ -99,6 +122,8 @@ function CategoryBar({ categories, active, onSelect }) {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.88 }}
             onClick={() => scrollBy(1)}
             aria-label="Scroll categories right"
             className={`${arrow} right-0`}
@@ -111,7 +136,7 @@ function CategoryBar({ categories, active, onSelect }) {
         ref={scroller}
         onScroll={measure}
         style={{ maskImage: fade, WebkitMaskImage: fade }}
-        className="no-scrollbar -mx-4 flex gap-1 overflow-x-auto scroll-smooth px-4 sm:mx-0 sm:px-0"
+        className="no-scrollbar -mx-4 flex gap-1 overflow-x-auto px-4 sm:mx-0 sm:px-0"
         role="tablist"
         aria-label="Categories"
       >
