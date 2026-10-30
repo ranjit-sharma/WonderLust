@@ -110,8 +110,8 @@ export function PageHeader({ eyebrow, title, text, action }) {
     <div className="mb-6 sm:mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
         {eyebrow && <p className="text-xs sm:text-sm font-semibold tracking-wide text-brand-500 uppercase">{eyebrow}</p>}
-        <h1 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-4xl">{title}</h1>
-        {text && <p className="mt-2 max-w-xl text-neutral-500 dark:text-neutral-400">{text}</p>}
+        <h1 className="mt-1 text-xl sm:text-4xl font-extrabold tracking-tight break-words">{title}</h1>
+        {text && <p className="mt-2 max-w-xl text-xs sm:text-base text-neutral-500 dark:text-neutral-400">{text}</p>}
       </div>
       {action}
     </div>

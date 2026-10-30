@@ -37,17 +37,17 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
 
         </div>
 
-        <div className="mt-3 px-1">
-          <div className="flex items-start justify-between gap-2">
-            <h3 className="min-w-0 truncate font-bold text-neutral-900 dark:text-neutral-100">{listing.title}</h3>
+        <div className="mt-2 sm:mt-3 px-0.5 sm:px-1">
+          <div className="flex items-start justify-between gap-1.5 sm:gap-2">
+            <h3 className="min-w-0 truncate font-bold text-xs sm:text-base text-neutral-900 dark:text-neutral-100">{listing.title}</h3>
             {"averageRating" in listing && (
-              <Rating value={listing.averageRating} count={listing.reviewCount} className="shrink-0 text-xs sm:text-sm" />
+              <Rating value={listing.averageRating} count={listing.reviewCount} className="shrink-0 text-[11px] sm:text-sm" />
             )}
           </div>
-          <p className="truncate text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="truncate text-[11px] sm:text-sm text-neutral-500 dark:text-neutral-400">
             {[listing.location, listing.country].filter(Boolean).join(", ")}
           </p>
-          <p className="mt-1 text-[15px]">
+          <p className="mt-0.5 sm:mt-1 text-xs sm:text-[15px]">
             <motion.span
               key={String(showTax)}
               initial={{ opacity: 0, y: 4 }}
@@ -57,21 +57,21 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
             >
               {formatPrice(price)}
             </motion.span>{" "}
-            <span className="text-neutral-500 dark:text-neutral-400">night{showTax && " incl. GST"}</span>
+            <span className="text-neutral-500 dark:text-neutral-400 text-[11px] sm:text-sm">night{showTax && " incl. GST"}</span>
           </p>
         </div>
       </Link>
       {/* Top bar: category tag and wishlist button aligned responsively on both mobile and desktop */}
-      <div className="pointer-events-none absolute inset-x-2 top-2 z-10 flex items-center justify-between gap-1.5 sm:inset-x-3 sm:top-3 sm:gap-2">
+      <div className="pointer-events-none absolute inset-x-1.5 top-1.5 z-10 flex items-center justify-between gap-1 sm:inset-x-3 sm:top-3 sm:gap-2">
         {listing.category ? (
-          <span className="pointer-events-auto inline-flex h-6 items-center gap-1.5 max-w-[calc(100%-2.25rem)] truncate rounded-full bg-black/50 px-2.5 text-[11px] font-semibold text-white shadow-sm ring-1 ring-white/15 backdrop-blur-md sm:h-7 sm:max-w-[calc(100%-3rem)] sm:px-3 sm:text-xs">
-            <Tag className="size-3 shrink-0 stroke-[2.2] text-white" />
+          <span className="pointer-events-auto inline-flex h-5 sm:h-7 items-center gap-1 sm:gap-1.5 max-w-[calc(100%-2rem)] sm:max-w-[calc(100%-3rem)] truncate rounded-full bg-black/55 px-2 sm:px-3 text-[10px] sm:text-xs font-semibold text-white shadow-sm ring-1 ring-white/15 backdrop-blur-md">
+            <Tag className="size-2.5 sm:size-3 shrink-0 stroke-[2.2] text-white" />
             <span className="truncate">{listing.category}</span>
           </span>
         ) : (
           <span />
         )}
-        <div className="pointer-events-auto">
+        <div className="pointer-events-auto shrink-0">
           <WishlistButton listingId={listing._id} onChange={onWishlistChange} />
         </div>
       </div>
