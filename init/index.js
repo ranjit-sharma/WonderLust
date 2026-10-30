@@ -1,3 +1,4 @@
+// Database seeding: populates initial listings with geocoded coordinates
 require("dotenv").config({ path: require("path").join(__dirname, "../.env") });
 const mongoose = require("mongoose");
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
