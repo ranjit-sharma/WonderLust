@@ -36,7 +36,9 @@ function SearchBar({ className = "" }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [q, setQ] = useState(params.get("q") || "");
+  const [debouncedQ, setDebouncedQ] = useState("");
   const [open, setOpen] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const [allListings, setAllListings] = useState([]);
   const containerRef = useRef(null);
 
@@ -56,6 +58,24 @@ function SearchBar({ className = "" }) {
       active = false;
     };
   }, []);
+
+  // Debounce query: require at least 2 characters and a short typing pause (300ms)
+  useEffect(() => {
+    if (q.trim().length < 2) {
+      setDebouncedQ("");
+      setOpen(false);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setDebouncedQ(q.trim());
+      if (isFocused) {
+        setOpen(true);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [q, isFocused]);
 
   // Close suggestions when clicking outside or pressing Escape
   useEffect(() => {
@@ -92,10 +112,10 @@ function SearchBar({ className = "" }) {
     return Array.from(map.values());
   }, [allListings]);
 
-  // Matching existing listings
+  // Matching existing listings (only when debounced query is at least 2 chars)
   const matchingListings = useMemo(() => {
-    const query = q.trim().toLowerCase();
-    if (!query) return allListings.slice(0, 4);
+    const query = debouncedQ.toLowerCase();
+    if (!query || query.length < 2) return [];
     return allListings
       .filter(
         (l) =>
@@ -105,25 +125,25 @@ function SearchBar({ className = "" }) {
           l.category?.toLowerCase().includes(query)
       )
       .slice(0, 5);
-  }, [allListings, q]);
+  }, [allListings, debouncedQ]);
 
   // Matching destinations
   const matchingDestinations = useMemo(() => {
-    const query = q.trim().toLowerCase();
-    if (!query) return destinations.slice(0, 3);
+    const query = debouncedQ.toLowerCase();
+    if (!query || query.length < 2) return [];
     return destinations
       .filter((d) => d.name.toLowerCase().includes(query))
       .slice(0, 3);
-  }, [destinations, q]);
+  }, [destinations, debouncedQ]);
 
   // Matching categories
   const matchingCategories = useMemo(() => {
-    const query = q.trim().toLowerCase();
-    if (!query) return [];
+    const query = debouncedQ.toLowerCase();
+    if (!query || query.length < 2) return [];
     return Object.keys(categoryIcons)
       .filter((c) => c.toLowerCase().includes(query))
       .slice(0, 3);
-  }, [q]);
+  }, [debouncedQ]);
 
   const submit = (e) => {
     e?.preventDefault();
@@ -155,6 +175,8 @@ function SearchBar({ className = "" }) {
 
   const handleClear = () => {
     setQ("");
+    setDebouncedQ("");
+    setOpen(false);
     const next = new URLSearchParams(pathname === "/listings" ? params : undefined);
     next.delete("q");
     navigate(`/listings?${next}`);
@@ -171,10 +193,18 @@ function SearchBar({ className = "" }) {
         <input
           type="search"
           value={q}
-          onFocus={() => setOpen(true)}
+          onFocus={() => {
+            setIsFocused(true);
+            if (debouncedQ.length >= 2) {
+              setOpen(true);
+            }
+          }}
+          onBlur={() => {
+            // Keep state updated without blocking click handlers in dropdown
+            setTimeout(() => setIsFocused(false), 200);
+          }}
           onChange={(e) => {
             setQ(e.target.value);
-            setOpen(true);
           }}
           placeholder="Search destinations, stays, categories…"
           aria-label="Search listings"
@@ -206,7 +236,7 @@ function SearchBar({ className = "" }) {
 
       {/* Search Suggestions Dropdown */}
       <AnimatePresence>
-        {open && (
+        {open && debouncedQ.length >= 2 && (
           <motion.div
             initial={{ opacity: 0, y: -6, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -216,7 +246,7 @@ function SearchBar({ className = "" }) {
           >
             {!hasSuggestions ? (
               <div className="px-4 py-6 text-center text-sm text-neutral-500 dark:text-neutral-400">
-                <p>No listings found matching "{q}"</p>
+                <p>No listings found matching "{debouncedQ}"</p>
                 <button
                   type="button"
                   onClick={submit}
@@ -231,7 +261,7 @@ function SearchBar({ className = "" }) {
                 {matchingDestinations.length > 0 && (
                   <div>
                     <div className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
-                      {q.trim() ? "Destinations" : "Popular Destinations"}
+                      Destinations
                     </div>
                     <div className="space-y-0.5">
                       {matchingDestinations.map((dest) => (
@@ -291,7 +321,7 @@ function SearchBar({ className = "" }) {
                 {matchingListings.length > 0 && (
                   <div>
                     <div className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
-                      {q.trim() ? "Existing Stays" : "Featured Stays"}
+                      Existing Stays
                     </div>
                     <div className="space-y-1">
                       {matchingListings.map((listing) => (
@@ -328,18 +358,16 @@ function SearchBar({ className = "" }) {
                 )}
 
                 {/* Footer action to search all */}
-                {q.trim() && (
-                  <div className="border-t border-neutral-100 pt-1.5 dark:border-neutral-800">
-                    <button
-                      type="button"
-                      onClick={submit}
-                      className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold text-brand-500 hover:bg-brand-50/60 dark:hover:bg-brand-500/10 transition"
-                    >
-                      <span>Search all results for "{q.trim()}"</span>
-                      <ArrowRight className="size-3.5" />
-                    </button>
-                  </div>
-                )}
+                <div className="border-t border-neutral-100 pt-1.5 dark:border-neutral-800">
+                  <button
+                    type="button"
+                    onClick={submit}
+                    className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold text-brand-500 hover:bg-brand-50/60 dark:hover:bg-brand-500/10 transition"
+                  >
+                    <span>Search all results for "{debouncedQ}"</span>
+                    <ArrowRight className="size-3.5" />
+                  </button>
+                </div>
               </div>
             )}
           </motion.div>
