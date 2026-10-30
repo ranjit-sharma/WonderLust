@@ -12,7 +12,7 @@ const AUTH_IMAGE = "https://images.unsplash.com/photo-1501785888041-af3ef285b470
 
 function AuthLayout({ title, text, children, footer }) {
   return (
-    <div className="container-page grid min-h-[calc(100dvh-12rem)] items-center gap-10 py-10 lg:grid-cols-2">
+    <div className="container-page grid min-h-[calc(100dvh-12rem)] items-center gap-10 py-6 sm:py-10 lg:grid-cols-2">
       <motion.div
         initial={{ opacity: 0, x: -24 }}
         animate={{ opacity: 1, x: 0 }}
@@ -41,7 +41,7 @@ function AuthLayout({ title, text, children, footer }) {
         className="mx-auto w-full max-w-md"
       >
         <Logo iconSize="size-7" clickable={false} />
-        <h1 className="mt-6 text-3xl font-extrabold tracking-tight sm:text-4xl">{title}</h1>
+        <h1 className="mt-6 text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">{title}</h1>
         <p className="mt-2 text-neutral-500 dark:text-neutral-400">{text}</p>
         <div className="mt-8">{children}</div>
         <p className="mt-6 text-center text-sm text-neutral-600 dark:text-neutral-400">{footer}</p>

@@ -148,7 +148,7 @@ export default function ListingForm() {
   if (!meta || (editing && !values.title)) return <PageLoader />;
 
   return (
-    <div className="container-page max-w-3xl py-10">
+    <div className="container-page max-w-3xl py-6 sm:py-10">
       <PageHeader
         eyebrow={editing ? "Edit listing" : "Become a host"}
         title={editing ? "Update your place" : "Share your place with the world"}
@@ -214,8 +214,8 @@ export default function ListingForm() {
             </div>
           </div>,
           <div key="actions" className="flex flex-col-reverse gap-3 border-t border-neutral-200 pt-6 sm:flex-row sm:justify-end dark:border-neutral-800">
-            <Link to={editing ? `/listings/${id}` : "/listings"} className="btn-ghost">Cancel</Link>
-            <button type="submit" disabled={submitting} className="btn-primary px-8">
+            <Link to={editing ? `/listings/${id}` : "/listings"} className="btn-ghost w-full sm:w-auto">Cancel</Link>
+            <button type="submit" disabled={submitting} className="btn-primary w-full sm:w-auto px-8">
               {submitting && <Spinner className="size-4" />}
               {editing ? "Save changes" : "Publish listing"}
             </button>

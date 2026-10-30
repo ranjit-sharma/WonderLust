@@ -81,7 +81,7 @@ function ReviewCard({ review, canDelete, onDelete }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.35, ease }}
-      className="card flex flex-col p-5"
+      className="card flex flex-col p-4 sm:p-5"
     >
       <div className="flex items-center gap-3">
         <Avatar name={review.author?.username} className="size-10" />
@@ -323,7 +323,7 @@ export default function ListingDetail() {
           initial={{ y: 100 }}
           animate={{ y: 0 }}
           transition={{ delay: 0.4, type: "spring", stiffness: 260, damping: 30 }}
-          className="fixed inset-x-0 bottom-0 z-30 border-t border-neutral-200 bg-white/95 backdrop-blur-xl lg:hidden dark:border-neutral-800 dark:bg-ink/95"
+          className="fixed inset-x-0 bottom-0 z-30 border-t border-neutral-200 bg-white/95 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl lg:hidden dark:border-neutral-800 dark:bg-ink/95"
         >
           <div className="container-page flex items-center justify-between gap-4 py-3">
             <p>

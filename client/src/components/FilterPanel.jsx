@@ -177,10 +177,10 @@ export default function FilterPanel({ open, onClose, params, categories, onApply
             animate={{ x: 0, y: 0 }}
             exit={hidden}
             transition={{ type: "spring", stiffness: 320, damping: 34 }}
-            className="absolute inset-x-0 bottom-0 flex max-h-[90dvh] flex-col rounded-t-3xl bg-white shadow-lift md:inset-y-0 md:right-0 md:left-auto md:max-h-none md:w-[420px] md:rounded-none md:rounded-l-3xl dark:bg-neutral-900"
+            className="absolute inset-x-0 bottom-0 flex max-h-[92dvh] flex-col rounded-t-3xl bg-white shadow-lift md:inset-y-0 md:right-0 md:left-auto md:max-h-none md:w-[420px] md:rounded-none md:rounded-l-3xl dark:bg-neutral-900"
           >
             <div className="mx-auto mt-3 h-1.5 w-12 rounded-full bg-neutral-300 md:hidden dark:bg-neutral-700" />
-            <header className="flex items-center justify-between border-b border-neutral-200 px-6 py-4 dark:border-neutral-800">
+            <header className="flex items-center justify-between border-b border-neutral-200 px-4 py-3.5 sm:px-6 sm:py-4 dark:border-neutral-800">
               <h2 id="filters-title" className="flex items-center gap-2 text-lg font-bold">
                 <SlidersHorizontal className="size-5" /> Filters
               </h2>
@@ -189,7 +189,7 @@ export default function FilterPanel({ open, onClose, params, categories, onApply
               </button>
             </header>
 
-            <div className="flex-1 overflow-y-auto px-6 pb-28">
+            <div className="flex-1 overflow-y-auto px-4 sm:px-6 pb-28">
               <Section icon={MapPin} title="Location">
                 <div ref={locRef} className="relative">
                   <input
@@ -278,14 +278,14 @@ export default function FilterPanel({ open, onClose, params, categories, onApply
                 />
               </Section>
               <Section icon={Star} title="Minimum rating">
-                <div className="grid grid-cols-5 gap-2">
+                <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
                   {["", "1", "2", "3", "4"].map((r) => (
                     <button
                       type="button"
                       key={r || "any"}
                       onClick={() => setDraft((d) => ({ ...d, minRating: r }))}
                       aria-pressed={draft.minRating === r}
-                      className={`rounded-xl border py-2.5 text-sm font-semibold transition ${
+                      className={`rounded-xl border py-2 sm:py-2.5 text-xs sm:text-sm font-semibold transition ${
                         draft.minRating === r
                           ? "border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900"
                           : "border-neutral-300 hover:border-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-300"
@@ -298,7 +298,7 @@ export default function FilterPanel({ open, onClose, params, categories, onApply
               </Section>
             </div>
 
-            <footer className="flex items-center justify-between gap-3 border-t border-neutral-200 px-6 py-4 dark:border-neutral-800">
+            <footer className="flex items-center justify-between gap-3 border-t border-neutral-200 px-4 py-3.5 sm:px-6 sm:py-4 pb-[max(1rem,env(safe-area-inset-bottom))] dark:border-neutral-800">
               <button type="button" onClick={clear} className="flex items-center gap-2 text-sm font-semibold underline-offset-4 hover:underline">
                 <RotateCcw className="size-4" /> Clear all
               </button>

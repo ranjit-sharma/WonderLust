@@ -43,7 +43,7 @@ function BookingRow({ booking, onCancel, onDelete }) {
   const listing = booking.listing;
   return (
     <motion.li layout exit={{ opacity: 0, x: -20 }} className="flex flex-col gap-4 rounded-card border border-neutral-200 p-4 sm:flex-row sm:items-center dark:border-neutral-800">
-      {listing?.image?.url && <img src={imageUrl(listing.image.url, 320)} alt="" className="h-20 w-full rounded-xl object-cover sm:w-28" />}
+      {listing?.image?.url && <img src={imageUrl(listing.image.url, 320)} alt="" className="h-36 w-full rounded-xl object-cover sm:h-20 sm:w-28" />}
       <div className="min-w-0 flex-1">
         {listing ? (
           <Link to={`/listings/${listing._id}`} className="font-bold hover:underline">{listing.title}</Link>
@@ -54,7 +54,7 @@ function BookingRow({ booking, onCancel, onDelete }) {
           {formatDate(booking.checkIn)} → {formatDate(booking.checkOut)} · {booking.guests} guest{booking.guests === 1 ? "" : "s"}
         </p>
       </div>
-      <div className="flex items-center gap-3 sm:flex-col sm:items-end">
+      <div className="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
         <span className={`rounded-full px-3 py-1 text-xs font-bold capitalize ${statusStyles[booking.status]}`}>{booking.status}</span>
         <strong>{formatPrice(booking.totalPrice)}</strong>
         {listing && (
@@ -116,14 +116,14 @@ export function Profile() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.08, duration: 0.5, ease }}
             whileHover={{ y: -4 }}
-            className="card flex items-center gap-4 p-5"
+            className="card flex items-center gap-3 p-3.5 sm:gap-4 sm:p-5"
           >
             <span className={`grid size-12 shrink-0 place-items-center rounded-2xl ${accents[i % accents.length].tint} ${accents[i % accents.length].text}`}>
               <s.icon className="size-6" />
             </span>
             <div>
-              <p className="text-2xl font-extrabold"><CountUp value={s.value} /></p>
-              <p className="text-sm text-neutral-500">{s.label}</p>
+              <p className="text-xl sm:text-2xl font-extrabold"><CountUp value={s.value} /></p>
+              <p className="text-xs sm:text-sm text-neutral-500">{s.label}</p>
             </div>
           </motion.div>
         ))}
@@ -296,7 +296,7 @@ export function BookingConfirmation() {
   ];
 
   return (
-    <div className="container-page max-w-xl py-12 text-center">
+    <div className="container-page max-w-xl py-8 sm:py-12 text-center">
       <div className="flex justify-center"><AnimatedCheck /></div>
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.5, ease }}>
         <p className="mt-6 text-sm font-semibold tracking-wide text-emerald-600 uppercase">Reservation confirmed</p>
@@ -305,7 +305,7 @@ export function BookingConfirmation() {
 
         <div className="card mt-8 overflow-hidden text-left">
           {listing.image?.url && <img src={imageUrl(listing.image.url, 1000)} alt="" className="h-40 w-full object-cover" />}
-          <dl className="space-y-3 p-6">
+          <dl className="space-y-3 p-4 sm:p-6 text-sm sm:text-base">
             {rows.map(([k, v]) => (
               <div key={k} className="flex justify-between"><dt className="text-neutral-500">{k}</dt><dd className="font-semibold">{v}</dd></div>
             ))}

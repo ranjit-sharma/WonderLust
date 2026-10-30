@@ -34,7 +34,7 @@ import SearchableSelect from "../components/SearchableSelect.jsx";
 
 function Hero({ icon: Icon, eyebrow, title, text }) {
   return (
-    <section className="relative overflow-hidden rounded-card bg-linear-to-br from-brand-50 via-violet-50 to-sky-50 px-6 py-14 text-center sm:px-12 sm:py-20 dark:from-brand-500/10 dark:via-violet-500/5 dark:to-sky-500/10">
+    <section className="relative overflow-hidden rounded-card bg-linear-to-br from-brand-50 via-violet-50 to-sky-50 px-4 py-10 text-center sm:px-12 sm:py-20 dark:from-brand-500/10 dark:via-violet-500/5 dark:to-sky-500/10">
       <motion.div
         aria-hidden="true"
         animate={{ y: [0, -14, 0], rotate: [0, 6, 0] }}
@@ -51,8 +51,8 @@ function Hero({ icon: Icon, eyebrow, title, text }) {
       </motion.span>
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.6, ease }}>
         <p className="mt-6 text-sm font-semibold tracking-wide text-brand-500 uppercase">{eyebrow}</p>
-        <h1 className="mx-auto mt-2 max-w-2xl text-4xl font-extrabold tracking-tight sm:text-5xl">{title}</h1>
-        <p className="mx-auto mt-4 max-w-xl text-neutral-600 sm:text-lg dark:text-neutral-400">{text}</p>
+        <h1 className="mx-auto mt-2 max-w-2xl text-2xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">{title}</h1>
+        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-neutral-600 sm:text-lg dark:text-neutral-400">{text}</p>
       </motion.div>
     </section>
   );
@@ -89,7 +89,7 @@ function TopicGrid({ topics, cols = "md:grid-cols-2" }) {
 
 function Story({ eyebrow, title, paragraphs, cta }) {
   return (
-    <Reveal className="card grid gap-6 p-8 sm:p-10 md:grid-cols-[1fr_1.4fr]">
+    <Reveal className="card grid gap-6 p-5 sm:p-10 md:grid-cols-[1fr_1.4fr]">
       <div>
         <p className="text-sm font-semibold tracking-wide text-brand-500 uppercase">{eyebrow}</p>
         <h2 className="mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl">{title}</h2>
@@ -104,7 +104,7 @@ function Story({ eyebrow, title, paragraphs, cta }) {
 
 function Prose({ sections }) {
   return (
-    <Reveal className="card space-y-8 p-8 sm:p-10">
+    <Reveal className="card space-y-8 p-5 sm:p-10">
       {sections.map(([heading, text]) => (
         <div key={heading}>
           <h2 className="text-xl font-bold">{heading}</h2>
@@ -408,7 +408,7 @@ function SupportForm({
         onSubmit={submit}
         action={formSubmitEmail ? `https://formsubmit.co/${formSubmitEmail}` : undefined}
         method="POST"
-        className="card mx-auto grid max-w-2xl gap-5 p-6 sm:grid-cols-2 sm:p-10"
+        className="card mx-auto grid max-w-2xl gap-5 p-5 sm:grid-cols-2 sm:p-10"
       >
         {formSubmitEmail && (
           <>

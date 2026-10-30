@@ -38,7 +38,7 @@ export default function BookingCard({ listing, averageRating, reviewCount }) {
   };
 
   return (
-    <div id="reserve" className="card scroll-mt-36 p-6 md:scroll-mt-28">
+    <div id="reserve" className="card scroll-mt-36 p-4 sm:p-6 md:scroll-mt-28">
       <div className="flex items-baseline justify-between gap-3">
         <p>
           <span className="text-2xl font-extrabold">{formatPrice(listing.price)}</span>
@@ -61,17 +61,17 @@ export default function BookingCard({ listing, averageRating, reviewCount }) {
       ) : (
         <form onSubmit={submit} className="mt-6">
           <div className="grid grid-cols-2 overflow-hidden rounded-2xl border border-neutral-300 dark:border-neutral-700">
-            <label htmlFor="check-in" className="border-r border-b border-neutral-300 p-3 dark:border-neutral-700">
+            <label htmlFor="check-in" className="border-r border-b border-neutral-300 p-2.5 sm:p-3 dark:border-neutral-700">
               <span className="block text-[11px] font-bold tracking-wide uppercase">Check-in</span>
-              <input id="check-in" type="date" required min={today} value={form.checkIn} onChange={set("checkIn")} className="mt-0.5 w-full bg-transparent text-sm outline-none" />
+              <input id="check-in" type="date" required min={today} value={form.checkIn} onChange={set("checkIn")} className="mt-0.5 w-full bg-transparent text-xs sm:text-sm outline-none" />
             </label>
-            <label htmlFor="check-out" className="border-b border-neutral-300 p-3 dark:border-neutral-700">
+            <label htmlFor="check-out" className="border-b border-neutral-300 p-2.5 sm:p-3 dark:border-neutral-700">
               <span className="block text-[11px] font-bold tracking-wide uppercase">Check-out</span>
-              <input id="check-out" type="date" required min={minCheckOut} value={form.checkOut} onChange={set("checkOut")} className="mt-0.5 w-full bg-transparent text-sm outline-none" />
+              <input id="check-out" type="date" required min={minCheckOut} value={form.checkOut} onChange={set("checkOut")} className="mt-0.5 w-full bg-transparent text-xs sm:text-sm outline-none" />
             </label>
-            <label htmlFor="guests" className="col-span-2 p-3">
+            <label htmlFor="guests" className="col-span-2 p-2.5 sm:p-3">
               <span className="block text-[11px] font-bold tracking-wide uppercase">Guests</span>
-              <input id="guests" type="number" required min={1} value={form.guests} onChange={set("guests")} className="mt-0.5 w-full bg-transparent text-sm outline-none" />
+              <input id="guests" type="number" required min={1} value={form.guests} onChange={set("guests")} className="mt-0.5 w-full bg-transparent text-xs sm:text-sm outline-none" />
             </label>
           </div>
           <label htmlFor="special-requests" className="mt-3 block">

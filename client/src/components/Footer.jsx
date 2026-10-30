@@ -52,7 +52,7 @@ function FooterLink({ to, children }) {
 // Red call-to-action card that overlaps the top edge of the footer.
 function FooterCta() {
   return (
-    <Reveal className="animate-pan relative z-10 -mt-14 overflow-hidden rounded-card bg-linear-to-br from-brand-500 via-brand-600 to-brand-500 bg-[length:200%_200%] px-5 py-5 text-white shadow-[0_18px_44px_-20px_rgb(254_66_77/0.6)] sm:px-10 sm:py-7">
+    <Reveal className="animate-pan relative z-10 -mt-14 overflow-hidden rounded-card bg-linear-to-br from-brand-500 via-brand-600 to-brand-500 bg-[length:200%_200%] px-4 py-5 text-white shadow-[0_18px_44px_-20px_rgb(254_66_77/0.6)] sm:px-10 sm:py-7">
       <motion.span
         aria-hidden="true"
         animate={{ rotate: 360 }}
@@ -75,7 +75,7 @@ function FooterCta() {
           </div>
         </div>
         {/* side by side on every screen; compact on phones */}
-        <div className="grid grid-cols-2 gap-2.5 sm:flex sm:gap-3">
+        <div className="grid grid-cols-1 min-[340px]:grid-cols-2 gap-2 sm:flex sm:gap-3">
           <Link
             to="/listings"
             className="group btn bg-white px-3 py-2.5 text-[13px] text-brand-600 shadow-lift hover:-translate-y-0.5 hover:bg-white/95 focus-visible:ring-white/40 sm:px-5 sm:text-sm"
@@ -101,7 +101,7 @@ export default function Footer() {
       <div className="container-wide">
         <FooterCta />
 
-        <div className="grid grid-cols-2 gap-x-8 gap-y-12 py-14 sm:grid-cols-3 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
+        <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-x-8 gap-y-10 py-10 sm:grid-cols-3 sm:py-14 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
           <Reveal className="col-span-2 max-w-md sm:col-span-3 lg:col-span-1">
             <Logo clickable={false} />
             <h3 className="mt-4 text-[15px] font-bold text-neutral-900 dark:text-neutral-100">
