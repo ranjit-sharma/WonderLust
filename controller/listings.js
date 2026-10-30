@@ -176,6 +176,7 @@ module.exports.showListing = async (req, res) => {
     const listing = await Listing.findById(id)
         .populate({
             path: "reviews",
+            options: { sort: { createdAt: -1, _id: -1 } },
             populate: {
                 path: "author",
                 select: "username",
@@ -184,6 +185,15 @@ module.exports.showListing = async (req, res) => {
         .populate("owner", "username");
     if (!listing) {
         throw new ExpressError(404, "Listing you requested for does not exist!");
+    }
+    // Ensure newest reviews appear first
+    if (Array.isArray(listing.reviews)) {
+        listing.reviews.sort((a, b) => {
+            const timeA = new Date(a.createdAt || 0).getTime();
+            const timeB = new Date(b.createdAt || 0).getTime();
+            if (timeA !== timeB) return timeB - timeA;
+            return String(b._id || "").localeCompare(String(a._id || ""));
+        });
     }
     const reviewCount = listing.reviews.length;
     const validReviews = listing.reviews.filter(r => r && typeof r.rating === 'number');

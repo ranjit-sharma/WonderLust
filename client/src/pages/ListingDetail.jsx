@@ -106,6 +106,14 @@ export default function ListingDetail() {
   const isOwner = user && listing.owner?._id === user._id;
   const bookingCard = <BookingCard listing={listing} averageRating={averageRating} reviewCount={reviewCount} />;
 
+  // Sort reviews newest first (latest comments show at the top)
+  const sortedReviews = [...(listing.reviews || [])].sort((a, b) => {
+    const timeA = new Date(a.createdAt || 0).getTime();
+    const timeB = new Date(b.createdAt || 0).getTime();
+    if (timeA !== timeB) return timeB - timeA;
+    return String(b._id || "").localeCompare(String(a._id || ""));
+  });
+
   const deleteListing = async () => {
     if (!confirm("Delete this listing? This cannot be undone.")) return;
     try {
@@ -210,7 +218,7 @@ export default function ListingDetail() {
               <>
                 <div className="grid gap-4 md:grid-cols-2">
                   <AnimatePresence>
-                    {(showAllReviews ? listing.reviews : listing.reviews.slice(0, 4)).map((review) => (
+                    {(showAllReviews ? sortedReviews : sortedReviews.slice(0, 4)).map((review) => (
                       <ReviewCard
                         key={review._id}
                         review={review}
@@ -221,7 +229,7 @@ export default function ListingDetail() {
                   </AnimatePresence>
                 </div>
 
-                {listing.reviews.length > 4 && (
+                {sortedReviews.length > 4 && (
                   <div className="mt-6">
                     <button
                       type="button"
