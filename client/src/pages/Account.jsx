@@ -9,9 +9,11 @@ import {
   Luggage,
   Mail,
   Plus,
+  ShieldCheck,
   Star,
   User,
   Users,
+  Wallet,
 } from "lucide-react";
 import { api } from "../lib/api.js";
 import { useApi } from "../lib/useApi.js";
@@ -584,7 +586,7 @@ export function BookingConfirmation() {
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.5, ease }}>
         <p className="mt-4 sm:mt-6 text-xs sm:text-sm font-semibold tracking-wide text-emerald-600 uppercase">Reservation confirmed</p>
         <h1 className="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight">Your stay at {listing.title} is booked</h1>
-        <p className="mt-2 text-xs sm:text-sm text-neutral-500">We look forward to hosting you.</p>
+        <p className="mt-2 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">Pack your bags! Your spot is 100% reserved. Pay nothing online today.</p>
 
         <div className="card mt-6 sm:mt-8 overflow-hidden text-left">
           {listing.image?.url && <img src={imageUrl(listing.image.url, 1000)} alt="" className="h-40 w-full object-cover" />}
@@ -595,8 +597,54 @@ export function BookingConfirmation() {
             <hr className="border-neutral-200 dark:border-neutral-800" />
             <div className="flex justify-between"><dt>{nights} night{nights > 1 && "s"} × {formatPrice(listing.price)}</dt><dd>{formatPrice(basePrice)}</dd></div>
             <div className="flex justify-between"><dt>GST</dt><dd>{formatPrice(gst)}</dd></div>
-            <div className="flex justify-between border-t border-neutral-200 pt-3 text-base sm:text-lg font-bold dark:border-neutral-800"><dt>Total</dt><dd>{formatPrice(booking.totalPrice)}</dd></div>
+            <div className="flex items-end justify-between border-t border-neutral-200 pt-3 dark:border-neutral-800">
+              <div>
+                <dt className="text-base sm:text-lg font-extrabold text-neutral-900 dark:text-white">Total due at check-in</dt>
+                <span className="block text-[11px] sm:text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                  ₹0 paid today · Pay when you arrive
+                </span>
+              </div>
+              <div className="text-right">
+                <dd className="text-base sm:text-xl font-extrabold text-neutral-900 dark:text-white">{formatPrice(booking.totalPrice)}</dd>
+                <span className="block text-[11px] font-medium text-neutral-400">Cash / UPI / Card at stay</span>
+              </div>
+            </div>
           </dl>
+        </div>
+
+        {/* Pay when you visit highlight card */}
+        <div className="mt-4 sm:mt-5 rounded-2xl border border-emerald-200/90 bg-gradient-to-br from-emerald-50 via-teal-50/60 to-emerald-50/40 p-4 sm:p-5 text-left shadow-xs dark:border-emerald-800/70 dark:from-emerald-950/50 dark:via-teal-950/30 dark:to-neutral-900/60">
+          <div className="flex items-start gap-3 sm:gap-4">
+            <span className="grid size-10 sm:size-11 shrink-0 place-items-center rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-500/20">
+              <Wallet className="size-5 sm:size-6" />
+            </span>
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="font-extrabold text-sm sm:text-base text-emerald-950 dark:text-emerald-100">
+                  Pay when you visit · Zero upfront payment
+                </h3>
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-200/80 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-emerald-800 dark:bg-emerald-500/25 dark:text-emerald-300">
+                  <ShieldCheck className="size-3 stroke-[2.5]" /> Guaranteed Stay
+                </span>
+              </div>
+              <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-emerald-900/85 dark:text-emerald-200/85">
+                Sit back and relax! You do not need to pay anything right now. When you arrive at{" "}
+                <strong className="font-bold text-emerald-950 dark:text-white">{listing.title}</strong>, simply hand over or scan to pay your host{" "}
+                <strong className="font-extrabold text-emerald-950 dark:text-white">{formatPrice(booking.totalPrice)}</strong> using Cash, UPI, or Card.
+              </p>
+              <div className="mt-3 flex flex-wrap items-center gap-y-1 gap-x-4 border-t border-emerald-200/60 pt-2.5 text-[11px] sm:text-xs font-semibold text-emerald-800 dark:border-emerald-800/50 dark:text-emerald-300">
+                <span className="flex items-center gap-1.5">
+                  <span className="size-1.5 rounded-full bg-emerald-500" /> Pay in person
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="size-1.5 rounded-full bg-emerald-500" /> Free cancellation anytime before check-in
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="size-1.5 rounded-full bg-emerald-500" /> Host notified instantly
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="mt-6 sm:mt-8 flex flex-col justify-center gap-3 sm:flex-row">
