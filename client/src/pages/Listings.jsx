@@ -289,7 +289,7 @@ export default function Listings() {
           <ErrorState error={error} onRetry={reload} />
         ) : loading && !listings ? (
           <div className="listing-grid">
-            {Array.from({ length: 14 }, (_, i) => <ListingCardSkeleton key={i} />)}
+            {Array.from({ length: 18 }, (_, i) => <ListingCardSkeleton key={i} />)}
           </div>
         ) : listings.length === 0 ? (
           <EmptyState

@@ -16,8 +16,8 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
       whileInView={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.92, transition: { duration: 0.25, ease } }}
       viewport={{ once: true, margin: "-40px" }}
-      // stagger across a row of up to 7 cards
-      transition={{ duration: 0.6, delay: (index % 7) * 0.05, ease }}
+      // stagger across a row of up to 6 cards
+      transition={{ duration: 0.6, delay: (index % 6) * 0.05, ease }}
       className="group relative"
     >
       <Link
@@ -29,7 +29,7 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
             src={imageUrl(listing.image?.url, 600)}
             alt={listing.title}
             // first rows are on screen right away; the rest load as they scroll near
-            loading={index < 7 ? "eager" : "lazy"}
+            loading={index < 12 ? "eager" : "lazy"}
             className="size-full object-cover transition-transform duration-[1.1s] ease-smooth group-hover:scale-[1.05]"
           />
           {/* soft shade so the tag and heart read on bright photos */}
