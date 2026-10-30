@@ -514,7 +514,7 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-40 border-b bg-[#ebf0f7]/90 backdrop-blur-xl transition-[box-shadow,border-color] duration-300 dark:bg-ink/85 ${
+      className={`sticky top-0 z-40 border-b bg-[#ebf0f7]/90 backdrop-blur-xl transition-[box-shadow,border-color] duration-300 dark:bg-[#12151d]/90 ${
         scrolled ? "border-neutral-200 shadow-[0_6px_24px_-16px_rgb(0_0_0/0.35)] dark:border-neutral-800" : "border-transparent"
       }`}
     >

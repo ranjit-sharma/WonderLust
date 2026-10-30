@@ -12,7 +12,7 @@
   --color-brand-500: #fe424d;
   --color-brand-600: #eb1c2a;
   --color-brand-700: #c61220;
-  --color-ink: #0b0b0f;
+  --color-ink: #12151d;
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1); /* one easing curve for every transition */
   --animate-shimmer: shimmer 1.6s ease-in-out infinite;
   --animate-pan: pan 9s ease-in-out infinite;
@@ -52,7 +52,7 @@
     -webkit-font-smoothing: antialiased;
   }
   .dark body {
-    background-color: #0b0b0f;
+    background-color: #12151d;
     color: #f8fafc;
   }
   ::selection {

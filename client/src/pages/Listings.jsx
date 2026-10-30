@@ -181,7 +181,57 @@ function CategoryBar({ categories, active, onSelect }) {
   );
 }
 
-function TaxSwitch({ checked, onChange, className }) {
+function TaxSwitch({ checked, onChange, className = "", mobile = false }) {
+  if (mobile) {
+    return (
+      <label
+        className={`group flex items-center justify-between gap-3 rounded-2xl border border-neutral-200/90 bg-white p-3 sm:p-3.5 shadow-xs transition duration-300 ease-smooth select-none cursor-pointer hover:border-neutral-300 dark:border-neutral-800 dark:bg-neutral-900/80 ${
+          checked ? "border-brand-500/40 bg-brand-50/40 dark:border-brand-500/30 dark:bg-brand-500/5" : ""
+        } ${className}`}
+      >
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div
+            className={`grid size-8 sm:size-9 shrink-0 place-items-center rounded-xl transition-colors duration-300 ${
+              checked
+                ? "bg-brand-500 text-white shadow-sm"
+                : "bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300"
+            }`}
+          >
+            <BadgePercent className="size-4 sm:size-5" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white truncate">
+              Display prices with GST
+            </p>
+            <p className="text-[10px] sm:text-[11px] text-neutral-500 dark:text-neutral-400 truncate">
+              Includes 18% GST and all applicable fees
+            </p>
+          </div>
+        </div>
+
+        <input
+          type="checkbox"
+          className="sr-only"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+        />
+        <span
+          className={`relative h-5.5 w-10 sm:h-6 sm:w-11 shrink-0 rounded-full transition-colors duration-300 ease-smooth ${
+            checked
+              ? "bg-linear-to-r from-brand-500 to-brand-600 shadow-[0_4px_12px_-4px_rgb(254_66_77/0.7)]"
+              : "bg-neutral-200 dark:bg-neutral-700"
+          }`}
+        >
+          <motion.span
+            animate={{ x: checked ? 18 : 0 }}
+            transition={{ type: "spring", stiffness: 500, damping: 32 }}
+            className="absolute top-0.5 sm:top-1 left-0.5 sm:left-1 size-4 rounded-full bg-white shadow-md"
+          />
+        </span>
+      </label>
+    );
+  }
+
   return (
     <label className={`pill cursor-pointer has-focus-visible:ring-4 has-focus-visible:ring-brand-500/25 ${checked ? "pill-active" : ""} ${className}`}>
       <BadgePercent className={`size-4 transition-colors duration-300 ${checked ? "text-brand-500" : "text-neutral-500"}`} />
@@ -235,7 +285,7 @@ export default function Listings() {
     <div className="container-wide">
       <Hero />
 
-      <div className="z-30 -mx-4 mt-4 md:sticky md:top-[81px] border-b border-neutral-200/80 bg-[#ebf0f7]/90 px-4 backdrop-blur-xl sm:-mx-6 sm:px-6 md:-mx-8 md:px-8 lg:-mx-12 lg:px-12 xl:-mx-[1in] xl:px-[1in] dark:border-neutral-800 dark:bg-ink/90">
+      <div className="z-30 -mx-4 mt-4 md:sticky md:top-[81px] border-b border-neutral-200/80 bg-[#ebf0f7]/90 px-4 backdrop-blur-xl sm:-mx-6 sm:px-6 md:-mx-8 md:px-8 lg:-mx-12 lg:px-12 xl:-mx-[1in] xl:px-[1in] dark:border-neutral-800 dark:bg-[#12151d]/90">
         <div className="flex items-center gap-3 pt-2">
           <div className="min-w-0 flex-1">
             <CategoryBar categories={categories} active={category} onSelect={(c) => update({ category: c })} />
@@ -271,11 +321,12 @@ export default function Listings() {
         </div>
       </div>
 
-      {/* Phones: the tax toggle sits under the bar */}
+      {/* Phones: responsive tax card sitting cleanly under the category bar */}
       <TaxSwitch
         checked={showTax}
         onChange={setShowTax}
-        className="mt-4 flex w-full md:hidden [&>span:nth-child(2)]:flex-1"
+        mobile={true}
+        className="mt-3 md:hidden"
       />
 
       {params.get("q") && (
