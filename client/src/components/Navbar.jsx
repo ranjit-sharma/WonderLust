@@ -21,16 +21,20 @@ import { useToast } from "../lib/toast.jsx";
 import { useTheme } from "../lib/theme.js";
 import { ease } from "./ui.jsx";
 
-export function Logo() {
+export function Logo({ className = "" }) {
   return (
     <Link
       to="/listings"
       // already on /listings means no route change, so scroll up explicitly
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className="group flex items-center gap-2 text-brand-500"
+      className={`group inline-flex items-center gap-2 text-brand-500 ${className}`}
       aria-label="WonderLust home"
     >
-      <motion.span whileHover={{ rotate: 180 }} transition={{ duration: 0.6, ease }} className="grid">
+      <motion.span
+        whileHover={{ rotate: 180 }}
+        transition={{ duration: 0.6, ease }}
+        className="grid transition-transform duration-500 ease-smooth group-hover:rotate-180"
+      >
         <Compass className="size-8" strokeWidth={2.2} />
       </motion.span>
       <span className="text-xl font-extrabold tracking-tight">WonderLust</span>
