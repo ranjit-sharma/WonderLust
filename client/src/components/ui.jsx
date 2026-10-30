@@ -29,59 +29,21 @@ export function Spinner({ className = "size-5", brand = false }) {
   );
 }
 
-export function PageLoader({ className = "min-h-[50vh]", message = "Loading" }) {
+export function PageLoader({ className = "min-h-[50vh]", iconSize = "size-10" }) {
   return (
     <div
-      className={`flex flex-col items-center justify-center text-brand-500 ${className}`}
+      className={`flex items-center justify-center text-brand-500 ${className}`}
       role="status"
       aria-label="Loading"
     >
-      <div className="relative flex items-center justify-center">
-        {/* Ambient radial glow */}
-        <div className="absolute size-24 rounded-full bg-brand-500/20 blur-xl animate-pulse" />
-
-        {/* Outer spinning ring with brand gradient arc */}
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1.4, ease: "linear" }}
-          className="size-16 rounded-full border-[3px] border-brand-500/20 border-t-brand-500 border-r-brand-500 drop-shadow-[0_0_12px_rgba(254,66,77,0.4)]"
-        />
-
-        {/* Counter-rotating inner accent ring */}
-        <motion.div
-          animate={{ rotate: -360 }}
-          transition={{ repeat: Infinity, duration: 2.2, ease: "linear" }}
-          className="absolute size-11 rounded-full border-2 border-brand-400/25 border-b-brand-500"
-        />
-
-        {/* Central Brand Compass Logo with gentle oscillation and breathing pulse */}
-        <motion.div
-          animate={{
-            rotate: [0, -15, 15, 0],
-            scale: [0.95, 1.05, 0.95],
-          }}
-          transition={{
-            repeat: Infinity,
-            duration: 2.4,
-            ease: "easeInOut",
-          }}
-          className="absolute inset-0 flex items-center justify-center text-brand-500 drop-shadow-[0_0_8px_rgba(254,66,77,0.5)]"
-        >
-          <Compass className="size-6" strokeWidth={2.4} />
-        </motion.div>
-      </div>
-
-      {message && (
-        <motion.p
-          initial={{ opacity: 0.6 }}
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-          className="mt-5 text-xs font-bold tracking-widest uppercase text-brand-500"
-        >
-          {message}
-        </motion.p>
-      )}
-      <span className="sr-only">Loading WonderLust...</span>
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 1.2, ease: "linear" }}
+        className="flex items-center justify-center"
+      >
+        <Compass className={iconSize} strokeWidth={2.3} />
+      </motion.div>
+      <span className="sr-only">Loading</span>
     </div>
   );
 }

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { IndianRupee, MapPin, RotateCcw, SlidersHorizontal, Star, Tag, X } from "lucide-react";
 import { formatPrice } from "../lib/format.js";
+import SearchableSelect from "./SearchableSelect.jsx";
+import { categoryIcons } from "../lib/categories.js";
 import { useMediaQuery } from "../lib/useMediaQuery.js";
 
 const PRICE_MAX = 50000;
@@ -125,7 +127,7 @@ export default function FilterPanel({ open, onClose, params, categories, onApply
               </button>
             </header>
 
-            <div className="flex-1 overflow-y-auto px-6">
+            <div className="flex-1 overflow-y-auto px-6 pb-28">
               <Section icon={MapPin} title="Location">
                 <input
                   type="search"
@@ -143,23 +145,20 @@ export default function FilterPanel({ open, onClose, params, categories, onApply
                 />
               </Section>
               <Section icon={Tag} title="Category">
-                <div className="flex flex-wrap gap-2">
-                  {["", "Trending", ...categories].map((c) => (
-                    <button
-                      type="button"
-                      key={c || "all"}
-                      onClick={() => setDraft((d) => ({ ...d, category: c }))}
-                      aria-pressed={draft.category === c}
-                      className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
-                        draft.category === c
-                          ? "border-neutral-900 bg-neutral-900 text-white dark:border-white dark:bg-white dark:text-neutral-900"
-                          : "border-neutral-300 hover:border-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-300"
-                      }`}
-                    >
-                      {c || "All"}
-                    </button>
-                  ))}
-                </div>
+                <SearchableSelect
+                  id="filter-category"
+                  value={draft.category ?? ""}
+                  onChange={(val) => setDraft((d) => ({ ...d, category: val }))}
+                  options={[
+                    { value: "", label: "All categories" },
+                    { value: "Trending", label: "Trending" },
+                    ...categories.map((c) => ({ value: c, label: c })),
+                  ]}
+                  getIcon={(cat) => categoryIcons[cat]}
+                  placeholder="All categories"
+                  searchPlaceholder="Search category..."
+                  clearable={true}
+                />
               </Section>
               <Section icon={Star} title="Minimum rating">
                 <div className="grid grid-cols-5 gap-2">
