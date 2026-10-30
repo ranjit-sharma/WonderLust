@@ -203,6 +203,10 @@ export function Profile() {
   const { user: authUser } = useAuth();
   const toast = useToast();
 
+  const [showAllHostBookings, setShowAllHostBookings] = useState(false);
+  const [showAllTrips, setShowAllTrips] = useState(false);
+  const [showAllListings, setShowAllListings] = useState(false);
+
   if (error) return <div className="container-page py-16"><ErrorState error={error} onRetry={reload} /></div>;
   if (!data) return <PageLoader />;
 
@@ -212,10 +216,6 @@ export function Profile() {
   const wishlist = Array.isArray(data?.wishlist) ? data.wishlist : [];
   const bookings = Array.isArray(data?.bookings) ? data.bookings : [];
   const hostBookings = Array.isArray(data?.hostBookings) ? data.hostBookings : [];
-
-  const [showAllHostBookings, setShowAllHostBookings] = useState(false);
-  const [showAllTrips, setShowAllTrips] = useState(false);
-  const [showAllListings, setShowAllListings] = useState(false);
 
   const visibleHostBookings = showAllHostBookings ? hostBookings : hostBookings.slice(0, 4);
   const visibleTrips = showAllTrips ? bookings : bookings.slice(0, 4);
