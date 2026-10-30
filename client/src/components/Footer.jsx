@@ -101,20 +101,27 @@ export default function Footer() {
       <div className="container-wide">
         <FooterCta />
 
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 py-14 sm:grid-cols-3 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
-          <Reveal className="col-span-2 max-w-sm sm:col-span-3 lg:col-span-1">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-12 py-14 sm:grid-cols-3 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
+          <Reveal className="col-span-2 max-w-md sm:col-span-3 lg:col-span-1">
             <Logo clickable={false} />
-            <p className="mt-4 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
-              <strong className="text-neutral-900 dark:text-neutral-100">Some places you visit. Some places you remember.</strong>{" "}
-              WonderLust helps you discover stays with character, welcoming hosts, and destinations that turn ordinary trips
-              into stories worth telling.
+            <h3 className="mt-4 text-[15px] font-bold text-neutral-900 dark:text-neutral-100">
+              Some places you visit. Some places you remember.
+            </h3>
+            <p className="mt-2 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+              WonderLust helps you discover stays with character, welcoming hosts, and destinations that turn ordinary trips into stories worth telling.
             </p>
-            <p className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-semibold text-neutral-500">
-              <span className="inline-flex items-center gap-1.5"><MapPin className="size-3.5" /> India</span>
-              <span className="inline-flex items-center gap-1.5"><IndianRupee className="size-3.5" /> INR</span>
-              <span className="inline-flex items-center gap-1.5"><Globe className="size-3.5" /> English</span>
-            </p>
-            <SocialLinks className="mt-5" />
+            <div className="mt-5 flex flex-wrap items-center gap-2 text-xs font-medium text-neutral-600 dark:text-neutral-400">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200/80 bg-white px-3 py-1 shadow-2xs dark:border-neutral-800 dark:bg-neutral-900">
+                <MapPin className="size-3 text-brand-500" /> India
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200/80 bg-white px-3 py-1 shadow-2xs dark:border-neutral-800 dark:bg-neutral-900">
+                <IndianRupee className="size-3 text-brand-500" /> INR
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200/80 bg-white px-3 py-1 shadow-2xs dark:border-neutral-800 dark:bg-neutral-900">
+                <Globe className="size-3 text-brand-500" /> English
+              </span>
+            </div>
+            <SocialLinks className="mt-6" />
           </Reveal>
 
           {columns.map((col, i) => (
