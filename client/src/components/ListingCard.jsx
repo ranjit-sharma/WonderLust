@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { motion } from "motion/react";
+import { Tag } from "lucide-react";
 import { formatPrice, GST_RATE, imageUrl } from "../lib/format.js";
 import WishlistButton from "./WishlistButton.jsx";
 import SmoothImage from "./SmoothImage.jsx";
@@ -62,8 +63,9 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
       {/* Top bar: category tag and wishlist button aligned responsively on both mobile and desktop */}
       <div className="pointer-events-none absolute inset-x-2 top-2 z-10 flex items-center justify-between gap-1.5 sm:inset-x-3 sm:top-3 sm:gap-2">
         {listing.category ? (
-          <span className="pointer-events-auto inline-flex h-6 items-center max-w-[calc(100%-2.25rem)] truncate rounded-full bg-white/90 px-2 text-[10.5px] font-bold text-neutral-800 shadow-sm backdrop-blur sm:h-7 sm:max-w-[calc(100%-3rem)] sm:px-3 sm:text-xs dark:bg-neutral-900/80 dark:text-neutral-100">
-            {listing.category}
+          <span className="pointer-events-auto inline-flex h-6 items-center gap-1.5 max-w-[calc(100%-2.25rem)] truncate rounded-full bg-black/50 px-2.5 text-[11px] font-semibold text-white shadow-sm ring-1 ring-white/15 backdrop-blur-md sm:h-7 sm:max-w-[calc(100%-3rem)] sm:px-3 sm:text-xs">
+            <Tag className="size-3 shrink-0 stroke-[2.2] text-white" />
+            <span className="truncate">{listing.category}</span>
           </span>
         ) : (
           <span />
