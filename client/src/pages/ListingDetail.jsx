@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { ChevronDown, ChevronLeft, ChevronUp, MapPin, MessageSquareText, Pencil, Tag, Trash2 } from "lucide-react";
@@ -63,6 +63,17 @@ function ReviewForm({ listingId, onCreated }) {
 }
 
 function ReviewCard({ review, canDelete, onDelete }) {
+  const [expanded, setExpanded] = useState(false);
+  const [isClamped, setIsClamped] = useState(false);
+  const textRef = useRef(null);
+
+  useEffect(() => {
+    const el = textRef.current;
+    if (el) {
+      setIsClamped(el.scrollHeight > el.clientHeight + 2);
+    }
+  }, [review.comment]);
+
   return (
     <motion.article
       layout
@@ -80,9 +91,31 @@ function ReviewCard({ review, canDelete, onDelete }) {
         </div>
         <Stars value={review.rating} className="size-3.5" />
       </div>
-      <p className="mt-4 flex-1 leading-relaxed text-neutral-700 dark:text-neutral-300">{review.comment}</p>
+
+      <p
+        ref={textRef}
+        className={`mt-4 flex-1 leading-relaxed text-neutral-700 dark:text-neutral-300 ${
+          expanded ? "" : "line-clamp-3"
+        }`}
+      >
+        {review.comment}
+      </p>
+
+      {(isClamped || (!expanded && review.comment?.length > 130)) && (
+        <button
+          type="button"
+          onClick={() => setExpanded((prev) => !prev)}
+          className="mt-2 self-start cursor-pointer text-sm font-semibold text-neutral-900 underline underline-offset-4 transition hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-300"
+        >
+          {expanded ? "Show less" : "Show more"}
+        </button>
+      )}
+
       {canDelete && (
-        <button onClick={onDelete} className="mt-4 inline-flex items-center gap-1.5 self-start text-sm font-semibold text-brand-600 hover:underline dark:text-brand-400">
+        <button
+          onClick={onDelete}
+          className="mt-4 inline-flex items-center gap-1.5 self-start text-sm font-semibold text-brand-600 hover:underline dark:text-brand-400"
+        >
           <Trash2 className="size-4" /> Delete review
         </button>
       )}
