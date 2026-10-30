@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import { AnimatePresence, animate, motion, useMotionValue, useTransform } from "motion/react";
 import {
@@ -197,6 +197,14 @@ export function Profile() {
 
   const { user, listings, reviews, wishlist, bookings, hostBookings = [] } = data;
 
+  const [showAllHostBookings, setShowAllHostBookings] = useState(false);
+  const [showAllTrips, setShowAllTrips] = useState(false);
+  const [showAllListings, setShowAllListings] = useState(false);
+
+  const visibleHostBookings = showAllHostBookings ? hostBookings : hostBookings.slice(0, 4);
+  const visibleTrips = showAllTrips ? bookings : bookings.slice(0, 4);
+  const visibleListings = showAllListings ? listings : listings.slice(0, 4);
+
   const bookingAction = async (booking, action, isHost = false) => {
     const verb = action === "cancel" ? "Cancel" : "Delete";
     if (!confirm(`${verb} this reservation?`)) return;
@@ -296,18 +304,31 @@ export function Profile() {
                   No reservations received yet. When someone books one of your listings, their details, dates, and contact info will appear here.
                 </p>
               ) : (
-                <ul className="space-y-3.5 sm:space-y-4">
-                  <AnimatePresence>
-                    {hostBookings.map((b) => (
-                      <HostBookingRow
-                        key={b._id}
-                        booking={b}
-                        onCancel={() => bookingAction(b, "cancel", true)}
-                        onDelete={() => bookingAction(b, "delete", true)}
-                      />
-                    ))}
-                  </AnimatePresence>
-                </ul>
+                <>
+                  <ul className="space-y-3.5 sm:space-y-4">
+                    <AnimatePresence>
+                      {visibleHostBookings.map((b) => (
+                        <HostBookingRow
+                          key={b._id}
+                          booking={b}
+                          onCancel={() => bookingAction(b, "cancel", true)}
+                          onDelete={() => bookingAction(b, "delete", true)}
+                        />
+                      ))}
+                    </AnimatePresence>
+                  </ul>
+                  {hostBookings.length > 4 && (
+                    <div className="mt-4 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => setShowAllHostBookings((prev) => !prev)}
+                        className="inline-block cursor-pointer text-sm font-semibold text-neutral-900 underline underline-offset-4 transition hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-300"
+                      >
+                        {showAllHostBookings ? "Show less" : `Show all ${hostBookings.length} reservations`}
+                      </button>
+                    </div>
+                  )}
+                </>
               )}
             </Section>
           )}
@@ -316,18 +337,31 @@ export function Profile() {
             {bookings.length === 0 ? (
               <p className="text-neutral-500 text-xs sm:text-sm">You have not booked any stays yet.</p>
             ) : (
-              <ul className="space-y-3">
-                <AnimatePresence>
-                  {bookings.map((b) => (
-                    <BookingRow
-                      key={b._id}
-                      booking={b}
-                      onCancel={() => bookingAction(b, "cancel", false)}
-                      onDelete={() => bookingAction(b, "delete", false)}
-                    />
-                  ))}
-                </AnimatePresence>
-              </ul>
+              <>
+                <ul className="space-y-3">
+                  <AnimatePresence>
+                    {visibleTrips.map((b) => (
+                      <BookingRow
+                        key={b._id}
+                        booking={b}
+                        onCancel={() => bookingAction(b, "cancel", false)}
+                        onDelete={() => bookingAction(b, "delete", false)}
+                      />
+                    ))}
+                  </AnimatePresence>
+                </ul>
+                {bookings.length > 4 && (
+                  <div className="mt-4 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setShowAllTrips((prev) => !prev)}
+                      className="inline-block cursor-pointer text-sm font-semibold text-neutral-900 underline underline-offset-4 transition hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-300"
+                    >
+                      {showAllTrips ? "Show less" : `Show all ${bookings.length} bookings`}
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </Section>
 
@@ -339,9 +373,24 @@ export function Profile() {
             {listings.length === 0 ? (
               <p className="text-neutral-500 text-xs sm:text-sm">You have not created any listings yet.</p>
             ) : (
-              <div className="grid gap-3.5 sm:gap-6 grid-cols-1 min-[440px]:grid-cols-2 xl:grid-cols-3">
-                {listings.map((l, i) => <ListingCard key={l._id} listing={l} index={i} />)}
-              </div>
+              <>
+                <div className="grid gap-3.5 sm:gap-6 grid-cols-1 min-[440px]:grid-cols-2 xl:grid-cols-3">
+                  <AnimatePresence>
+                    {visibleListings.map((l, i) => <ListingCard key={l._id} listing={l} index={i} />)}
+                  </AnimatePresence>
+                </div>
+                {listings.length > 4 && (
+                  <div className="mt-4 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setShowAllListings((prev) => !prev)}
+                      className="inline-block cursor-pointer text-sm font-semibold text-neutral-900 underline underline-offset-4 transition hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-300"
+                    >
+                      {showAllListings ? "Show less" : `Show all ${listings.length} listings`}
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </Section>
 
