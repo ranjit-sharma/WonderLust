@@ -1,3 +1,4 @@
+// Middleware: authentication checks, resource ownership, and schema validation
 const Listing = require("./models/listing");
 const Review = require("./models/review.js");
 const ExpressError = require("./utils/ExpressError.js");
