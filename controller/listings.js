@@ -2,23 +2,45 @@
 const Listing = require("../models/listing");
 const Review = require("../models/review.js");
 const Booking = require("../models/booking.js");
+const User = require("../models/user.js");
 const ExpressError = require("../utils/ExpressError.js");
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const { cloudinary } = require("../cloudConfig.js");
 const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
-const deleteCloudinaryImage = async (image) => {
-    if (!image?.filename || !image.url?.includes("res.cloudinary.com")) {
-        return;
+const getCloudinaryPublicId = (image) => {
+    if (!image) return null;
+    const url = image.url || "";
+    if (url.includes("res.cloudinary.com")) {
+        const match = url.match(/\/upload\/(?:v\d+\/)?([^\.]+)/);
+        if (match && match[1]) {
+            return decodeURIComponent(match[1]);
+        }
     }
+    if (image.filename && image.filename !== "listingimage") {
+        return image.filename.replace(/\.[^/.]+$/, "");
+    }
+    return null;
+};
 
-    const result = await cloudinary.uploader.destroy(image.filename, {
-        resource_type: "image",
-    });
+const deleteCloudinaryImage = async (image) => {
+    try {
+        const publicId = getCloudinaryPublicId(image);
+        if (!publicId) return;
 
-    if (result.result !== "ok" && result.result !== "not found") {
-        throw new Error(`Cloudinary image deletion failed: ${result.result}`);
+        const result = await cloudinary.uploader.destroy(publicId, {
+            resource_type: "image",
+            invalidate: true,
+        });
+
+        if (result.result !== "ok" && result.result !== "not found") {
+            console.warn(`Cloudinary deletion warning for ${publicId}:`, result);
+        } else {
+            console.log(`Cloudinary image deleted successfully: ${publicId}`);
+        }
+    } catch (err) {
+        console.error("Cloudinary image deletion error:", err);
     }
 };
 
@@ -233,8 +255,15 @@ module.exports.destroyListing = async (req, res) => {
         throw new ExpressError(404, "Listing you requested for does not exist!");
     }
 
-    await Listing.findByIdAndDelete(id);
+    // Delete image from Cloudinary
     await deleteCloudinaryImage(listing.image);
+
+    // Delete listing from MongoDB (triggers review/booking cleanup hook)
+    await Listing.findByIdAndDelete(id);
+
+    // Also remove from any user's wishlist and bookings
+    await Booking.deleteMany({ listing: id });
+    await User.updateMany({ wishlist: id }, { $pull: { wishlist: id } });
 
     res.json({ ok: true });
 }
