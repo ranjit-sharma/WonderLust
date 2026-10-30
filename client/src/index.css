@@ -52,6 +52,15 @@
   ::selection {
     @apply bg-brand-500 text-white;
   }
+  /* Suppress default browser cancel/clear 'X' button on search inputs */
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-decoration,
+  input[type="search"]::-webkit-search-results-button,
+  input[type="search"]::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+  }
   input[type="date"]::-webkit-calendar-picker-indicator {
     @apply cursor-pointer dark:invert;
   }
