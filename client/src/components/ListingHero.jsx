@@ -58,7 +58,7 @@ export default function ListingHero({ listing }) {
             <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-3 sm:inset-x-6 sm:bottom-6">
               <div className="flex flex-wrap gap-2">
                 {listing.category && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1.5 text-xs font-bold text-white ring-1 ring-white/30 backdrop-blur-md">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-500 px-3 py-1.5 text-xs font-bold text-white shadow-sm backdrop-blur-md">
                     <Tag className="size-3.5" /> {listing.category}
                   </span>
                 )}

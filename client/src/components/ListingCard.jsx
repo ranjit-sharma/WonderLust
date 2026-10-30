@@ -34,7 +34,7 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
           <div className="absolute inset-x-0 top-0 h-20 bg-linear-to-b from-black/25 to-transparent" />
 
           {listing.category && (
-            <span className="absolute top-3 left-3 max-w-[calc(100%-4rem)] truncate rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-neutral-800 shadow-sm backdrop-blur dark:bg-neutral-900/80 dark:text-neutral-100">
+            <span className="absolute top-3 left-3 max-w-[calc(100%-4rem)] truncate rounded-full bg-brand-500 px-3 py-1 text-xs font-bold text-white shadow-sm backdrop-blur">
               {listing.category}
             </span>
           )}
