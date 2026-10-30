@@ -235,7 +235,7 @@ export default function ListingDetail() {
                         </>
                       ) : (
                         <>
-                          <span>More options · Show all {listing.reviews.length} reviews (+{listing.reviews.length - 4} more)</span>
+                          <span>Show more reviews ({listing.reviews.length - 4} more)</span>
                           <ChevronDown className="size-4" />
                         </>
                       )}
