@@ -1,3 +1,4 @@
+// Joi validation schemas: request validation for listings and reviews
 const Joi = require('joi');
 const categories = require('./utils/categories.js');
 
