@@ -34,7 +34,7 @@ export default function WishlistButton({ listingId, variant = "overlay", onChang
     <span className="relative grid place-items-center">
       <motion.span key={String(saved)} initial={{ scale: 0.4 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 500, damping: 12 }}>
         <Heart
-          className={`size-5 transition-colors ${
+          className={`size-4 sm:size-5 transition-colors ${
             saved ? "fill-brand-500 text-brand-500" : variant === "overlay" ? "fill-black/40 text-white" : ""
           }`}
           strokeWidth={2.2}
@@ -63,7 +63,7 @@ export default function WishlistButton({ listingId, variant = "overlay", onChang
         aria-label={label}
         aria-pressed={saved}
         title={label}
-        className="relative grid size-7 place-items-center rounded-full transition hover:scale-110 after:absolute after:-inset-2 after:content-['']"
+        className="relative grid size-6 sm:size-7 place-items-center rounded-full transition hover:scale-110 after:absolute after:-inset-2 after:content-['']"
       >
         {heart}
       </motion.button>

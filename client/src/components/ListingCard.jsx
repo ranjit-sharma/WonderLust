@@ -59,10 +59,10 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
           </p>
         </div>
       </Link>
-      {/* Top bar: category tag and wishlist button aligned on the same horizontal line */}
-      <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-center justify-between gap-2">
+      {/* Top bar: category tag and wishlist button aligned responsively on both mobile and desktop */}
+      <div className="pointer-events-none absolute inset-x-2 top-2 z-10 flex items-center justify-between gap-1.5 sm:inset-x-3 sm:top-3 sm:gap-2">
         {listing.category ? (
-          <span className="pointer-events-auto inline-flex h-7 items-center max-w-[calc(100%-3rem)] truncate rounded-full bg-white/90 px-3 text-xs font-bold text-neutral-800 shadow-sm backdrop-blur dark:bg-neutral-900/80 dark:text-neutral-100">
+          <span className="pointer-events-auto inline-flex h-6 items-center max-w-[calc(100%-2.25rem)] truncate rounded-full bg-white/90 px-2 text-[10.5px] font-bold text-neutral-800 shadow-sm backdrop-blur sm:h-7 sm:max-w-[calc(100%-3rem)] sm:px-3 sm:text-xs dark:bg-neutral-900/80 dark:text-neutral-100">
             {listing.category}
           </span>
         ) : (
