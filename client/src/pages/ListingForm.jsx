@@ -26,7 +26,7 @@ function ImagePicker({ file, currentUrl, onChange, required }) {
   const shown = preview || currentUrl;
 
   return (
-    <label
+    <div
       onDragOver={(e) => {
         e.preventDefault();
         setDragging(true);
@@ -36,8 +36,9 @@ function ImagePicker({ file, currentUrl, onChange, required }) {
         e.preventDefault();
         setDragging(false);
         const dropped = e.dataTransfer.files[0];
-        // same formats the file picker and Cloudinary accept
-        if (dropped && ["image/png", "image/jpeg"].includes(dropped.type)) onChange(dropped);
+        if (dropped && dropped.type.startsWith("image/")) {
+          onChange(dropped);
+        }
       }}
       className={`group relative flex aspect-[16/9] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-card border-2 border-dashed text-center transition ${
         dragging ? "border-brand-500 bg-brand-50 dark:bg-brand-500/10" : "border-neutral-300 hover:border-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-300"
@@ -45,10 +46,17 @@ function ImagePicker({ file, currentUrl, onChange, required }) {
     >
       <input
         type="file"
-        accept="image/png,image/jpeg"
+        accept="image/*"
         required={required && !file}
-        onChange={(e) => onChange(e.target.files[0] || null)}
-        className="absolute inset-0 opacity-0"
+        onClick={(e) => {
+          e.target.value = null;
+        }}
+        onChange={(e) => {
+          if (e.target.files && e.target.files[0]) {
+            onChange(e.target.files[0]);
+          }
+        }}
+        className="absolute inset-0 z-20 size-full cursor-pointer opacity-0"
         aria-label="Listing image"
       />
       <AnimatePresence mode="wait">
@@ -61,22 +69,28 @@ function ImagePicker({ file, currentUrl, onChange, required }) {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease }}
-            className="absolute inset-0 size-full object-cover"
+            className="pointer-events-none absolute inset-0 size-full object-cover"
           />
         ) : (
-          <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="px-6">
+          <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="pointer-events-none px-6">
             <ImagePlus className="mx-auto size-10 text-neutral-400 transition group-hover:scale-110" />
             <p className="mt-3 font-semibold">Drag a photo here or click to upload</p>
-            <p className="text-sm text-neutral-500">PNG or JPG</p>
+            <p className="text-sm text-neutral-500">PNG, JPG, WEBP, AVIF</p>
           </motion.div>
         )}
       </AnimatePresence>
       {shown && (
-        <span className="absolute right-4 bottom-4 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-neutral-900 opacity-0 shadow transition group-hover:opacity-100">
-          Change photo
+        <span className="pointer-events-none absolute right-4 bottom-4 z-10 flex items-center gap-1.5 rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-neutral-900 shadow-md transition group-hover:scale-105 dark:bg-neutral-900/90 dark:text-neutral-100">
+          <ImagePlus className="size-4 text-brand-500" />
+          {file ? "Replace selected photo" : "Change photo"}
         </span>
       )}
-    </label>
+      {file && (
+        <span className="pointer-events-none absolute top-4 left-4 z-10 rounded-full bg-brand-500 px-3 py-1 text-xs font-bold text-white shadow-md">
+          New photo ready to save
+        </span>
+      )}
+    </div>
   );
 }
 

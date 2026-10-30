@@ -221,31 +221,39 @@ module.exports.updateListing = async (req, res) => {
         throw new ExpressError(404, "Listing you requested for does not exist!");
     }
 
-    const oldImage = listing.image;
-    const locationChanged = req.body.listing.location !== listing.location;
-    Object.assign(listing, req.body.listing);
+    // Clone old image details before any modifications
+    const oldImage = listing.image ? { url: listing.image.url, filename: listing.image.filename } : null;
+    const locationChanged = req.body.listing && req.body.listing.location !== listing.location;
+
+    if (req.body.listing) {
+        Object.assign(listing, req.body.listing);
+    }
 
     if (locationChanged) {
         const geometry = await geocode(listing.location);
         if (!geometry) {
-            await deleteCloudinaryImage(uploadedImage(req.file));
+            if (typeof req.file !== "undefined") {
+                await deleteCloudinaryImage(uploadedImage(req.file));
+            }
             throw new ExpressError(400, "Invalid location provided. Please try a different location.");
         }
         listing.geometry = geometry;
     }
 
-    if (typeof req.file !== "undefined") {
+    const hasNewImage = typeof req.file !== "undefined";
+    if (hasNewImage) {
         listing.image = uploadedImage(req.file);
     }
 
     await listing.save();
 
-    if (typeof req.file !== "undefined") {
+    // Delete the previous photo from Cloudinary if a new photo was uploaded
+    if (hasNewImage && oldImage) {
         await deleteCloudinaryImage(oldImage);
     }
 
     res.json(listing);
-}
+};
 
 module.exports.destroyListing = async (req, res) => {
     let { id } = req.params;
