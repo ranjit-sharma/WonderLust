@@ -21,40 +21,19 @@ import { useToast } from "../lib/toast.jsx";
 import { useTheme } from "../lib/theme.js";
 import { ease } from "./ui.jsx";
 
-export function Logo({ className = "", clickable = true }) {
-  const content = (
-    <>
-      <motion.span
-        whileHover={{ rotate: 180 }}
-        transition={{ duration: 0.6, ease }}
-        className="grid transition-transform duration-500 ease-smooth group-hover:rotate-180"
-      >
-        <Compass className="size-8" strokeWidth={2.2} />
-      </motion.span>
-      <span className="text-xl font-extrabold tracking-tight">WonderLust</span>
-    </>
-  );
-
-  if (!clickable) {
-    return (
-      <div
-        className={`group inline-flex items-center gap-2 text-brand-500 select-none cursor-default ${className}`}
-        aria-label="WonderLust"
-      >
-        {content}
-      </div>
-    );
-  }
-
+export function Logo() {
   return (
     <Link
       to="/listings"
       // already on /listings means no route change, so scroll up explicitly
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className={`group inline-flex items-center gap-2 text-brand-500 ${className}`}
+      className="group flex items-center gap-2 text-brand-500"
       aria-label="WonderLust home"
     >
-      {content}
+      <motion.span whileHover={{ rotate: 180 }} transition={{ duration: 0.6, ease }} className="grid">
+        <Compass className="size-8" strokeWidth={2.2} />
+      </motion.span>
+      <span className="text-xl font-extrabold tracking-tight">WonderLust</span>
     </Link>
   );
 }
@@ -237,7 +216,7 @@ export default function Navbar() {
       }`}
     >
       <div className="container-wide flex flex-wrap items-center gap-x-4 gap-y-3 py-3 md:flex-nowrap md:py-4">
-        <Logo clickable={false} />
+        <Logo />
         <SearchBar className="order-last w-full md:order-none md:mx-auto md:max-w-md lg:max-w-lg" />
         <nav className="ml-auto flex items-center gap-1 sm:gap-2 md:ml-0">
           <NavLink
