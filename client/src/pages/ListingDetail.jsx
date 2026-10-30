@@ -191,7 +191,7 @@ export default function ListingDetail() {
             <div className="h-80 overflow-hidden rounded-card bg-neutral-100 sm:h-[26rem] dark:bg-neutral-900">
               {listing.geometry?.coordinates?.length === 2 && (
                 <Suspense fallback={<PageLoader />}>
-                  <ListingMap coordinates={listing.geometry.coordinates} title={listing.title} />
+                  <ListingMap coordinates={listing.geometry.coordinates} title={listing.title} location={[listing.location, listing.country].filter(Boolean).join(", ")} />
                 </Suspense>
               )}
             </div>
