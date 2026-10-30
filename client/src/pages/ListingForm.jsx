@@ -133,9 +133,6 @@ export default function ListingForm() {
   if (loadError) return <div className="container-page py-16"><ErrorState error={loadError} /></div>;
   if (!meta || (editing && !values.title)) return <PageLoader />;
 
-  // Keep a saved country selectable even if it's not in the preset list.
-  const countries = values.country && !meta.countries.includes(values.country) ? [values.country, ...meta.countries] : meta.countries;
-
   return (
     <div className="container-page max-w-3xl py-10">
       <PageHeader
@@ -182,13 +179,13 @@ export default function ListingForm() {
           <div key="row2" className="grid gap-6 sm:grid-cols-3">
             <div>
               <label htmlFor="country" className="label">Country</label>
-              <SearchableSelect
+              <input
                 id="country"
                 required
+                className="field"
+                placeholder="Enter country"
                 value={values.country}
-                onChange={(val) => setValues((v) => ({ ...v, country: val }))}
-                options={countries}
-                placeholder="Select a country"
+                onChange={set("country")}
               />
             </div>
             <div>
