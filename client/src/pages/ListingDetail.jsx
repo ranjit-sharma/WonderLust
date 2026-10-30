@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { AnimatePresence, motion } from "motion/react";
-import { ChevronLeft, MapPin, MessageSquareText, Pencil, Tag, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronUp, MapPin, MessageSquareText, Pencil, Tag, Trash2 } from "lucide-react";
 import { api } from "../lib/api.js";
 import { useApi } from "../lib/useApi.js";
 import { useAuth } from "../lib/auth.jsx";
@@ -97,6 +97,7 @@ export default function ListingDetail() {
   const { user } = useAuth();
   const { data, error, reload } = useApi(`/listings/${id}`);
   const wide = useMediaQuery("(min-width: 1024px)");
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   if (error) return <div className="container-page py-16"><ErrorState error={error} onRetry={reload} /></div>;
   if (!data) return <PageLoader />;
@@ -206,18 +207,42 @@ export default function ListingDetail() {
             {listing.reviews.length === 0 ? (
               <p className="flex items-center gap-2 text-neutral-500"><MessageSquareText className="size-5" /> No reviews yet. Be the first to share your stay.</p>
             ) : (
-              <div className="grid gap-4 md:grid-cols-2">
-                <AnimatePresence>
-                  {listing.reviews.map((review) => (
-                    <ReviewCard
-                      key={review._id}
-                      review={review}
-                      canDelete={user && review.author?._id === user._id}
-                      onDelete={() => deleteReview(review._id)}
-                    />
-                  ))}
-                </AnimatePresence>
-              </div>
+              <>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <AnimatePresence>
+                    {(showAllReviews ? listing.reviews : listing.reviews.slice(0, 4)).map((review) => (
+                      <ReviewCard
+                        key={review._id}
+                        review={review}
+                        canDelete={user && review.author?._id === user._id}
+                        onDelete={() => deleteReview(review._id)}
+                      />
+                    ))}
+                  </AnimatePresence>
+                </div>
+
+                {listing.reviews.length > 4 && (
+                  <div className="mt-6">
+                    <button
+                      type="button"
+                      onClick={() => setShowAllReviews((prev) => !prev)}
+                      className="btn-ghost inline-flex items-center gap-2 rounded-xl border border-neutral-300 px-5 py-2.5 text-sm font-semibold transition hover:border-neutral-900 dark:border-neutral-700 dark:hover:border-neutral-300"
+                    >
+                      {showAllReviews ? (
+                        <>
+                          <span>Show fewer reviews</span>
+                          <ChevronUp className="size-4" />
+                        </>
+                      ) : (
+                        <>
+                          <span>More options · Show all {listing.reviews.length} reviews (+{listing.reviews.length - 4} more)</span>
+                          <ChevronDown className="size-4" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </section>
         </div>
