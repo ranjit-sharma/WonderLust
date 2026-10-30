@@ -70,9 +70,15 @@ module.exports.profile = async (req, res) => {
         Listing.find({ owner: req.user._id }).sort({ _id: -1 }),
         Review.find({ author: req.user._id }).sort({ createdAt: -1 }),
         Booking.find({ user: req.user._id })
-            .populate("listing", "title price image location")
+            .populate("listing", "title price image location country")
             .sort({ createdAt: -1 }),
     ]);
+
+    const myListingIds = myListings.map((l) => l._id);
+    const hostBookings = await Booking.find({ listing: { $in: myListingIds } })
+        .populate("listing", "title price image location country")
+        .populate("user", "username email")
+        .sort({ createdAt: -1 });
 
     const reviewIds = myReviews.map((review) => review._id);
     const reviewedListings = await Listing.find({ reviews: { $in: reviewIds } })
@@ -94,5 +100,6 @@ module.exports.profile = async (req, res) => {
         })),
         wishlist: (profileUser.wishlist || []).filter(Boolean),
         bookings: myBookings,
+        hostBookings,
     });
 }

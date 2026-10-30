@@ -1,12 +1,23 @@
 import { useEffect } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import { AnimatePresence, animate, motion, useMotionValue, useTransform } from "motion/react";
-import { CalendarCheck, Heart, House, Plus, Star } from "lucide-react";
+import {
+  Calendar,
+  CalendarCheck,
+  Heart,
+  House,
+  Luggage,
+  Mail,
+  Plus,
+  Star,
+  User,
+  Users,
+} from "lucide-react";
 import { api } from "../lib/api.js";
 import { useApi } from "../lib/useApi.js";
 import { useAuth } from "../lib/auth.jsx";
 import { useToast } from "../lib/toast.jsx";
-import { formatDate, formatPrice, imageUrl } from "../lib/format.js";
+import { formatDate, formatPrice, imageUrl, nightsBetween } from "../lib/format.js";
 import ListingCard from "../components/ListingCard.jsx";
 import { accents } from "../lib/categories.js";
 import { EmptyState, ErrorState, PageHeader, PageLoader, Reveal, ease } from "../components/ui.jsx";
@@ -60,11 +71,118 @@ function BookingRow({ booking, onCancel, onDelete }) {
         {listing && (
           <button
             onClick={booking.status === "cancelled" ? onDelete : onCancel}
-            className="ml-auto text-sm font-semibold text-brand-600 hover:underline sm:ml-0 dark:text-brand-400"
+            className="ml-auto text-sm font-semibold text-brand-600 hover:underline sm:ml-0 dark:text-brand-400 cursor-pointer"
           >
             {booking.status === "cancelled" ? "Delete" : "Cancel"}
           </button>
         )}
+      </div>
+    </motion.li>
+  );
+}
+
+function HostBookingRow({ booking, onCancel, onDelete }) {
+  const listing = booking.listing;
+  const guest = booking.user;
+  const nights = nightsBetween(booking.checkIn, booking.checkOut);
+
+  return (
+    <motion.li
+      layout
+      exit={{ opacity: 0, x: -20 }}
+      className="flex flex-col gap-4 rounded-card border border-neutral-200 bg-white p-4 sm:p-5 shadow-xs dark:border-neutral-800 dark:bg-neutral-900/60"
+    >
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+        {listing?.image?.url && (
+          <img
+            src={imageUrl(listing.image.url, 320)}
+            alt=""
+            className="h-36 w-full rounded-xl object-cover sm:h-24 sm:w-32 shrink-0 bg-neutral-100 dark:bg-neutral-800"
+          />
+        )}
+        <div className="min-w-0 flex-1 space-y-2">
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <div>
+              {listing ? (
+                <Link to={`/listings/${listing._id}`} className="font-bold text-base hover:underline line-clamp-1">
+                  {listing.title}
+                </Link>
+              ) : (
+                <b className="text-base">Listing no longer available</b>
+              )}
+              {listing && (
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                  {[listing.location, listing.country].filter(Boolean).join(", ")}
+                </p>
+              )}
+            </div>
+            <span className={`rounded-full px-3 py-1 text-xs font-bold capitalize ${statusStyles[booking.status]}`}>
+              {booking.status}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm pt-0.5">
+            <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300 min-w-0">
+              <User className="size-4 text-brand-500 shrink-0" />
+              <span className="truncate">
+                Guest: <strong className="text-neutral-900 dark:text-white">{guest?.username || "Guest"}</strong>
+              </span>
+            </div>
+            {guest?.email && (
+              <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300 min-w-0">
+                <Mail className="size-4 text-brand-500 shrink-0" />
+                <a
+                  href={`mailto:${guest.email}`}
+                  title={`Email ${guest.email}`}
+                  className="truncate font-medium text-brand-600 hover:underline dark:text-brand-400"
+                >
+                  {guest.email}
+                </a>
+              </div>
+            )}
+            <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
+              <Calendar className="size-4 text-brand-500 shrink-0" />
+              <span>
+                {formatDate(booking.checkIn)} → {formatDate(booking.checkOut)} ({nights} night{nights === 1 ? "" : "s"})
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
+              <Users className="size-4 text-brand-500 shrink-0" />
+              <span>
+                {booking.guests} guest{booking.guests === 1 ? "" : "s"}
+              </span>
+            </div>
+          </div>
+
+          {booking.specialRequests && (
+            <div className="mt-1.5 rounded-xl bg-neutral-50 p-2.5 text-xs text-neutral-600 dark:bg-neutral-800/80 dark:text-neutral-300 border border-neutral-100 dark:border-neutral-800">
+              <span className="font-semibold text-neutral-900 dark:text-neutral-100">Guest note: </span>
+              "{booking.specialRequests}"
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-neutral-100 pt-3 text-sm dark:border-neutral-800">
+        <span className="text-xs text-neutral-400">
+          Reserved on {formatDate(booking.createdAt)}
+        </span>
+        <div className="flex items-center gap-4 ml-auto sm:ml-0">
+          <p>
+            <span className="text-xs text-neutral-500 dark:text-neutral-400">Payout: </span>
+            <strong className="text-base font-extrabold text-neutral-900 dark:text-neutral-100">
+              {formatPrice(booking.totalPrice)}
+            </strong>
+          </p>
+          {listing && (
+            <button
+              onClick={booking.status === "cancelled" ? onDelete : onCancel}
+              className="text-sm font-semibold text-brand-600 hover:underline dark:text-brand-400 cursor-pointer"
+            >
+              {booking.status === "cancelled" ? "Delete record" : "Cancel booking"}
+            </button>
+          )}
+        </div>
       </div>
     </motion.li>
   );
@@ -77,31 +195,60 @@ export function Profile() {
   if (error) return <div className="container-page py-16"><ErrorState error={error} onRetry={reload} /></div>;
   if (!data) return <PageLoader />;
 
-  const { user, listings, reviews, wishlist, bookings } = data;
+  const { user, listings, reviews, wishlist, bookings, hostBookings = [] } = data;
 
-  const bookingAction = async (booking, action) => {
-    if (action === "cancel" && !confirm("Cancel this booking?")) return;
+  const bookingAction = async (booking, action, isHost = false) => {
+    const verb = action === "cancel" ? "Cancel" : "Delete";
+    if (!confirm(`${verb} this reservation?`)) return;
     try {
       const base = `/listings/${booking.listing._id}/bookings/${booking._id}`;
       if (action === "cancel") {
         const updated = await api(`${base}/cancel`, { method: "POST" });
-        setData({ ...data, bookings: bookings.map((b) => (b._id === booking._id ? { ...b, status: updated.status } : b)) });
-        toast("Your booking has been cancelled.");
+        if (isHost) {
+          setData({
+            ...data,
+            hostBookings: hostBookings.map((b) => (b._id === booking._id ? { ...b, status: updated.status } : b)),
+          });
+          toast("Reservation cancelled.");
+        } else {
+          setData({
+            ...data,
+            bookings: bookings.map((b) => (b._id === booking._id ? { ...b, status: updated.status } : b)),
+          });
+          toast("Your booking has been cancelled.");
+        }
       } else {
         await api(base, { method: "DELETE" });
-        setData({ ...data, bookings: bookings.filter((b) => b._id !== booking._id) });
-        toast("Cancelled booking deleted.");
+        if (isHost) {
+          setData({
+            ...data,
+            hostBookings: hostBookings.filter((b) => b._id !== booking._id),
+          });
+          toast("Reservation record deleted.");
+        } else {
+          setData({
+            ...data,
+            bookings: bookings.filter((b) => b._id !== booking._id),
+          });
+          toast("Cancelled booking deleted.");
+        }
       }
     } catch (err) {
       toast(err.message, "error");
     }
   };
 
+  const isHost = listings.length > 0;
   const stats = [
-    { label: "Listings", value: listings.length, icon: House },
-    { label: "Bookings", value: bookings.length, icon: CalendarCheck },
-    { label: "Reviews", value: reviews.length, icon: Star },
+    { label: "My Listings", value: listings.length, icon: House },
+    ...(isHost
+      ? [{ label: "Guest Bookings", value: hostBookings.length, icon: CalendarCheck }]
+      : []),
+    { label: "My Trips", value: bookings.length, icon: Luggage },
     { label: "Wishlist", value: wishlist.length, icon: Heart },
+    ...(!isHost
+      ? [{ label: "Reviews", value: reviews.length, icon: Star }]
+      : []),
   ];
 
   return (
@@ -131,14 +278,53 @@ export function Profile() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_340px]">
         <div className="min-w-0 space-y-6">
-          <Section title="My bookings">
+          {/* Host Reservations Section */}
+          {isHost && (
+            <Section
+              title="Reservations on my listings"
+              delay={0}
+              action={
+                hostBookings.length > 0 ? (
+                  <span className="text-xs font-bold text-neutral-500">
+                    {hostBookings.length} reservation{hostBookings.length === 1 ? "" : "s"}
+                  </span>
+                ) : null
+              }
+            >
+              {hostBookings.length === 0 ? (
+                <p className="text-neutral-500 text-sm">
+                  No reservations received yet. When someone books one of your listings, their details, dates, and contact info will appear here.
+                </p>
+              ) : (
+                <ul className="space-y-4">
+                  <AnimatePresence>
+                    {hostBookings.map((b) => (
+                      <HostBookingRow
+                        key={b._id}
+                        booking={b}
+                        onCancel={() => bookingAction(b, "cancel", true)}
+                        onDelete={() => bookingAction(b, "delete", true)}
+                      />
+                    ))}
+                  </AnimatePresence>
+                </ul>
+              )}
+            </Section>
+          )}
+
+          <Section title="My trips">
             {bookings.length === 0 ? (
-              <p className="text-neutral-500">You have not booked any stays yet.</p>
+              <p className="text-neutral-500 text-sm">You have not booked any stays yet.</p>
             ) : (
               <ul className="space-y-3">
                 <AnimatePresence>
                   {bookings.map((b) => (
-                    <BookingRow key={b._id} booking={b} onCancel={() => bookingAction(b, "cancel")} onDelete={() => bookingAction(b, "delete")} />
+                    <BookingRow
+                      key={b._id}
+                      booking={b}
+                      onCancel={() => bookingAction(b, "cancel", false)}
+                      onDelete={() => bookingAction(b, "delete", false)}
+                    />
                   ))}
                 </AnimatePresence>
               </ul>
@@ -151,7 +337,7 @@ export function Profile() {
             action={<Link to="/listings/new" className="btn-dark px-4 py-2"><Plus className="size-4" /> Add listing</Link>}
           >
             {listings.length === 0 ? (
-              <p className="text-neutral-500">You have not created any listings yet.</p>
+              <p className="text-neutral-500 text-sm">You have not created any listings yet.</p>
             ) : (
               <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                 {listings.map((l, i) => <ListingCard key={l._id} listing={l} index={i} />)}
@@ -161,7 +347,7 @@ export function Profile() {
 
           <Section title="My reviews" delay={0.1}>
             {reviews.length === 0 ? (
-              <p className="text-neutral-500">You have not written any reviews yet.</p>
+              <p className="text-neutral-500 text-sm">You have not written any reviews yet.</p>
             ) : (
               <ul className="divide-y divide-neutral-200 dark:divide-neutral-800">
                 {reviews.map(({ review, listing }) => (
@@ -183,13 +369,13 @@ export function Profile() {
         <div className="space-y-6">
           <Section title="Wishlist" action={<Link to="/wishlist" className="text-sm font-semibold underline-offset-4 hover:underline">View all</Link>}>
             {wishlist.length === 0 ? (
-              <p className="text-neutral-500">Your wishlist is empty.</p>
+              <p className="text-neutral-500 text-sm">Your wishlist is empty.</p>
             ) : (
               <ul className="space-y-3">
                 {wishlist.slice(0, 5).map((l) => (
                   <li key={l._id}>
                     <Link to={`/listings/${l._id}`} className="group flex items-center gap-3">
-                      <img src={imageUrl(l.image?.url, 160)} alt="" className="size-14 rounded-xl object-cover transition group-hover:scale-105" />
+                      <img src={imageUrl(l.image?.url, 160)} alt="" className="size-14 rounded-xl object-cover transition group-hover:scale-105 bg-neutral-100 dark:bg-neutral-800" />
                       <span className="min-w-0">
                         <span className="block truncate font-semibold group-hover:underline">{l.title}</span>
                         <span className="text-sm text-neutral-500">{formatPrice(l.price)} / night</span>

@@ -86,14 +86,38 @@ module.exports.createBooking = async (req, res) => {
     });
 };
 
+
+module.exports.getListingBookings = async (req, res) => {
+    const { id } = req.params;
+    const listing = await Listing.findById(id);
+
+    if (!listing) {
+        throw new ExpressError(404, "Listing does not exist!");
+    }
+
+    if (!listing.owner.equals(req.user._id)) {
+        throw new ExpressError(403, "Only the host can view booking details for this listing.");
+    }
+
+    const bookings = await Booking.find({ listing: id })
+        .populate("user", "username email")
+        .sort({ createdAt: -1 });
+
+    res.json(bookings);
+};
+
 module.exports.cancelBooking = async (req, res) => {
-    const booking = await Booking.findOne({
-        _id: req.params.bookingId,
-        user: req.user._id,
-    });
+    const booking = await Booking.findById(req.params.bookingId).populate("listing");
 
     if (!booking) {
         throw new ExpressError(404, "Booking does not exist.");
+    }
+
+    const isGuest = booking.user?.equals(req.user._id);
+    const isHost = booking.listing?.owner?.equals(req.user._id);
+
+    if (!isGuest && !isHost) {
+        throw new ExpressError(403, "You do not have permission to cancel this booking.");
     }
 
     if (booking.status === "cancelled") {
@@ -106,13 +130,17 @@ module.exports.cancelBooking = async (req, res) => {
 };
 
 module.exports.deleteBooking = async (req, res) => {
-    const booking = await Booking.findOne({
-        _id: req.params.bookingId,
-        user: req.user._id,
-    });
+    const booking = await Booking.findById(req.params.bookingId).populate("listing");
 
     if (!booking) {
         throw new ExpressError(404, "Booking does not exist.");
+    }
+
+    const isGuest = booking.user?.equals(req.user._id);
+    const isHost = booking.listing?.owner?.equals(req.user._id);
+
+    if (!isGuest && !isHost) {
+        throw new ExpressError(403, "You do not have permission to delete this booking.");
     }
 
     if (booking.status !== "cancelled") {
