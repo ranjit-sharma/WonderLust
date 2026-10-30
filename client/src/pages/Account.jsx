@@ -17,6 +17,7 @@ import { api } from "../lib/api.js";
 import { useApi } from "../lib/useApi.js";
 import { useAuth } from "../lib/auth.jsx";
 import { useToast } from "../lib/toast.jsx";
+import { useMediaQuery } from "../lib/useMediaQuery.js";
 import { formatDate, formatPrice, imageUrl, nightsBetween } from "../lib/format.js";
 import ListingCard from "../components/ListingCard.jsx";
 import { accents } from "../lib/categories.js";
@@ -202,10 +203,12 @@ export function Profile() {
   const { data, error, reload, setData } = useApi("/profile");
   const { user: authUser } = useAuth();
   const toast = useToast();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const [showAllHostBookings, setShowAllHostBookings] = useState(false);
   const [showAllTrips, setShowAllTrips] = useState(false);
   const [showAllListings, setShowAllListings] = useState(false);
+  const [showAllReviews, setShowAllReviews] = useState(false);
 
   if (error) return <div className="container-page py-16"><ErrorState error={error} onRetry={reload} /></div>;
   if (!data) return <PageLoader />;
@@ -217,9 +220,14 @@ export function Profile() {
   const bookings = Array.isArray(data?.bookings) ? data.bookings : [];
   const hostBookings = Array.isArray(data?.hostBookings) ? data.hostBookings : [];
 
-  const visibleHostBookings = showAllHostBookings ? hostBookings : hostBookings.slice(0, 4);
-  const visibleTrips = showAllTrips ? bookings : bookings.slice(0, 4);
-  const visibleListings = showAllListings ? listings : listings.slice(0, 4);
+  const initialCount = isDesktop ? 3 : 2;
+
+  const visibleHostBookings = showAllHostBookings ? hostBookings : hostBookings.slice(0, initialCount);
+  const visibleTrips = showAllTrips ? bookings : bookings.slice(0, initialCount);
+  const visibleListings = showAllListings ? listings : listings.slice(0, initialCount);
+
+  const validReviews = reviews.filter((item) => item?.review);
+  const visibleReviews = showAllReviews ? validReviews : validReviews.slice(0, initialCount);
 
   const bookingAction = async (booking, action, isHost = false) => {
     const verb = action === "cancel" ? "Cancel" : "Delete";
@@ -338,7 +346,7 @@ export function Profile() {
                       ))}
                     </AnimatePresence>
                   </ul>
-                  {hostBookings.length > 4 && (
+                  {hostBookings.length > initialCount && (
                     <div className="mt-4 pt-1">
                       <button
                         type="button"
@@ -371,7 +379,7 @@ export function Profile() {
                     ))}
                   </AnimatePresence>
                 </ul>
-                {bookings.length > 4 && (
+                {bookings.length > initialCount && (
                   <div className="mt-4 pt-1">
                     <button
                       type="button"
@@ -395,12 +403,12 @@ export function Profile() {
               <p className="text-neutral-500 text-xs sm:text-sm">You have not created any listings yet.</p>
             ) : (
               <>
-                <div className="grid grid-cols-2 gap-2.5 sm:gap-5 xl:grid-cols-3">
+                <div className="grid grid-cols-2 gap-2.5 sm:gap-4 md:grid-cols-3">
                   <AnimatePresence>
                     {visibleListings.map((l, i) => <ListingCard key={l._id} listing={l} index={i} />)}
                   </AnimatePresence>
                 </div>
-                {listings.length > 4 && (
+                {listings.length > initialCount && (
                   <div className="mt-4 pt-1">
                     <button
                       type="button"
@@ -416,22 +424,35 @@ export function Profile() {
           </Section>
 
           <Section title="My reviews" delay={0.1}>
-            {reviews.length === 0 ? (
+            {validReviews.length === 0 ? (
               <p className="text-neutral-500 text-xs sm:text-sm">You have not written any reviews yet.</p>
             ) : (
-              <ul className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                {reviews.filter((item) => item?.review).map(({ review, listing }) => (
-                  <li key={review._id} className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4 py-3.5 sm:py-4 first:pt-0 last:pb-0">
-                    <div className="min-w-0 flex-1">
-                      {listing ? <Link to={`/listings/${listing._id}`} className="font-bold text-sm sm:text-base hover:underline line-clamp-1">{listing.title}</Link> : <b className="text-sm sm:text-base">Listing review</b>}
-                      <p className="mt-1 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">{review.comment}</p>
-                    </div>
-                    <span className="inline-flex self-start sm:self-auto shrink-0 items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-700 dark:bg-amber-500/15 dark:text-amber-300">
-                      <Star className="size-3 fill-current" /> {review.rating}/5
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <>
+                <ul className="divide-y divide-neutral-200 dark:divide-neutral-800">
+                  {visibleReviews.map(({ review, listing }) => (
+                    <li key={review._id} className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4 py-3.5 sm:py-4 first:pt-0 last:pb-0">
+                      <div className="min-w-0 flex-1">
+                        {listing ? <Link to={`/listings/${listing._id}`} className="font-bold text-sm sm:text-base hover:underline line-clamp-1">{listing.title}</Link> : <b className="text-sm sm:text-base">Listing review</b>}
+                        <p className="mt-1 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">{review.comment}</p>
+                      </div>
+                      <span className="inline-flex self-start sm:self-auto shrink-0 items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-bold text-amber-700 dark:bg-amber-500/15 dark:text-amber-300">
+                        <Star className="size-3 fill-current" /> {review.rating}/5
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                {validReviews.length > initialCount && (
+                  <div className="mt-4 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setShowAllReviews((prev) => !prev)}
+                      className="inline-block cursor-pointer text-sm font-semibold text-neutral-900 underline underline-offset-4 transition hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-300"
+                    >
+                      {showAllReviews ? "Show less" : `Show all ${validReviews.length} reviews`}
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </Section>
         </div>
@@ -442,7 +463,7 @@ export function Profile() {
               <p className="text-neutral-500 text-xs sm:text-sm">Your wishlist is empty.</p>
             ) : (
               <ul className="space-y-3">
-                {wishlist.filter(Boolean).slice(0, 5).map((l) => (
+                {wishlist.filter(Boolean).slice(0, initialCount).map((l) => (
                   <li key={l._id}>
                     <Link to={`/listings/${l._id}`} className="group flex items-center gap-3">
                       <img src={imageUrl(l.image?.url, 160)} alt="" className="size-12 sm:size-14 rounded-xl object-cover transition group-hover:scale-105 bg-neutral-100 dark:bg-neutral-800 shrink-0" />
