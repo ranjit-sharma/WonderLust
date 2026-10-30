@@ -10,6 +10,7 @@ import {
   LogOut,
   Luggage,
   Menu,
+  MessageSquareText,
   Moon,
   MapPin,
   Search,
@@ -490,6 +491,7 @@ function AccountMenu() {
             <MenuLink to="/co-hosts" icon={Users}>Find a co-host</MenuLink>
             {divider}
             <MenuLink to="/help" icon={LifeBuoy}>Help Centre</MenuLink>
+            <MenuLink to="/feedback" icon={MessageSquareText}>Feedback</MenuLink>
             <MenuLink to="/about" icon={Info}>About WonderLust</MenuLink>
             {user && (
               <>
