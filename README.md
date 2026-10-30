@@ -1,4 +1,4 @@
-# 🏡 WonderLust — Full-Stack Travel & Property Listing Web App.
+# 🏡 WonderLust — Full-Stack Travel & Vacation Rental Platform
 
 ---
  
