@@ -137,6 +137,16 @@ export default function ListingDetail() {
   const { data, error, reload } = useApi(`/listings/${id}`);
   const wide = useMediaQuery("(min-width: 1024px)");
   const [showAllReviews, setShowAllReviews] = useState(false);
+  const [showFullAbout, setShowFullAbout] = useState(false);
+  const [aboutCanExpand, setAboutCanExpand] = useState(false);
+  const aboutRef = useRef(null);
+
+  useEffect(() => {
+    const el = aboutRef.current;
+    if (el) {
+      setAboutCanExpand(el.scrollHeight > el.clientHeight + 2);
+    }
+  }, [data?.listing?.description]);
 
   if (error) return <div className="container-page py-16"><ErrorState error={error} onRetry={reload} /></div>;
   if (!data) return <PageLoader />;
@@ -212,7 +222,23 @@ export default function ListingDetail() {
 
           <Reveal>
             <h2 className="mb-3 text-xl font-bold">About this place</h2>
-            <p className="leading-relaxed whitespace-pre-line text-neutral-700 dark:text-neutral-300">{listing.description}</p>
+            <p
+              ref={aboutRef}
+              className={`leading-relaxed whitespace-pre-line text-neutral-700 dark:text-neutral-300 ${
+                showFullAbout ? "" : "line-clamp-10"
+              }`}
+            >
+              {listing.description}
+            </p>
+            {(aboutCanExpand || (!showFullAbout && (listing.description || "").length > 400)) && (
+              <button
+                type="button"
+                onClick={() => setShowFullAbout((prev) => !prev)}
+                className="mt-3 inline-block cursor-pointer text-base font-semibold text-neutral-900 underline underline-offset-4 transition hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-300"
+              >
+                {showFullAbout ? "Show less" : "Show more"}
+              </button>
+            )}
             {isOwner && (
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link to={`/listings/${listing._id}/edit`} className="btn-dark">

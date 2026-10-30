@@ -169,6 +169,12 @@ select.field option {
   -webkit-line-clamp: 3;
   overflow: hidden;
 }
+@utility line-clamp-10 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 10;
+  overflow: hidden;
+}
 @utility card {
   @apply rounded-card border border-neutral-200/80 bg-white shadow-card dark:border-neutral-800 dark:bg-neutral-900/70;
 }
