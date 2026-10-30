@@ -30,6 +30,7 @@ import { api } from "../lib/api.js";
 import { accents } from "../lib/categories.js";
 import { useToast } from "../lib/toast.jsx";
 import { Reveal, Spinner, ease } from "../components/ui.jsx";
+import SearchableSelect from "../components/SearchableSelect.jsx";
 
 function Hero({ icon: Icon, eyebrow, title, text }) {
   return (
@@ -385,6 +386,7 @@ function SupportForm({ endpoint, fields, submitLabel, successMessage }) {
 }
 
 export function Feedback() {
+  const [rating, setRating] = useState("");
   return (
     <Page>
       <Hero icon={MessageSquareText} eyebrow="Help us improve" title="Share your feedback" text="Tell us what you enjoyed, what we can improve, or what would make your WonderLust experience better." />
@@ -396,14 +398,22 @@ export function Feedback() {
           <>
             <div className="sm:col-span-2">
               <label htmlFor="rating" className="label">How was your experience?</label>
-              <select id="rating" name="rating" required defaultValue="" className="field">
-                <option value="" disabled>Choose a rating</option>
-                <option value="5">Excellent</option>
-                <option value="4">Good</option>
-                <option value="3">Okay</option>
-                <option value="2">Needs improvement</option>
-                <option value="1">Poor</option>
-              </select>
+              <SearchableSelect
+                id="rating"
+                name="rating"
+                required
+                value={rating}
+                onChange={setRating}
+                placeholder="Choose a rating"
+                searchable={false}
+                options={[
+                  { value: "5", label: "⭐⭐⭐⭐⭐ Excellent (5/5)" },
+                  { value: "4", label: "⭐⭐⭐⭐ Good (4/5)" },
+                  { value: "3", label: "⭐⭐⭐ Okay (3/5)" },
+                  { value: "2", label: "⭐⭐ Needs improvement (2/5)" },
+                  { value: "1", label: "⭐ Poor (1/5)" },
+                ]}
+              />
             </div>
             <div className="sm:col-span-2">
               <label htmlFor="message" className="label">Your feedback</label>

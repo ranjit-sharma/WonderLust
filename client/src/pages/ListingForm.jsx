@@ -8,6 +8,7 @@ import { useToast } from "../lib/toast.jsx";
 import { imageUrl } from "../lib/format.js";
 import { ErrorState, PageHeader, PageLoader, Spinner, ease } from "../components/ui.jsx";
 import SearchableSelect from "../components/SearchableSelect.jsx";
+import { categoryIcons } from "../lib/categories.js";
 
 const empty = { title: "", description: "", category: "", price: "", country: "", state: "", location: "" };
 
@@ -163,10 +164,15 @@ export default function ListingForm() {
           <div key="row1" className="grid gap-6 sm:grid-cols-2">
             <div>
               <label htmlFor="category" className="label">Category</label>
-              <select id="category" required className="field" value={values.category} onChange={set("category")}>
-                <option value="" disabled>Select a category</option>
-                {meta.categories.map((c) => <option key={c}>{c}</option>)}
-              </select>
+              <SearchableSelect
+                id="category"
+                required
+                value={values.category}
+                onChange={(val) => setValues((v) => ({ ...v, category: val }))}
+                options={meta.categories}
+                getIcon={(cat) => categoryIcons[cat]}
+                placeholder="Select a category"
+              />
             </div>
             <div>
               <label htmlFor="price" className="label">Price per night (₹)</label>
