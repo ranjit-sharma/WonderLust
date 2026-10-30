@@ -97,7 +97,7 @@ function FooterCta() {
 
 export default function Footer() {
   return (
-    <footer className="mt-32 border-t border-white/60 bg-[#e4eaf3] dark:border-white/5 dark:bg-[#11141c]">
+    <footer className="mt-32 border-t border-neutral-200 bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-950">
       <div className="container-wide">
         <FooterCta />
 
@@ -111,13 +111,13 @@ export default function Footer() {
               WonderLust helps you discover stays with character, welcoming hosts, and destinations that turn ordinary trips into stories worth telling.
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-2 text-xs font-medium text-neutral-600 dark:text-neutral-400">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/70 bg-[#ebf0f7] px-3 py-1 shadow-sm dark:border-white/5 dark:bg-[#181b25]">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200/80 bg-white px-3 py-1 shadow-2xs dark:border-neutral-800 dark:bg-neutral-900">
                 <MapPin className="size-3 text-brand-500" /> India
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/70 bg-[#ebf0f7] px-3 py-1 shadow-sm dark:border-white/5 dark:bg-[#181b25]">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200/80 bg-white px-3 py-1 shadow-2xs dark:border-neutral-800 dark:bg-neutral-900">
                 <IndianRupee className="size-3 text-brand-500" /> INR
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/70 bg-[#ebf0f7] px-3 py-1 shadow-sm dark:border-white/5 dark:bg-[#181b25]">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200/80 bg-white px-3 py-1 shadow-2xs dark:border-neutral-800 dark:bg-neutral-900">
                 <Globe className="size-3 text-brand-500" /> English
               </span>
             </div>
@@ -163,7 +163,7 @@ export default function Footer() {
               whileTap={{ scale: 0.92 }}
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               aria-label="Back to top"
-              className="grid size-10 place-items-center rounded-full border border-white/70 bg-[#ebf0f7] text-neutral-700 shadow-card transition hover:shadow-lift hover:text-brand-600 dark:border-white/5 dark:bg-[#181b25] dark:text-neutral-200"
+              className="grid size-10 place-items-center rounded-full border border-neutral-200 bg-white text-neutral-700 shadow-card transition-colors hover:border-brand-200 hover:text-brand-600 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200"
             >
               <ArrowUp className="size-4" />
             </motion.button>

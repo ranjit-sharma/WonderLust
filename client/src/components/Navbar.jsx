@@ -208,7 +208,7 @@ function SearchBar({ className = "" }) {
           placeholder="Search destinations, stays…"
           aria-label="Search listings"
           autoComplete="off"
-          className="h-11 sm:h-12 w-full rounded-full border border-neutral-300/60 bg-[#ebf0f7] pr-20 pl-4 sm:pl-5 text-sm text-neutral-900 shadow-[inset_3px_3px_6px_rgba(166,178,195,0.5),inset_-3px_-3px_6px_rgba(255,255,255,0.95)] transition outline-none placeholder:text-neutral-400 focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/15 dark:border-neutral-800/80 dark:bg-[#181b25] dark:text-neutral-100 dark:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.8),inset_-3px_-3px_6px_rgba(255,255,255,0.035)] dark:focus:border-brand-500/50"
+          className="h-11 sm:h-12 w-full rounded-full border border-neutral-200 bg-white pr-20 pl-4 sm:pl-5 text-sm shadow-card transition outline-none placeholder:text-neutral-400 hover:shadow-lift focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 focus:shadow-lift dark:border-neutral-800 dark:bg-neutral-900 dark:focus:border-brand-500/50"
         />
 
         <div className="absolute top-1 right-1 sm:top-1.5 sm:right-1.5 flex items-center gap-1">
@@ -230,7 +230,7 @@ function SearchBar({ className = "" }) {
             whileTap={{ scale: 0.9 }}
             type="submit"
             aria-label="Search"
-            className="grid size-8 sm:size-9 place-items-center rounded-full bg-linear-to-br from-brand-500 to-brand-600 text-white shadow-[3px_3px_8px_rgba(235,28,42,0.4),-2px_-2px_6px_rgba(255,255,255,0.8)] dark:shadow-[3px_3px_8px_rgba(235,28,42,0.5),-2px_-2px_6px_rgba(255,255,255,0.05)] hover:brightness-105 active:scale-95 transition"
+            className="grid size-8 sm:size-9 place-items-center rounded-full bg-linear-to-br from-brand-500 to-brand-600 text-white shadow-sm"
           >
             <Search className="size-3.5 sm:size-4" strokeWidth={2.6} />
           </motion.button>
@@ -245,7 +245,7 @@ function SearchBar({ className = "" }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
-            className="absolute left-0 right-0 top-full z-50 mt-2 max-h-[75vh] overflow-y-auto rounded-2xl border border-white/80 bg-[#ebf0f7]/95 p-2 shadow-lift backdrop-blur-xl dark:border-white/5 dark:bg-[#181b25]/95"
+            className="absolute left-0 right-0 top-full z-50 mt-2 max-h-[75vh] overflow-y-auto rounded-2xl border border-neutral-200/90 bg-white/95 p-2 shadow-lift backdrop-blur-xl dark:border-neutral-800 dark:bg-neutral-900/95"
           >
             {!hasSuggestions ? (
               <div className="px-4 py-6 text-center text-sm text-neutral-500 dark:text-neutral-400">
@@ -437,7 +437,7 @@ function AccountMenu() {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label="Open menu"
-        className="flex items-center gap-2.5 rounded-full border border-white/70 bg-[#ebf0f7] py-1.5 pr-1.5 pl-3.5 shadow-card transition hover:shadow-lift dark:border-white/5 dark:bg-[#181b25]"
+        className="flex items-center gap-2.5 rounded-full border border-neutral-200 bg-white py-1.5 pr-1.5 pl-3.5 transition hover:shadow-card dark:border-neutral-800 dark:bg-neutral-900"
       >
         <Menu className="size-4" />
         <span className="grid size-8 place-items-center rounded-full bg-neutral-800 text-sm font-bold text-white uppercase dark:bg-neutral-200 dark:text-neutral-900">
@@ -453,7 +453,7 @@ function AccountMenu() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -4, transition: { duration: 0.12 } }}
             transition={{ duration: 0.2, ease }}
-            className="absolute top-full right-0 z-50 mt-3 w-[min(18rem,calc(100vw-2rem))] origin-top-right rounded-2xl border border-white/80 bg-[#ebf0f7] p-2 shadow-lift dark:border-white/5 dark:bg-[#181b25]"
+            className="absolute top-full right-0 z-50 mt-3 w-[min(18rem,calc(100vw-2rem))] origin-top-right rounded-2xl border border-neutral-200 bg-white p-2 shadow-lift dark:border-neutral-800 dark:bg-neutral-900"
           >
             {user ? (
               <>
@@ -514,8 +514,8 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-40 border-b bg-[#ebf0f7]/90 backdrop-blur-xl transition-[box-shadow,border-color] duration-300 dark:bg-[#141720]/90 ${
-        scrolled ? "border-white/70 shadow-[0_6px_18px_rgba(166,178,195,0.4)] dark:border-white/5 dark:shadow-[0_6px_20px_rgba(0,0,0,0.7)]" : "border-transparent"
+      className={`sticky top-0 z-40 border-b bg-white/85 backdrop-blur-xl transition-[box-shadow,border-color] duration-300 dark:bg-ink/85 ${
+        scrolled ? "border-neutral-200 shadow-[0_6px_24px_-16px_rgb(0_0_0/0.35)] dark:border-neutral-800" : "border-transparent"
       }`}
     >
       <div className="container-wide flex flex-wrap items-center gap-x-4 gap-y-3 py-3 md:flex-nowrap md:py-4">
@@ -532,7 +532,7 @@ export default function Navbar() {
             whileTap={{ scale: 0.9, rotate: 20 }}
             onClick={toggle}
             aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-            className="grid size-10 place-items-center rounded-full border border-white/70 bg-[#ebf0f7] text-neutral-800 shadow-card transition hover:shadow-lift dark:border-white/5 dark:bg-[#181b25] dark:text-neutral-200"
+            className="grid size-10 place-items-center rounded-full transition hover:bg-neutral-100 dark:hover:bg-neutral-900"
           >
             <AnimatePresence mode="wait" initial={false}>
               <motion.span
