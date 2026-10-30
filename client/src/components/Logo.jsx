@@ -7,7 +7,7 @@ export default function Logo({
   className = "",
   iconSize = "size-8",
   textSize = "text-xl",
-  clickable = true,
+  clickable = false,
 }) {
   const content = (
     <>

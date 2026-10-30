@@ -40,7 +40,7 @@ function AuthLayout({ title, text, children, footer }) {
         transition={{ duration: 0.6, delay: 0.1, ease }}
         className="mx-auto w-full max-w-md"
       >
-        <Logo iconSize="size-7" />
+        <Logo iconSize="size-7" clickable={false} />
         <h1 className="mt-6 text-3xl font-extrabold tracking-tight sm:text-4xl">{title}</h1>
         <p className="mt-2 text-neutral-500 dark:text-neutral-400">{text}</p>
         <div className="mt-8">{children}</div>
