@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, Navigate, useNavigate, useSearchParams } from "react-router";
 import { motion } from "motion/react";
-import { Compass } from "lucide-react";
+import Logo from "../components/Logo.jsx";
 import { api } from "../lib/api.js";
 import { useAuth } from "../lib/auth.jsx";
 import { useToast } from "../lib/toast.jsx";
@@ -40,10 +40,7 @@ function AuthLayout({ title, text, children, footer }) {
         transition={{ duration: 0.6, delay: 0.1, ease }}
         className="mx-auto w-full max-w-md"
       >
-        <div className="flex items-center gap-2 text-brand-500">
-          <Compass className="size-7" />
-          <span className="font-extrabold">WonderLust</span>
-        </div>
+        <Logo iconSize="size-7" />
         <h1 className="mt-6 text-3xl font-extrabold tracking-tight sm:text-4xl">{title}</h1>
         <p className="mt-2 text-neutral-500 dark:text-neutral-400">{text}</p>
         <div className="mt-8">{children}</div>

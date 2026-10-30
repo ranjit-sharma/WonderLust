@@ -137,3 +137,8 @@
 .dark .mapboxgl-popup-tip {
   @apply border-t-neutral-900!;
 }
+
+/* Disable "Use ctrl + scroll to zoom the map" overlay */
+.mapboxgl-ctrl-cooperative-gesture-screen {
+  display: none !important;
+}
