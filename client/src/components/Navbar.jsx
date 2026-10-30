@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate, useSearchParams } from "react-router";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } from "motion/react";
 import {
+  ArrowRight,
   Compass,
   Heart,
   Info,
@@ -10,8 +11,11 @@ import {
   Luggage,
   Menu,
   Moon,
+  MapPin,
   Search,
+  Sparkles,
   Sun,
+  X,
   User,
   UserPlus,
   Users,
@@ -21,6 +25,9 @@ import { useToast } from "../lib/toast.jsx";
 import { useTheme } from "../lib/theme.js";
 import { ease } from "./ui.jsx";
 
+import { api } from "../lib/api.js";
+import { formatPrice, imageUrl } from "../lib/format.js";
+import { categoryIcons } from "../lib/categories.js";
 import Logo from "./Logo.jsx";
 export { Logo };
 
@@ -29,37 +36,316 @@ function SearchBar({ className = "" }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [q, setQ] = useState(params.get("q") || "");
+  const [open, setOpen] = useState(false);
+  const [allListings, setAllListings] = useState([]);
+  const containerRef = useRef(null);
 
   useEffect(() => setQ(params.get("q") || ""), [params]);
 
+  // Load existing listings once for instant search suggestions
+  useEffect(() => {
+    let active = true;
+    api("/listings")
+      .then((data) => {
+        if (active && Array.isArray(data)) {
+          setAllListings(data);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // Close suggestions when clicking outside or pressing Escape
+  useEffect(() => {
+    if (!open) return;
+    const handleClick = (e) => {
+      if (!containerRef.current?.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    const handleKey = (e) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("pointerdown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("pointerdown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [open]);
+
+  // Derived unique locations from existing listings
+  const destinations = useMemo(() => {
+    const map = new Map();
+    allListings.forEach((l) => {
+      if (l.location) {
+        const full = [l.location, l.country].filter(Boolean).join(", ");
+        if (!map.has(full)) {
+          map.set(full, { name: full, count: 1, rawLocation: l.location });
+        } else {
+          map.get(full).count += 1;
+        }
+      }
+    });
+    return Array.from(map.values());
+  }, [allListings]);
+
+  // Matching existing listings
+  const matchingListings = useMemo(() => {
+    const query = q.trim().toLowerCase();
+    if (!query) return allListings.slice(0, 4);
+    return allListings
+      .filter(
+        (l) =>
+          l.title?.toLowerCase().includes(query) ||
+          l.location?.toLowerCase().includes(query) ||
+          l.country?.toLowerCase().includes(query) ||
+          l.category?.toLowerCase().includes(query)
+      )
+      .slice(0, 5);
+  }, [allListings, q]);
+
+  // Matching destinations
+  const matchingDestinations = useMemo(() => {
+    const query = q.trim().toLowerCase();
+    if (!query) return destinations.slice(0, 3);
+    return destinations
+      .filter((d) => d.name.toLowerCase().includes(query))
+      .slice(0, 3);
+  }, [destinations, q]);
+
+  // Matching categories
+  const matchingCategories = useMemo(() => {
+    const query = q.trim().toLowerCase();
+    if (!query) return [];
+    return Object.keys(categoryIcons)
+      .filter((c) => c.toLowerCase().includes(query))
+      .slice(0, 3);
+  }, [q]);
+
   const submit = (e) => {
-    e.preventDefault();
-    // Keep the filters already applied on the listings page.
+    e?.preventDefault();
+    setOpen(false);
     const next = new URLSearchParams(pathname === "/listings" ? params : undefined);
     if (q.trim()) next.set("q", q.trim());
     else next.delete("q");
     navigate(`/listings?${next}`);
   };
 
+  const handleSelectListing = (id) => {
+    setOpen(false);
+    navigate(`/listings/${id}`);
+  };
+
+  const handleSelectDestination = (dest) => {
+    const loc = (dest.rawLocation || dest.name).trim();
+    setQ(loc);
+    setOpen(false);
+    const next = new URLSearchParams(pathname === "/listings" ? params : undefined);
+    next.set("q", loc);
+    navigate(`/listings?${next}`);
+  };
+
+  const handleSelectCategory = (cat) => {
+    setOpen(false);
+    navigate(`/listings?category=${encodeURIComponent(cat)}`);
+  };
+
+  const handleClear = () => {
+    setQ("");
+    const next = new URLSearchParams(pathname === "/listings" ? params : undefined);
+    next.delete("q");
+    navigate(`/listings?${next}`);
+  };
+
+  const hasSuggestions =
+    matchingListings.length > 0 ||
+    matchingDestinations.length > 0 ||
+    matchingCategories.length > 0;
+
   return (
-    <form onSubmit={submit} role="search" className={`group relative ${className}`}>
-      <input
-        type="search"
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder="Search destinations, stays, categories…"
-        aria-label="Search listings"
-        className="h-12 w-full rounded-full border border-neutral-200 bg-white pr-14 pl-5 text-sm shadow-card transition outline-none placeholder:text-neutral-400 hover:shadow-lift focus:border-neutral-300 focus:shadow-lift dark:border-neutral-800 dark:bg-neutral-900 dark:focus:border-neutral-700"
-      />
-      <motion.button
-        whileTap={{ scale: 0.9 }}
-        type="submit"
-        aria-label="Search"
-        className="absolute top-1.5 right-1.5 grid size-9 place-items-center rounded-full bg-linear-to-br from-brand-500 to-brand-600 text-white"
-      >
-        <Search className="size-4" strokeWidth={2.6} />
-      </motion.button>
-    </form>
+    <div ref={containerRef} className={`relative ${className}`}>
+      <form onSubmit={submit} role="search" className="group relative">
+        <input
+          type="search"
+          value={q}
+          onFocus={() => setOpen(true)}
+          onChange={(e) => {
+            setQ(e.target.value);
+            setOpen(true);
+          }}
+          placeholder="Search destinations, stays, categories…"
+          aria-label="Search listings"
+          autoComplete="off"
+          className="h-12 w-full rounded-full border border-neutral-200 bg-white pr-20 pl-5 text-sm shadow-card transition outline-none placeholder:text-neutral-400 hover:shadow-lift focus:border-brand-500/50 focus:ring-4 focus:ring-brand-500/10 focus:shadow-lift dark:border-neutral-800 dark:bg-neutral-900 dark:focus:border-brand-500/50"
+        />
+
+        <div className="absolute top-1.5 right-1.5 flex items-center gap-1">
+          {q && (
+            <button
+              type="button"
+              onClick={handleClear}
+              aria-label="Clear search"
+              className="grid size-8 place-items-center rounded-full text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-200 transition-colors"
+            >
+              <X className="size-3.5" />
+            </button>
+          )}
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            type="submit"
+            aria-label="Search"
+            className="grid size-9 place-items-center rounded-full bg-linear-to-br from-brand-500 to-brand-600 text-white shadow-sm"
+          >
+            <Search className="size-4" strokeWidth={2.6} />
+          </motion.button>
+        </div>
+      </form>
+
+      {/* Search Suggestions Dropdown */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -6, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.98 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className="absolute left-0 right-0 top-full z-50 mt-2 max-h-[75vh] overflow-y-auto rounded-2xl border border-neutral-200/90 bg-white/95 p-2 shadow-lift backdrop-blur-xl dark:border-neutral-800 dark:bg-neutral-900/95"
+          >
+            {!hasSuggestions ? (
+              <div className="px-4 py-6 text-center text-sm text-neutral-500 dark:text-neutral-400">
+                <p>No listings found matching "{q}"</p>
+                <button
+                  type="button"
+                  onClick={submit}
+                  className="mt-2 text-xs font-semibold text-brand-500 hover:underline"
+                >
+                  Search all stays anyway →
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {/* Destinations Section */}
+                {matchingDestinations.length > 0 && (
+                  <div>
+                    <div className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+                      {q.trim() ? "Destinations" : "Popular Destinations"}
+                    </div>
+                    <div className="space-y-0.5">
+                      {matchingDestinations.map((dest) => (
+                        <button
+                          key={dest.name}
+                          type="button"
+                          onClick={() => handleSelectDestination(dest)}
+                          className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                        >
+                          <div className="grid size-8 shrink-0 place-items-center rounded-lg bg-neutral-100 text-brand-500 dark:bg-neutral-800">
+                            <MapPin className="size-4" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate font-medium text-neutral-900 dark:text-neutral-100">
+                              {dest.name}
+                            </p>
+                            <p className="text-xs text-neutral-400">
+                              {dest.count} {dest.count === 1 ? "stay" : "stays"}
+                            </p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Categories Section */}
+                {matchingCategories.length > 0 && (
+                  <div>
+                    <div className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+                      Categories
+                    </div>
+                    <div className="space-y-0.5">
+                      {matchingCategories.map((cat) => {
+                        const Icon = categoryIcons[cat];
+                        return (
+                          <button
+                            key={cat}
+                            type="button"
+                            onClick={() => handleSelectCategory(cat)}
+                            className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                          >
+                            <div className="grid size-8 shrink-0 place-items-center rounded-lg bg-brand-50 text-brand-500 dark:bg-brand-500/10">
+                              {Icon ? <Icon className="size-4" /> : <Sparkles className="size-4" />}
+                            </div>
+                            <span className="truncate font-medium text-neutral-900 dark:text-neutral-100">
+                              {cat}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Existing Listings Section */}
+                {matchingListings.length > 0 && (
+                  <div>
+                    <div className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+                      {q.trim() ? "Existing Stays" : "Featured Stays"}
+                    </div>
+                    <div className="space-y-1">
+                      {matchingListings.map((listing) => (
+                        <button
+                          key={listing._id}
+                          type="button"
+                          onClick={() => handleSelectListing(listing._id)}
+                          className="flex w-full items-center gap-3 rounded-xl p-2 text-left transition hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                        >
+                          <img
+                            src={imageUrl(listing.image?.url, 120)}
+                            alt={listing.title}
+                            className="size-11 shrink-0 rounded-lg object-cover bg-neutral-100 dark:bg-neutral-800"
+                            loading="lazy"
+                          />
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                              {listing.title}
+                            </p>
+                            <p className="truncate text-xs text-neutral-500 dark:text-neutral-400">
+                              {[listing.location, listing.country].filter(Boolean).join(", ")}
+                            </p>
+                          </div>
+                          <div className="shrink-0 text-right">
+                            <span className="text-xs font-bold text-neutral-900 dark:text-neutral-100">
+                              {formatPrice(listing.price)}
+                            </span>
+                            <span className="block text-[11px] text-neutral-400">/ night</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Footer action to search all */}
+                {q.trim() && (
+                  <div className="border-t border-neutral-100 pt-1.5 dark:border-neutral-800">
+                    <button
+                      type="button"
+                      onClick={submit}
+                      className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold text-brand-500 hover:bg-brand-50/60 dark:hover:bg-brand-500/10 transition"
+                    >
+                      <span>Search all results for "{q.trim()}"</span>
+                      <ArrowRight className="size-3.5" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
