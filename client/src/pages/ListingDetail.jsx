@@ -275,7 +275,7 @@ export default function ListingDetail() {
                       onClick={() => setShowAllReviews((prev) => !prev)}
                       className="inline-block cursor-pointer text-base font-semibold text-neutral-900 underline underline-offset-4 transition hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-300"
                     >
-                      {showAllReviews ? "Show less" : "Show more"}
+                      {showAllReviews ? "Show less" : `Show all ${sortedReviews.length} reviews`}
                     </button>
                   </div>
                 )}
