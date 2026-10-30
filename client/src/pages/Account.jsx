@@ -374,7 +374,7 @@ export function Profile() {
               <p className="text-neutral-500 text-xs sm:text-sm">You have not created any listings yet.</p>
             ) : (
               <>
-                <div className="grid gap-3.5 sm:gap-6 grid-cols-1 min-[440px]:grid-cols-2 xl:grid-cols-3">
+                <div className="grid grid-cols-2 gap-2.5 sm:gap-5 xl:grid-cols-3">
                   <AnimatePresence>
                     {visibleListings.map((l, i) => <ListingCard key={l._id} listing={l} index={i} />)}
                   </AnimatePresence>
