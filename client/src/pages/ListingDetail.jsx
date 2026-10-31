@@ -116,12 +116,14 @@ function ReviewCard({ review, canDelete, onDelete }) {
           </div>
 
           {canDelete && (
-            <button
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.92 }}
               onClick={onDelete}
-              className="ml-auto inline-flex items-center gap-1.5 cursor-pointer text-sm font-semibold text-brand-600 hover:underline dark:text-brand-400"
+              className="ml-auto inline-flex items-center gap-1.5 cursor-pointer text-sm font-semibold text-brand-600 transition hover:text-brand-700 hover:underline dark:text-brand-400 dark:hover:text-brand-300"
             >
               <Trash2 className="size-4" /> Delete review
-            </button>
+            </motion.button>
           )}
         </div>
       )}
@@ -134,7 +136,7 @@ export default function ListingDetail() {
   const navigate = useNavigate();
   const toast = useToast();
   const { user } = useAuth();
-  const { data, error, reload } = useApi(`/listings/${id}`);
+  const { data, error, reload, setData } = useApi(`/listings/${id}`);
   const wide = useMediaQuery("(min-width: 1024px)");
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [showFullAbout, setShowFullAbout] = useState(false);
@@ -175,12 +177,33 @@ export default function ListingDetail() {
   };
 
   const deleteReview = async (reviewId) => {
+    const previousData = data;
+    const currentReviews = listing.reviews || [];
+    const remainingReviews = currentReviews.filter((r) => String(r._id) !== String(reviewId));
+    const newCount = remainingReviews.length;
+    const newAvg = newCount === 0
+      ? 0
+      : remainingReviews.reduce((sum, r) => sum + (Number(r.rating) || 0), 0) / newCount;
+
+    // Optimistic UI: immediately remove the review from state and recalculate ratings
+    setData({
+      ...data,
+      listing: {
+        ...listing,
+        reviews: remainingReviews,
+      },
+      reviewCount: newCount,
+      averageRating: newAvg,
+    });
+
+    toast("Review Deleted!");
+
     try {
       await api(`/listings/${listing._id}/reviews/${reviewId}`, { method: "DELETE" });
-      toast("Review Deleted!");
-      reload();
     } catch (err) {
-      toast(err.message, "error");
+      // Rollback on failure
+      setData(previousData);
+      toast(err.message || "Failed to delete review", "error");
     }
   };
 

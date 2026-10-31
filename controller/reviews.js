@@ -18,13 +18,18 @@ module.exports.createReview = async (req, res) => {
     await Listing.updateOne({ _id: listing._id }, { $push: { reviews: newReview._id } });
     await newReview.populate("author", "username");
     res.status(201).json(newReview);
-}
+};
 
 module.exports.destroyReview = async (req, res) => {
-    let { reviewId } = req.params;
+    const { id, reviewId } = req.params;
 
-    // Pull from whichever listing holds it, even if the URL names a different listing.
-    await Listing.updateMany({ reviews: reviewId }, { $pull: { reviews: reviewId } });
-    await Review.findByIdAndDelete(reviewId);
+    // Concurrently remove the review reference from the listing and delete the review document
+    await Promise.all([
+        id
+            ? Listing.updateOne({ _id: id }, { $pull: { reviews: reviewId } })
+            : Listing.updateMany({ reviews: reviewId }, { $pull: { reviews: reviewId } }),
+        Review.findByIdAndDelete(reviewId),
+    ]);
+
     res.json({ ok: true });
-}
+};
