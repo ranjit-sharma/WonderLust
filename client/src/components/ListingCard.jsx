@@ -59,6 +59,7 @@ export default function ListingCard({ listing, index = 0, onWishlistChange }) {
               <Rating
                 value={listing.averageRating}
                 count={listing.reviewCount}
+                showCount={false}
                 className="shrink-0 text-neutral-700 dark:text-neutral-300 font-medium text-[11px] sm:text-sm"
               />
             )}

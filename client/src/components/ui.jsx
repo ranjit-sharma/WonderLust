@@ -93,13 +93,13 @@ export function ErrorState({ error, onRetry }) {
   );
 }
 
-export function Rating({ value, count, className = "" }) {
+export function Rating({ value, count, showCount = true, className = "" }) {
   if (!count) return <span className={`text-neutral-500 dark:text-neutral-400 ${className}`}>New</span>;
   return (
     <span className={`inline-flex items-center gap-1 ${className}`}>
       <Star className="size-3.5 fill-current" aria-hidden="true" />
       <span className="font-semibold">{value.toFixed(1)}</span>
-      <span className="text-neutral-500 dark:text-neutral-400">({count})</span>
+      {showCount && <span className="text-neutral-500 dark:text-neutral-400">({count})</span>}
     </span>
   );
 }
