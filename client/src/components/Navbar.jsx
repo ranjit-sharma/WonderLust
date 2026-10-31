@@ -527,8 +527,8 @@ export default function Navbar() {
       <div className="container-wide flex flex-wrap items-center gap-x-4 gap-y-3 py-3 md:flex-nowrap md:py-4">
         <Logo
           clickable={true}
-          iconSize="size-8 md:size-9 lg:size-10"
-          textSize="text-xl md:text-2xl lg:text-[1.65rem]"
+          iconSize="size-8 md:size-10 lg:size-11 xl:size-12"
+          textSize="text-xl md:text-[1.75rem] lg:text-[1.95rem] xl:text-[2.15rem]"
         />
         <SearchBar className="order-last w-full md:order-none md:mx-auto md:max-w-xs lg:max-w-md xl:max-w-lg" />
         <nav className="ml-auto flex items-center gap-1 sm:gap-2 md:ml-0">

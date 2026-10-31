@@ -25,7 +25,7 @@ export default function Logo({
   if (!clickable) {
     return (
       <div
-        className={`group inline-flex items-center gap-2 md:gap-2.5 text-brand-500 select-none cursor-default ${className}`}
+        className={`group inline-flex items-center gap-2 md:gap-2.5 lg:gap-3 text-brand-500 select-none cursor-default ${className}`}
         aria-label="WonderLust"
       >
         {content}
@@ -37,7 +37,7 @@ export default function Logo({
     <Link
       to="/listings"
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className={`group inline-flex items-center gap-2 md:gap-2.5 text-brand-500 focus-visible:outline-none ${className}`}
+      className={`group inline-flex items-center gap-2 md:gap-2.5 lg:gap-3 text-brand-500 focus-visible:outline-none ${className}`}
       aria-label="WonderLust home"
     >
       {content}
