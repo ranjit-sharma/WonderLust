@@ -395,16 +395,14 @@ export default function Listings() {
             </motion.div>
 
             {hasMore && (
-              <div className="mt-8 mb-6 flex justify-center">
-                <motion.button
+              <div className="mt-6 mb-2 flex justify-center">
+                <button
                   type="button"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
                   onClick={handleToggleShow}
-                  className="btn-dark cursor-pointer rounded-full px-6 py-2.5 text-sm font-semibold shadow-xs transition duration-200"
+                  className="cursor-pointer text-sm sm:text-base font-semibold text-neutral-900 underline underline-offset-4 transition hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-300"
                 >
-                  {showAll ? "Show less" : "View more"}
-                </motion.button>
+                  {showAll ? "Show less stays" : "View more stays"}
+                </button>
               </div>
             )}
           </>

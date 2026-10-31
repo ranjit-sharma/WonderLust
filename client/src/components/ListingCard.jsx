@@ -37,22 +37,22 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
         </div>
 
         <div className="mt-2 sm:mt-3 px-0.5 sm:px-1">
-          <div className="flex items-start justify-between gap-1.5 sm:gap-2">
-            <h3 className="min-w-0 truncate font-bold text-xs sm:text-base text-neutral-900 dark:text-neutral-100">{listing.title}</h3>
+          <h3 className="truncate font-bold text-xs sm:text-base text-neutral-900 dark:text-neutral-100">{listing.title}</h3>
+          <div className="mt-0.5 sm:mt-1 flex items-center justify-between gap-1.5 sm:gap-2 text-[11px] sm:text-sm text-neutral-500 dark:text-neutral-400">
+            <p className="min-w-0 truncate">
+              {[listing.location, listing.country].filter(Boolean).join(", ")}
+            </p>
             {"averageRating" in listing && (
-              <Rating value={listing.averageRating} count={listing.reviewCount} className="shrink-0 text-[11px] sm:text-sm" />
+              <Rating value={listing.averageRating} count={listing.reviewCount} className="shrink-0 text-[11px] sm:text-sm text-neutral-700 dark:text-neutral-300" />
             )}
           </div>
-          <p className="truncate text-[11px] sm:text-sm text-neutral-500 dark:text-neutral-400">
-            {[listing.location, listing.country].filter(Boolean).join(", ")}
-          </p>
           <p className="mt-0.5 sm:mt-1 text-xs sm:text-[15px]">
             <motion.span
               key={String(showTax)}
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, ease }}
-              className="inline-block font-bold"
+              className="inline-block font-bold text-neutral-900 dark:text-neutral-100"
             >
               {formatPrice(price)}
             </motion.span>{" "}
