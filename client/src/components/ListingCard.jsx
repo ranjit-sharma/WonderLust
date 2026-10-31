@@ -48,23 +48,24 @@ export default function ListingCard({ listing, index = 0, showCount = false, onW
           {[listing.location, listing.country].filter(Boolean).join(", ")}
         </p>
 
-        {/* Line 3: Price & Star Rating */}
-        <div className="mt-0.5 sm:mt-1 flex items-center justify-between gap-1.5 sm:gap-2">
-          <p className="text-xs sm:text-[15px]">
-            <span className="inline-block font-bold text-neutral-900 dark:text-neutral-100">
-              {formatPrice(price)}
-            </span>{" "}
-            <span className="text-neutral-500 dark:text-neutral-400 text-[11px] sm:text-sm">night</span>
-          </p>
+        {/* Line 3: Price & Star Rating inline next to night */}
+        <p className="mt-0.5 sm:mt-1 flex items-center gap-1 sm:gap-1.5 text-xs sm:text-[15px] truncate">
+          <span className="font-bold text-neutral-900 dark:text-neutral-100">
+            {formatPrice(price)}
+          </span>
+          <span className="text-neutral-500 dark:text-neutral-400 text-[11px] sm:text-sm">night</span>
           {"averageRating" in listing && (
-            <Rating
-              value={listing.averageRating}
-              count={listing.reviewCount}
-              showCount={showCount}
-              className="shrink-0 text-neutral-700 dark:text-neutral-300 font-medium text-[11px] sm:text-sm"
-            />
+            <>
+              <span className="text-neutral-400 dark:text-neutral-500 text-[11px] sm:text-sm select-none">·</span>
+              <Rating
+                value={listing.averageRating}
+                count={listing.reviewCount}
+                showCount={showCount}
+                className="text-neutral-700 dark:text-neutral-300 font-medium text-[11px] sm:text-sm"
+              />
+            </>
           )}
-        </div>
+        </p>
       </div>
       {/* Top bar: category tag and wishlist button aligned responsively on both mobile and desktop */}
       <div className="pointer-events-none absolute inset-x-1.5 top-1.5 z-10 flex items-center justify-between gap-1 sm:inset-x-3 sm:top-3 sm:gap-2">
