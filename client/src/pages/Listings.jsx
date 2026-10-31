@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { AnimatePresence, animate, motion } from "motion/react";
-import { BadgePercent, ChevronLeft, ChevronRight, SearchX, SlidersHorizontal } from "lucide-react";
+import { BadgePercent, ChevronDown, ChevronLeft, ChevronRight, SearchX, SlidersHorizontal } from "lucide-react";
 import { getMeta } from "../lib/api.js";
 import { useApi } from "../lib/useApi.js";
 import { useMediaQuery } from "../lib/useMediaQuery.js";
@@ -395,14 +395,17 @@ export default function Listings() {
             </motion.div>
 
             {hasMore && (
-              <div className="mt-6 mb-2 flex justify-center">
-                <button
+              <div className="mt-7 mb-2 flex justify-center">
+                <motion.button
                   type="button"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={handleToggleShow}
-                  className="cursor-pointer text-sm sm:text-base font-semibold text-neutral-900 underline underline-offset-4 transition hover:text-neutral-600 dark:text-neutral-100 dark:hover:text-neutral-300"
+                  className="group inline-flex cursor-pointer items-center gap-2 rounded-full border border-neutral-300/90 bg-white px-6 py-2.5 text-sm font-semibold text-neutral-800 shadow-2xs transition duration-300 ease-smooth hover:border-neutral-900 hover:text-neutral-950 hover:shadow-xs dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:border-neutral-400 dark:hover:text-white"
                 >
-                  {showAll ? "Show less stays" : "View more stays"}
-                </button>
+                  <span>{showAll ? "Show fewer stays" : "Show more stays"}</span>
+                  <ChevronDown className={`size-4 text-neutral-500 transition-transform duration-300 ease-smooth group-hover:text-neutral-900 dark:text-neutral-400 dark:group-hover:text-white ${showAll ? "rotate-180" : ""}`} />
+                </motion.button>
               </div>
             )}
           </>
