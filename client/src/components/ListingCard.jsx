@@ -20,52 +20,52 @@ export default function ListingCard({ listing, index = 0, showCount = false, onW
       transition={{ duration: 0.35, delay: index < 6 ? (index % 6) * 0.04 : 0, ease }}
       className="group relative will-change-transform"
     >
+      {/* Navigation happens strictly on clicking the photo */}
       <Link
         to={`/listings/${listing._id}`}
-        className="block rounded-card focus-visible:ring-4 focus-visible:ring-brand-500/30 focus-visible:outline-none"
+        aria-label={listing.title}
+        className="block relative aspect-[4/3.6] overflow-hidden rounded-card bg-neutral-200 dark:bg-neutral-800 focus-visible:ring-4 focus-visible:ring-brand-500/30 focus-visible:outline-none"
       >
-        <div className="relative aspect-[4/3.6] overflow-hidden rounded-card bg-neutral-200 dark:bg-neutral-800">
-          <SmoothImage
-            src={imageUrl(listing.image?.url, 600)}
-            alt={listing.title}
-            // first rows are on screen right away; the rest load as they scroll near
-            loading={index < 12 ? "eager" : "lazy"}
-            className="size-full object-cover transition-transform duration-[0.8s] ease-smooth group-hover:scale-[1.04]"
-          />
-          {/* soft shade so the tag and heart read on bright photos */}
-          <div className="absolute inset-x-0 top-0 h-20 bg-linear-to-b from-black/25 to-transparent pointer-events-none" />
-        </div>
-
-        <div className="mt-2 sm:mt-3 px-0.5 sm:px-1">
-          {/* Line 1: Listing Title (Highlighted) */}
-          <h3 className="min-w-0 truncate font-bold text-xs sm:text-base text-neutral-900 dark:text-neutral-100">
-            {listing.title}
-          </h3>
-
-          {/* Line 2: Address */}
-          <p className="mt-0.5 sm:mt-1 min-w-0 truncate text-[11px] sm:text-sm text-neutral-500 dark:text-neutral-400">
-            {[listing.location, listing.country].filter(Boolean).join(", ")}
-          </p>
-
-          {/* Line 3: Price & Star Rating */}
-          <div className="mt-0.5 sm:mt-1 flex items-center justify-between gap-1.5 sm:gap-2">
-            <p className="text-xs sm:text-[15px]">
-              <span className="inline-block font-bold text-neutral-900 dark:text-neutral-100">
-                {formatPrice(price)}
-              </span>{" "}
-              <span className="text-neutral-500 dark:text-neutral-400 text-[11px] sm:text-sm">night</span>
-            </p>
-            {"averageRating" in listing && (
-              <Rating
-                value={listing.averageRating}
-                count={listing.reviewCount}
-                showCount={showCount}
-                className="shrink-0 text-neutral-700 dark:text-neutral-300 font-medium text-[11px] sm:text-sm"
-              />
-            )}
-          </div>
-        </div>
+        <SmoothImage
+          src={imageUrl(listing.image?.url, 600)}
+          alt={listing.title}
+          // first rows are on screen right away; the rest load as they scroll near
+          loading={index < 12 ? "eager" : "lazy"}
+          className="size-full object-cover transition-transform duration-[0.8s] ease-smooth group-hover:scale-[1.04]"
+        />
+        {/* soft shade so the tag and heart read on bright photos */}
+        <div className="absolute inset-x-0 top-0 h-20 bg-linear-to-b from-black/25 to-transparent pointer-events-none" />
       </Link>
+
+      <div className="mt-2 sm:mt-3 px-0.5 sm:px-1">
+        {/* Line 1: Listing Title (Highlighted) */}
+        <h3 className="min-w-0 truncate font-bold text-xs sm:text-base text-neutral-900 dark:text-neutral-100">
+          {listing.title}
+        </h3>
+
+        {/* Line 2: Address */}
+        <p className="mt-0.5 sm:mt-1 min-w-0 truncate text-[11px] sm:text-sm text-neutral-500 dark:text-neutral-400">
+          {[listing.location, listing.country].filter(Boolean).join(", ")}
+        </p>
+
+        {/* Line 3: Price & Star Rating */}
+        <div className="mt-0.5 sm:mt-1 flex items-center justify-between gap-1.5 sm:gap-2">
+          <p className="text-xs sm:text-[15px]">
+            <span className="inline-block font-bold text-neutral-900 dark:text-neutral-100">
+              {formatPrice(price)}
+            </span>{" "}
+            <span className="text-neutral-500 dark:text-neutral-400 text-[11px] sm:text-sm">night</span>
+          </p>
+          {"averageRating" in listing && (
+            <Rating
+              value={listing.averageRating}
+              count={listing.reviewCount}
+              showCount={showCount}
+              className="shrink-0 text-neutral-700 dark:text-neutral-300 font-medium text-[11px] sm:text-sm"
+            />
+          )}
+        </div>
+      </div>
       {/* Top bar: category tag and wishlist button aligned responsively on both mobile and desktop */}
       <div className="pointer-events-none absolute inset-x-1.5 top-1.5 z-10 flex items-center justify-between gap-1 sm:inset-x-3 sm:top-3 sm:gap-2">
         {listing.category ? (
