@@ -6,7 +6,7 @@ import { api } from "../lib/api.js";
 import { useApi } from "../lib/useApi.js";
 import { useAuth } from "../lib/auth.jsx";
 import { useToast } from "../lib/toast.jsx";
-import { formatDate, formatPrice } from "../lib/format.js";
+import { formatDate, formatPrice, GST_RATE } from "../lib/format.js";
 import { useMediaQuery } from "../lib/useMediaQuery.js";
 import WishlistButton from "../components/WishlistButton.jsx";
 import BookingCard from "../components/BookingCard.jsx";
@@ -350,7 +350,7 @@ export default function ListingDetail() {
         >
           <div className="container-page flex items-center justify-between gap-4 py-3">
             <p>
-              <span className="text-lg font-extrabold">{formatPrice(listing.price)}</span>
+              <span className="text-lg font-extrabold">{formatPrice(Math.round((Number(listing.price) || 0) * (1 + GST_RATE)))}</span>
               <span className="text-sm text-neutral-500"> / night</span>
             </p>
             <button

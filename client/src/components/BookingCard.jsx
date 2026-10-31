@@ -5,7 +5,7 @@ import { Calendar, CalendarCheck, Luggage, Mail, User, Users } from "lucide-reac
 import { api } from "../lib/api.js";
 import { useAuth } from "../lib/auth.jsx";
 import { useToast } from "../lib/toast.jsx";
-import { bookingTotals, formatDate, formatPrice, nightsBetween, toDateInput } from "../lib/format.js";
+import { bookingTotals, formatDate, formatPrice, GST_RATE, nightsBetween, toDateInput } from "../lib/format.js";
 import { Rating, Spinner } from "./ui.jsx";
 
 const statusStyles = {
@@ -60,7 +60,7 @@ export default function BookingCard({ listing, averageRating, reviewCount }) {
     <div id="reserve" className="card scroll-mt-36 p-4 sm:p-6 md:scroll-mt-28">
       <div className="flex items-baseline justify-between gap-3">
         <p>
-          <span className="text-2xl font-extrabold">{formatPrice(listing.price)}</span>
+          <span className="text-2xl font-extrabold">{formatPrice(Math.round((Number(listing.price) || 0) * (1 + GST_RATE)))}</span>
           <span className="text-neutral-500 dark:text-neutral-400"> / night</span>
         </p>
         <Rating value={averageRating} count={reviewCount} className="text-sm" />

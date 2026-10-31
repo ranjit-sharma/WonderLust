@@ -6,9 +6,9 @@ import WishlistButton from "./WishlistButton.jsx";
 import SmoothImage from "./SmoothImage.jsx";
 import { ease, Rating } from "./ui.jsx";
 
-export default function ListingCard({ listing, index = 0, showTax = false, onWishlistChange }) {
+export default function ListingCard({ listing, index = 0, onWishlistChange }) {
   if (!listing) return null;
-  const price = showTax ? (Number(listing.price) || 0) * (1 + GST_RATE) : (Number(listing.price) || 0);
+  const price = Math.round((Number(listing.price) || 0) * (1 + GST_RATE));
 
   return (
     <motion.article
@@ -53,16 +53,10 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
           </h3>
 
           <p className="mt-0.5 sm:mt-1 text-xs sm:text-[15px]">
-            <motion.span
-              key={String(showTax)}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, ease }}
-              className="inline-block font-bold text-neutral-900 dark:text-neutral-100"
-            >
+            <span className="inline-block font-bold text-neutral-900 dark:text-neutral-100">
               {formatPrice(price)}
-            </motion.span>{" "}
-            <span className="text-neutral-500 dark:text-neutral-400 text-[11px] sm:text-sm">night{showTax && " incl. GST"}</span>
+            </span>{" "}
+            <span className="text-neutral-500 dark:text-neutral-400 text-[11px] sm:text-sm">night</span>
           </p>
         </div>
       </Link>
