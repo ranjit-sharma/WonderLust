@@ -43,7 +43,7 @@ function Hero() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.5, ease }}
-        className="mt-4 max-w-2xl text-neutral-500 sm:text-lg dark:text-neutral-400"
+        className="mt-4 max-w-2xl text-neutral-500 sm:text-lg lg:max-w-none lg:whitespace-nowrap dark:text-neutral-400"
       >
         Stays with character, welcoming hosts, and destinations that turn ordinary trips into stories worth telling.
       </motion.p>
