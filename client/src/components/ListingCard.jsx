@@ -37,18 +37,18 @@ export default function ListingCard({ listing, index = 0, showTax = false, onWis
         </div>
 
         <div className="mt-2 sm:mt-3 px-0.5 sm:px-1">
-          {/* Line 1: Location & Star Rating */}
-          <div className="flex items-center justify-between gap-1.5 sm:gap-2">
-            <p className="min-w-0 truncate font-bold text-xs sm:text-base text-neutral-900 dark:text-neutral-100">
+          {/* Line 1: Address & Star Rating */}
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2 text-[11px] sm:text-sm text-neutral-500 dark:text-neutral-400">
+            <p className="min-w-0 truncate">
               {[listing.location, listing.country].filter(Boolean).join(", ")}
             </p>
             {"averageRating" in listing && (
-              <Rating value={listing.averageRating} count={listing.reviewCount} className="shrink-0 text-[11px] sm:text-sm font-semibold text-neutral-900 dark:text-neutral-100" />
+              <Rating value={listing.averageRating} count={listing.reviewCount} className="shrink-0 text-neutral-700 dark:text-neutral-300 font-medium" />
             )}
           </div>
 
-          {/* Line 2: Listing Title */}
-          <h3 className="mt-0.5 sm:mt-1 min-w-0 truncate text-[11px] sm:text-sm text-neutral-500 dark:text-neutral-400">
+          {/* Line 2: Listing Title (Highlighted) */}
+          <h3 className="mt-0.5 sm:mt-1 min-w-0 truncate font-bold text-xs sm:text-base text-neutral-900 dark:text-neutral-100">
             {listing.title}
           </h3>
 
