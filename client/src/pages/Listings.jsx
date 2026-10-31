@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { AnimatePresence, animate, motion } from "motion/react";
-import { BadgePercent, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, SearchX, SlidersHorizontal } from "lucide-react";
+import { BadgePercent, ChevronLeft, ChevronRight, SearchX, SlidersHorizontal } from "lucide-react";
 import { getMeta } from "../lib/api.js";
 import { useApi } from "../lib/useApi.js";
 import { useMediaQuery } from "../lib/useMediaQuery.js";
@@ -301,7 +301,6 @@ export default function Listings() {
   const allListings = Array.isArray(listings) ? listings : [];
   const visibleListings = showAll ? allListings : allListings.slice(0, initialListingCount);
   const hasMore = allListings.length > initialListingCount;
-  const remainingCount = allListings.length - initialListingCount;
 
   const handleToggleShow = () => {
     if (showAll) {
@@ -396,29 +395,16 @@ export default function Listings() {
             </motion.div>
 
             {hasMore && (
-              <div className="mt-12 mb-8 flex flex-col items-center justify-center gap-3">
+              <div className="mt-8 mb-6 flex justify-center">
                 <motion.button
                   type="button"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleToggleShow}
-                  className="group inline-flex cursor-pointer items-center gap-2.5 rounded-full border border-neutral-300/80 bg-white px-7 py-3.5 text-sm font-semibold text-neutral-900 shadow-xs transition duration-300 ease-smooth hover:border-neutral-900 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-900 dark:text-white dark:hover:border-neutral-500"
+                  className="btn-dark cursor-pointer rounded-full px-6 py-2.5 text-sm font-semibold shadow-xs transition duration-200"
                 >
-                  {showAll ? (
-                    <>
-                      <span>Show less</span>
-                      <ChevronUp className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
-                    </>
-                  ) : (
-                    <>
-                      <span>View more ({remainingCount} more stay{remainingCount === 1 ? "" : "s"})</span>
-                      <ChevronDown className="size-4 transition-transform duration-300 group-hover:translate-y-0.5" />
-                    </>
-                  )}
+                  {showAll ? "Show less" : "View more"}
                 </motion.button>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                  Showing {visibleListings.length} of {allListings.length} stays
-                </p>
               </div>
             )}
           </>
