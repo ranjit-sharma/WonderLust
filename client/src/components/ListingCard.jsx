@@ -6,7 +6,7 @@ import WishlistButton from "./WishlistButton.jsx";
 import SmoothImage from "./SmoothImage.jsx";
 import { ease, Rating } from "./ui.jsx";
 
-export default function ListingCard({ listing, index = 0, onWishlistChange }) {
+export default function ListingCard({ listing, index = 0, showCount = false, onWishlistChange }) {
   if (!listing) return null;
   const price = Math.round((Number(listing.price) || 0) * (1 + GST_RATE));
 
@@ -59,7 +59,7 @@ export default function ListingCard({ listing, index = 0, onWishlistChange }) {
               <Rating
                 value={listing.averageRating}
                 count={listing.reviewCount}
-                showCount={false}
+                showCount={showCount}
                 className="shrink-0 text-neutral-700 dark:text-neutral-300 font-medium text-[11px] sm:text-sm"
               />
             )}
