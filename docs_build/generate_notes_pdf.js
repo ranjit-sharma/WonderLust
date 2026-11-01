@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-console.log("Preparing StayLust Master Project Notes PDF...");
+console.log("Compiling StayLust Master Engineering Notes (What, Why, Implementation)...");
 
 // Load screenshots as Base64 strings
 const screenshotsDir = path.join(__dirname, 'screenshots');
@@ -20,22 +20,27 @@ const imgDetail = getBase64Image('detail.png');
 const imgLogin = getBase64Image('login.png');
 const imgAbout = getBase64Image('about.png');
 
-console.log("Screenshots encoded into Base64.");
+console.log("High-res screenshots encoded to Base64.");
 
-// Comprehensive HTML template
 const htmlContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>StayLust — Comprehensive Full-Stack Project Notes</title>
+  <title>StayLust — Comprehensive Full-Stack Engineering Notes</title>
   <style>
     @page {
       size: A4;
-      margin: 1.8cm 1.5cm 1.8cm 1.5cm;
+      margin: 1.6cm 1.4cm 1.6cm 1.4cm;
       @bottom-right {
-        content: counter(page);
-        font-size: 9pt;
-        color: #71717a;
+        content: "Page " counter(page);
+        font-size: 8.5pt;
+        color: #64748b;
+        font-family: 'Segoe UI', system-ui, sans-serif;
+      }
+      @bottom-left {
+        content: "StayLust Engineering Master Notes • Developer: Ranjit Sharma";
+        font-size: 8pt;
+        color: #94a3b8;
         font-family: 'Segoe UI', system-ui, sans-serif;
       }
     }
@@ -48,23 +53,23 @@ const htmlContent = `<!DOCTYPE html>
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      color: #1e293b;
-      line-height: 1.6;
-      font-size: 10pt;
+      color: #0f172a;
+      line-height: 1.55;
+      font-size: 9.5pt;
       background: #ffffff;
     }
 
     /* Cover Page */
     .cover-page {
       page-break-after: always;
-      height: 100vh;
+      height: 98vh;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 3rem 1rem;
-      border: 2px solid #e2e8f0;
+      padding: 2.5rem 1.5rem;
+      border: 2px solid #cbd5e1;
       border-radius: 12px;
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
       position: relative;
     }
 
@@ -73,7 +78,7 @@ const htmlContent = `<!DOCTYPE html>
       align-self: flex-start;
       background: #fe424d;
       color: #ffffff;
-      padding: 0.35rem 1rem;
+      padding: 0.35rem 1.1rem;
       border-radius: 9999px;
       font-size: 8.5pt;
       font-weight: 700;
@@ -82,15 +87,15 @@ const htmlContent = `<!DOCTYPE html>
     }
 
     .cover-title-group {
-      margin-top: 2rem;
+      margin-top: 1.5rem;
     }
 
     .cover-brand {
-      font-size: 38pt;
+      font-size: 40pt;
       font-weight: 900;
       color: #0f172a;
       letter-spacing: -0.04em;
-      line-height: 1.1;
+      line-height: 1.05;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -101,35 +106,43 @@ const htmlContent = `<!DOCTYPE html>
     }
 
     .cover-subtitle {
-      font-size: 16pt;
-      font-weight: 600;
-      color: #475569;
+      font-size: 15pt;
+      font-weight: 700;
+      color: #334155;
       margin-top: 0.8rem;
-      line-height: 1.4;
+      line-height: 1.35;
+    }
+
+    .cover-desc {
+      margin-top: 1rem;
+      font-size: 9.5pt;
+      color: #64748b;
+      max-width: 95%;
+      line-height: 1.6;
     }
 
     .cover-meta-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-top: 2.5rem;
+      gap: 1.2rem;
+      margin-top: 2rem;
       background: #ffffff;
-      padding: 1.5rem;
+      padding: 1.4rem;
       border-radius: 10px;
       border: 1px solid #e2e8f0;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
     .meta-item h4 {
-      font-size: 8pt;
+      font-size: 7.5pt;
       text-transform: uppercase;
       color: #64748b;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.25rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.2rem;
     }
 
     .meta-item p {
-      font-size: 10pt;
+      font-size: 9.5pt;
       font-weight: 700;
       color: #0f172a;
     }
@@ -143,7 +156,7 @@ const htmlContent = `<!DOCTYPE html>
     .cover-footer {
       border-top: 1px solid #cbd5e1;
       padding-top: 1rem;
-      font-size: 8.5pt;
+      font-size: 8pt;
       color: #64748b;
       display: flex;
       justify-content: space-between;
@@ -159,90 +172,82 @@ const htmlContent = `<!DOCTYPE html>
       page-break-inside: avoid;
     }
 
-    h1.section-title {
-      font-size: 20pt;
+    h1.chapter-title {
+      font-size: 17pt;
       font-weight: 800;
       color: #0f172a;
       border-bottom: 2.5px solid #fe424d;
-      padding-bottom: 0.4rem;
-      margin-top: 1.5rem;
-      margin-bottom: 1.2rem;
+      padding-bottom: 0.35rem;
+      margin-top: 1.2rem;
+      margin-bottom: 1rem;
       letter-spacing: -0.02em;
     }
 
-    h2.subsection-title {
-      font-size: 13pt;
+    h2.module-title {
+      font-size: 12pt;
       font-weight: 700;
       color: #1e293b;
-      margin-top: 1.4rem;
-      margin-bottom: 0.6rem;
+      margin-top: 1.3rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      border-left: 4px solid #fe424d;
+      padding-left: 0.5rem;
+    }
+
+    /* What / Why / Implementation Badges */
+    .triad-box {
+      margin: 0.8rem 0;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      page-break-inside: avoid;
+    }
+
+    .triad-header {
+      padding: 0.35rem 0.8rem;
+      font-size: 8.5pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       display: flex;
       align-items: center;
       gap: 0.4rem;
     }
 
-    h2.subsection-title::before {
-      content: "";
-      display: inline-block;
-      width: 4px;
-      height: 16px;
-      background: #fe424d;
-      border-radius: 2px;
-    }
+    .triad-what { background: #eff6ff; color: #1e40af; border-left: 4px solid #3b82f6; }
+    .triad-why { background: #fefce8; color: #854d0e; border-left: 4px solid #eab308; }
+    .triad-how { background: #f0fdf4; color: #166534; border-left: 4px solid #22c55e; }
 
-    h3 {
-      font-size: 11pt;
-      font-weight: 600;
+    .triad-body {
+      padding: 0.75rem 1rem;
+      font-size: 9pt;
       color: #334155;
-      margin-top: 1rem;
-      margin-bottom: 0.4rem;
-    }
-
-    p {
-      margin-bottom: 0.75rem;
-      text-align: justify;
-    }
-
-    /* Callout Boxes */
-    .callout {
-      background: #f8fafc;
-      border-left: 4px solid #fe424d;
-      padding: 0.9rem 1.2rem;
-      margin: 1rem 0;
-      border-radius: 0 8px 8px 0;
-      font-size: 9.5pt;
-    }
-
-    .callout-info {
-      background: #f0fdf4;
-      border-left-color: #16a34a;
-    }
-
-    .callout-warn {
-      background: #fffbeb;
-      border-left-color: #f59e0b;
+      line-height: 1.55;
     }
 
     /* Tables */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 1rem 0 1.2rem 0;
-      font-size: 9pt;
+      margin: 0.8rem 0 1rem 0;
+      font-size: 8.5pt;
     }
 
     table th {
       background: #0f172a;
       color: #ffffff;
-      padding: 0.55rem 0.75rem;
+      padding: 0.5rem 0.65rem;
       text-align: left;
       font-weight: 600;
-      font-size: 8.5pt;
+      font-size: 8pt;
       letter-spacing: 0.03em;
     }
 
     table td {
-      padding: 0.5rem 0.75rem;
+      padding: 0.45rem 0.65rem;
       border-bottom: 1px solid #e2e8f0;
       vertical-align: top;
     }
@@ -254,14 +259,15 @@ const htmlContent = `<!DOCTYPE html>
     /* Code Blocks */
     pre {
       background: #0f172a;
-      color: #f8fafc;
-      padding: 0.8rem 1rem;
-      border-radius: 8px;
+      color: #f1f5f9;
+      padding: 0.75rem 0.9rem;
+      border-radius: 6px;
       font-family: 'Consolas', 'Fira Code', monospace;
-      font-size: 8.5pt;
+      font-size: 8pt;
       overflow-x: auto;
-      margin: 0.8rem 0;
-      line-height: 1.5;
+      margin: 0.6rem 0;
+      line-height: 1.45;
+      border: 1px solid #334155;
     }
 
     code {
@@ -270,7 +276,7 @@ const htmlContent = `<!DOCTYPE html>
       padding: 0.15rem 0.35rem;
       border-radius: 4px;
       font-family: 'Consolas', monospace;
-      font-size: 8.5pt;
+      font-size: 8pt;
     }
 
     pre code {
@@ -279,14 +285,24 @@ const htmlContent = `<!DOCTYPE html>
       padding: 0;
     }
 
+    .code-label {
+      font-size: 7.5pt;
+      color: #64748b;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 0.4rem;
+      margin-bottom: 0.2rem;
+    }
+
     /* Screenshots & Images */
     .screenshot-card {
       background: #ffffff;
       border: 1px solid #cbd5e1;
       border-radius: 8px;
-      padding: 0.6rem;
-      margin: 1.2rem 0;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+      padding: 0.5rem;
+      margin: 1rem 0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
       page-break-inside: avoid;
     }
 
@@ -299,34 +315,20 @@ const htmlContent = `<!DOCTYPE html>
     }
 
     .screenshot-caption {
-      margin-top: 0.5rem;
-      font-size: 8.5pt;
+      margin-top: 0.45rem;
+      font-size: 8pt;
       color: #64748b;
       font-style: italic;
       text-align: center;
     }
 
-    /* Architecture Diagram */
-    .arch-diagram {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 1.2rem;
-      margin: 1rem 0;
-      font-family: 'Consolas', monospace;
-      font-size: 8pt;
-      line-height: 1.4;
-      white-space: pre;
-      color: #0f172a;
-    }
-
     /* Badges */
     .badge {
       display: inline-block;
-      padding: 0.15rem 0.5rem;
+      padding: 0.15rem 0.45rem;
       border-radius: 4px;
-      font-size: 7.5pt;
-      font-weight: 700;
+      font-size: 7pt;
+      font-weight: 800;
       text-transform: uppercase;
       background: #e2e8f0;
       color: #334155;
@@ -338,22 +340,22 @@ const htmlContent = `<!DOCTYPE html>
 
     /* Q&A Section */
     .qa-item {
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 8px;
-      padding: 1rem;
+      padding: 0.85rem 1rem;
       page-break-inside: avoid;
     }
 
     .qa-question {
-      font-size: 10pt;
+      font-size: 9.5pt;
       font-weight: 700;
       color: #0f172a;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.35rem;
       display: flex;
       align-items: baseline;
-      gap: 0.5rem;
+      gap: 0.45rem;
     }
 
     .qa-num {
@@ -361,14 +363,14 @@ const htmlContent = `<!DOCTYPE html>
       color: #ffffff;
       font-size: 7.5pt;
       font-weight: 800;
-      padding: 0.1rem 0.4rem;
+      padding: 0.1rem 0.35rem;
       border-radius: 4px;
     }
 
     .qa-answer {
-      font-size: 9pt;
+      font-size: 8.5pt;
       color: #334155;
-      line-height: 1.55;
+      line-height: 1.5;
       text-align: justify;
     }
   </style>
@@ -378,31 +380,31 @@ const htmlContent = `<!DOCTYPE html>
   <!-- ==================== COVER PAGE ==================== -->
   <div class="cover-page">
     <div>
-      <div class="cover-badge">Major Project Master Documentation & Engineering Notes</div>
+      <div class="cover-badge">Full-Stack Engineering & System Architecture Bible</div>
       <div class="cover-title-group">
         <div class="cover-brand">🧭 Stay<span class="highlight">Lust</span></div>
-        <div class="cover-subtitle">Production-Ready Full-Stack Travel Accommodation & Vacation Rental Platform</div>
-        <p style="margin-top: 1rem; font-size: 10pt; color: #64748b; max-width: 90%;">
-          An end-to-end cloud-native MERN ecosystem inspired by Airbnb, engineered with React 19, Express.js 5, MongoDB Atlas, Mapbox GL geocoding, Cloudinary CDN, and Tailwind CSS v4.
+        <div class="cover-subtitle">Complete Project Notes, Code Implementations & Viva Guide</div>
+        <p class="cover-desc">
+          An exhaustive engineering dossier detailing the design, implementation, and architectural trade-offs of <strong>StayLust</strong> — a production-grade accommodation booking and vacation rental web application powered by React 19, Express 5, MongoDB Atlas, Mapbox GL JS, and Cloudinary.
         </p>
       </div>
 
       <div class="cover-meta-grid">
         <div class="meta-item">
-          <h4>Project Developer</h4>
+          <h4>Author & Developer</h4>
           <p>Ranjit Sharma</p>
         </div>
         <div class="meta-item">
-          <h4>Architecture Pattern</h4>
+          <h4>Architecture Model</h4>
           <p>Decoupled SPA + RESTful API (MVC)</p>
         </div>
         <div class="meta-item">
-          <h4>Primary Tech Stack</h4>
-          <p>React 19, Node.js 24, Express 5, MongoDB Atlas</p>
+          <h4>Full Tech Stack</h4>
+          <p>React 19 • Vite 8 • Tailwind v4 • Node 24 • Express 5 • Atlas</p>
         </div>
         <div class="meta-item">
-          <h4>Styling & Animation</h4>
-          <p>Tailwind CSS v4 & Motion (Framer Motion)</p>
+          <h4>Cloud Services</h4>
+          <p>Cloudinary CDN • Mapbox GL Geocoding • Render CI/CD</p>
         </div>
         <div class="meta-item">
           <h4>GitHub Repository</h4>
@@ -416,556 +418,614 @@ const htmlContent = `<!DOCTYPE html>
     </div>
 
     <div class="cover-footer">
-      <span>Academic Year 2026 • Computer Science & Engineering</span>
-      <span>Confidential & Comprehensive Project Viva / Technical Reference</span>
+      <span>Framework: What • Why • Implementation (Code & Visuals)</span>
+      <span>Confidential & Comprehensive Major Project Documentation</span>
     </div>
   </div>
 
-  <!-- ==================== CHAPTER 1: EXECUTIVE SUMMARY ==================== -->
+  <!-- ==================== CHAPTER 1: ARCHITECTURE ==================== -->
   <div class="page-break"></div>
-  <h1 class="section-title">1. Executive Project Summary</h1>
+  <h1 class="chapter-title">Chapter 1: System Architecture & Decoupled SPA Paradigm</h1>
 
-  <h2 class="subsection-title">1.1 Project Overview & Vision</h2>
-  <p>
-    <strong>StayLust</strong> is an enterprise-grade, modern accommodation and vacation rental web application. Designed and implemented as a complete full-stack solution, it mirrors the core capabilities of Airbnb while incorporating localized Indian destination mapping, interactive geospatial exploration, automated 18% Goods & Services Tax (GST) calculation, and zero-latency optimistic review operations.
-  </p>
-  <p>
-    The platform bridges the gap between property hosts and domestic/international travellers. Travellers can effortlessly discover scenic hill villas, coastal beach houses, luxury heritage rooms, and tranquil retreats across destinations like Assagao Goa, Old Manali, Ooty, Varkala, and Indiranagar Bengaluru. Hosts can manage listings, upload high-resolution media to Cloudinary, track active reservations, and view payouts directly in real time.
-  </p>
-
-  <div class="callout callout-info">
-    <strong>Core Problem Solved:</strong> Many academic accommodation clones rely on static templates (EJS/Handlebars) with full page reloads, unvalidated manual geocoordinates, lack of real transaction tax breakdowns, and laggy UI deletions. StayLust solves this by leveraging modern <strong>React 19 Single Page Application (SPA)</strong> architecture with dynamic responsive pagination, forward geocoding with Mapbox GL, distributed session storage via MongoDB Atlas, and instant optimistic state reconciliation.
+  <div class="triad-box">
+    <div class="triad-header triad-what">📌 What It Is</div>
+    <div class="triad-body">
+      A <strong>Decoupled Single Page Application (SPA) + REST API architecture</strong>. The client-side interface is an autonomous React 19 application compiled by Vite, while the server is an Express.js 5 micro-monolith connected to MongoDB Atlas. Express acts strictly as an API gateway returning JSON and serving precompiled static production bundles.
+    </div>
   </div>
 
-  <h2 class="subsection-title">1.2 Key Engineering Highlights</h2>
-  <table>
-    <thead>
-      <tr>
-        <th style="width: 28%;">Technical Feature</th>
-        <th style="width: 32%;">Implementation Details</th>
-        <th style="width: 40%;">User & Architectural Benefit</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>Decoupled SPA Architecture</strong></td>
-        <td>React 19 + Vite 8 frontend communicating over REST API with Express 5 backend.</td>
-        <td>Near-instant page navigation with zero white flashes; clear separation of presentation and business logic.</td>
-      </tr>
-      <tr>
-        <td><strong>Forward Geocoding & Maps</strong></td>
-        <td>Mapbox Geocoding SDK on server side; Mapbox GL JS on client side with custom pins.</td>
-        <td>Automatically translates city & country names into exact coordinates [longitude, latitude] for visual exploration.</td>
-      </tr>
-      <tr>
-        <td><strong>Default 18% GST Engine</strong></td>
-        <td>Nightly prices compute <code>Math.round(price * 1.18)</code> transparently across cards & bookings.</td>
-        <td>Ensures accurate Indian market billing compliance without mutating base property values in the database.</td>
-      </tr>
-      <tr>
-        <td><strong>Optimistic Review Operations</strong></td>
-        <td>Instant React state updates coupled with parallel <code>Promise.all</code> in Express controllers.</td>
-        <td>Eliminates UI delete lag (0ms user feedback) while maintaining eventual database consistency and error rollback.</td>
-      </tr>
-      <tr>
-        <td><strong>4-Row Responsive Pagination</strong></td>
-        <td>Dynamic grid calculator based on viewport (2 cols on mobile = 8, up to 6 cols on desktop = 24).</td>
-        <td>Keeps initial viewports clean, reduces initial DOM node footprint, and provides an elegant "Show more stays" toggle.</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- ==================== CHAPTER 2: SYSTEM ARCHITECTURE ==================== -->
-  <div class="page-break"></div>
-  <h1 class="section-title">2. System Architecture & Request Lifecycle</h1>
-
-  <h2 class="subsection-title">2.1 Architectural Flow Diagram</h2>
-  <p>
-    StayLust utilizes a decoupled Model-View-Controller (MVC) pattern adapted for modern Single Page Applications. The client runs entirely in the browser as a compiled React bundle, while Express.js 5 serves strictly as an API gateway and static file server.
-  </p>
-
-  <div class="arch-diagram">
-+-------------------------------------------------------------------------------------------------+
-|                                 STAYLUST SYSTEM TOPOLOGY                                        |
-+-------------------------------------------------------------------------------------------------+
-
- [ CLIENT TIER: Browser / Mobile ]
-         │
-         ├─── (1) React 19 SPA (Vite Bundled) + Tailwind CSS v4 + Motion
-         ├─── (2) Mapbox GL JS WebGL Canvas (Interactive Geolocation Map)
-         └─── (3) Optimistic UI State Handler & Client Fetch Library
-                     │
-                     │  HTTP / HTTPS REST Calls (JSON)
-                     ▼
- [ BACKEND TIER: Express.js 5 / Node.js 24 ]
-         │
-         ├─── Middleware Layer
-         │      ├── express.json() & express.static(client/dist)
-         │      ├── express-session + connect-mongo (Distributed Session Manager)
-         │      ├── passport.initialize() + passport.session() (PBKDF2 Authentication)
-         │      └── Joi Schema Validator (Input Sanitization & Business Rules)
-         │
-         ├─── Controller Layer
-         │      ├── listing.js (CRUD, Geocoding, Dynamic Aggregations)
-         │      ├── review.js (Parallel Promise.all Deletions, Rating Recalculation)
-         │      ├── booking.js (Date Logic, Availability, Host Dashboard)
-         │      └── user.js (Register, Login, Session Serialization)
-         │
-         ├─── Cloud Service Integrations
-         │      ├── Cloudinary SDK (Direct Cloud Image Upload & Transformation)
-         │      └── Mapbox SDK (Forward Geocoding: Location String -> [Lng, Lat])
-         │
-         ▼
- [ DATABASE TIER: MongoDB Atlas (Replica Set Cluster) ]
-         ├─── listings collection (GeoJSON Point, Ref: User, Ref: Reviews)
-         ├─── reviews collection (Rating, Comment, Ref: User)
-         ├─── bookings collection (CheckIn, CheckOut, Guests, TotalPrice, Status)
-         ├─── users collection (Username, Email, Salt, Hash)
-         └─── sessions collection (TTL Indexed Session Store)
+  <div class="triad-box">
+    <div class="triad-header triad-why">💡 Why We Built It This Way</div>
+    <div class="triad-body">
+      Traditional monolithic Multi-Page Applications (MPAs) using EJS or Handlebars trigger a full document reload on every action. This introduces white flashes, destroys client-side scroll position, causes WebGL map canvases (Mapbox) to re-initialize from scratch on every page turn, and places high rendering CPU strain on Node.js. By decoupling into an SPA:
+      <ul style="margin-left: 1.2rem; margin-top: 0.3rem;">
+        <li>Client state is preserved across route changes (seamless navigation).</li>
+        <li>Network payloads are reduced to lean JSON strings rather than redundant HTML structures.</li>
+        <li>Optimistic UI reconciliation becomes possible (0ms perceived latency for deletions).</li>
+      </ul>
+    </div>
   </div>
 
-  <h2 class="subsection-title">2.2 Client-Server Request-Response Lifecycle</h2>
-  <ol style="margin-left: 1.5rem; line-height: 1.8;">
-    <li><strong>Client Dispatch:</strong> The user interacts with the UI (e.g., searches "Goa", reserves a date range, or deletes a review). The React frontend fires an asynchronous <code>fetch()</code> request via the unified <code>api.js</code> service.</li>
-    <li><strong>Express Routing & Middleware:</strong> The request hits <code>app.js</code>, passes through logging and cookie parsing, checks session validity via <code>MongoStore</code>, and executes Passport deserialization.</li>
-    <li><strong>Authorization Guard:</strong> Endpoints requiring elevated permissions pass through custom middleware (<code>isLoggedIn</code>, <code>isOwner</code>, <code>isReviewAuthor</code>) in <code>middleware.js</code>.</li>
-    <li><strong>Joi Schema Validation:</strong> Input bodies (e.g., listing price, coordinates, review stars) are validated against Joi schemas in <code>schema.js</code>. If invalid, a 400 Bad Request is returned before touching the database.</li>
-    <li><strong>Database & Cloud Execution:</strong> The controller executes Mongoose queries against MongoDB Atlas. For file uploads, Multer streams the multipart image payload directly into Cloudinary without buffering to the local server disk.</li>
-    <li><strong>Optimistic Client Reconciliation:</strong> For state-sensitive actions like deleting a review, the client removes the element from local state immediately (0ms latency feel) and only reverts if the network request fails with an error toast.</li>
-  </ol>
+  <div class="triad-box">
+    <div class="triad-header triad-how">⚙️ Implementation & Code Walkthrough</div>
+    <div class="triad-body">
+      <strong>1. Development Proxy (<a href="file:///c:/Users/ranji/Desktop/project/MajorProject/client/vite.config.js">client/vite.config.js</a>):</strong>
+      <div class="code-label">client/vite.config.js</div>
+      <pre><code>import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
-  <!-- ==================== CHAPTER 3: DATABASE DESIGN ==================== -->
-  <div class="page-break"></div>
-  <h1 class="section-title">3. Database Schema Design & Relationships</h1>
-
-  <h2 class="subsection-title">3.1 Entity Relationship Model</h2>
-  <p>
-    StayLust uses a normalized, document-based NoSQL data model designed to maximize query performance while maintaining clean relational integrity.
-  </p>
-
-  <table>
-    <thead>
-      <tr>
-        <th style="width: 15%;">Model</th>
-        <th style="width: 25%;">Field</th>
-        <th style="width: 20%;">Type</th>
-        <th style="width: 40%;">Description & Constraints</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td rowspan="8"><strong>Listing</strong></td>
-        <td><code>title</code></td>
-        <td>String</td>
-        <td>Required, trimmed, property headline (e.g. "Lush Green Surroundings").</td>
-      </tr>
-      <tr>
-        <td><code>description</code></td>
-        <td>String</td>
-        <td>Detailed property information (~150 words per listing).</td>
-      </tr>
-      <tr>
-        <td><code>image</code></td>
-        <td>{ url, filename }</td>
-        <td>Cloudinary public CDN URL and cloud file identifier.</td>
-      </tr>
-      <tr>
-        <td><code>price</code></td>
-        <td>Number</td>
-        <td>Base per-night cost in INR (must be positive).</td>
-      </tr>
-      <tr>
-        <td><code>location, country</code></td>
-        <td>String</td>
-        <td>City/region and country (defaulted to India).</td>
-      </tr>
-      <tr>
-        <td><code>geometry</code></td>
-        <td>GeoJSON Point</td>
-        <td><code>{ type: "Point", coordinates: [Number] }</code> for Mapbox pins.</td>
-      </tr>
-      <tr>
-        <td><code>owner</code></td>
-        <td>ObjectId (Ref: User)</td>
-        <td>Host user account with edit/delete authorization rights.</td>
-      </tr>
-      <tr>
-        <td><code>reviews</code></td>
-        <td>[ObjectId] (Ref: Review)</td>
-        <td>Array of child review IDs with cascading delete middleware.</td>
-      </tr>
-      <tr>
-        <td rowspan="4"><strong>Review</strong></td>
-        <td><code>comment</code></td>
-        <td>String</td>
-        <td>Detailed guest feedback (~30 words natural review text).</td>
-      </tr>
-      <tr>
-        <td><code>rating</code></td>
-        <td>Number</td>
-        <td>Integer between 1 and 5 stars.</td>
-      </tr>
-      <tr>
-        <td><code>author</code></td>
-        <td>ObjectId (Ref: User)</td>
-        <td>User who wrote the review (used for author-only deletion).</td>
-      </tr>
-      <tr>
-        <td><code>createdAt</code></td>
-        <td>Date</td>
-        <td>Timestamp automatically stamped upon review submission.</td>
-      </tr>
-      <tr>
-        <td rowspan="6"><strong>Booking</strong></td>
-        <td><code>listing</code></td>
-        <td>ObjectId (Ref: Listing)</td>
-        <td>The reserved accommodation.</td>
-      </tr>
-      <tr>
-        <td><code>user</code></td>
-        <td>ObjectId (Ref: User)</td>
-        <td>The registered guest who placed the booking.</td>
-      </tr>
-      <tr>
-        <td><code>checkIn, checkOut</code></td>
-        <td>Date</td>
-        <td>Reservation date range (validated: checkOut > checkIn).</td>
-      </tr>
-      <tr>
-        <td><code>guests</code></td>
-        <td>Number</td>
-        <td>Total guest headcount.</td>
-      </tr>
-      <tr>
-        <td><code>totalPrice</code></td>
-        <td>Number</td>
-        <td>Grand total including base nights + 18% GST.</td>
-      </tr>
-      <tr>
-        <td><code>status</code></td>
-        <td>String</td>
-        <td>Enum: "confirmed", "pending", "cancelled".</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <h2 class="subsection-title">3.2 Cascading Deletion Hook</h2>
-  <p>
-    When a listing is deleted by its host, all associated child reviews must be cleanly pruned from the <code>reviews</code> collection to prevent orphaned documents in MongoDB Atlas:
-  </p>
-
-  <pre><code>// models/listing.js: Post-middleware hook for findOneAndDelete
-listingSchema.post("findOneAndDelete", async (listing) => {
-  if (listing && listing.reviews && listing.reviews.length > 0) {
-    await Review.deleteMany({ _id: { $in: listing.reviews } });
-  }
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+  server: {
+    // Express runs on 8080; proxying keeps the session cookie same-origin in development
+    proxy: { "/api": "http://localhost:8080" },
+  },
 });</code></pre>
 
-  <!-- ==================== CHAPTER 4: KEY FEATURES & SCREENSHOTS ==================== -->
-  <div class="page-break"></div>
-  <h1 class="section-title">4. Key Modules & Production UI Walkthrough</h1>
+      <strong>2. Production Serving & Catch-All Routing (<a href="file:///c:/Users/ranji/Desktop/project/MajorProject/app.js">app.js</a>):</strong>
+      <div class="code-label">app.js</div>
+      <pre><code>const clientDist = path.join(__dirname, "client", "dist");
 
-  <h2 class="subsection-title">4.1 Homepage: Dynamic Responsive Grid & Card Hierarchy</h2>
-  <p>
-    The StayLust homepage is built to showcase curated stays with maximum visual clarity. The header displays the bold, enlarged <strong>StayLust</strong> branding alongside the live debounced search bar. The category bar allows instant filtering across Rooms, Iconic Cities, Mountains, Castles, Pools, Camping, and Farms.
-  </p>
+app.use(express.json());
+// Serve compiled assets before session middleware to prevent asset session creation
+app.use(express.static(clientDist));
+
+// REST API Routers
+app.use("/api/listings", listingRouter);
+app.use("/api/listings/:id/reviews", reviewRouter);
+app.use("/api/listings/:id/bookings", bookingRouter);
+app.use("/api", userRouter);
+app.use("/api", infoRouter);
+
+// Catch-all route delegating client routing to React Router
+app.get("/*splat", (req, res) => {
+  res.sendFile(path.join(clientDist, "index.html"));
+});</code></pre>
+    </div>
+  </div>
+
+  <!-- ==================== CHAPTER 2: AUTHENTICATION ==================== -->
+  <div class="page-break"></div>
+  <h1 class="chapter-title">Chapter 2: Authentication & Distributed Session Management</h1>
+
+  <div class="triad-box">
+    <div class="triad-header triad-what">📌 What It Is</div>
+    <div class="triad-body">
+      Stateful session-based user authentication powered by <strong>Passport.js Local Strategy</strong>, salted <strong>PBKDF2 password hashing</strong>, and a distributed session store backed by <strong>connect-mongo</strong> inside MongoDB Atlas.
+    </div>
+  </div>
+
+  <div class="triad-box">
+    <div class="triad-header triad-why">💡 Why We Built It This Way</div>
+    <div class="triad-body">
+      Many student projects use JSON Web Tokens (JWT) stored in <code>localStorage</code>. This introduces major security vulnerabilities:
+      <ul style="margin-left: 1.2rem; margin-top: 0.3rem;">
+        <li><strong>XSS Vulnerability:</strong> Any malicious third-party script or npm package can access <code>localStorage</code> and steal the token.</li>
+        <li><strong>Inability to Revoke:</strong> JWTs cannot be invalidated on demand unless you build a complex Redis blacklist. If a host terminates a session or account, a stolen JWT remains valid until expiration.</li>
+        <li><strong>Session Cookies:</strong> StayLust uses <code>httpOnly: true</code> and <code>secure: true</code> cookies. JavaScript cannot access them, eliminating XSS token theft. Sessions can be destroyed instantly on the server via <code>req.session.destroy()</code>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="triad-box">
+    <div class="triad-header triad-how">⚙️ Implementation & Code Walkthrough</div>
+    <div class="triad-body">
+      <div class="code-label">app.js: Distributed MongoDB Session Store</div>
+      <pre><code>const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  crypto: { secret: process.env.SESSION_SECRET },
+  touchAfter: 24 * 3600, // Lazy session update: only rewrite if session changed within 24h
+});
+
+const sessionOptions = {
+  store,
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true, // Prevents client-side JS from accessing the cookie
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  },
+};
+
+app.use(session(sessionOptions));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());</code></pre>
+    </div>
+  </div>
 
   <div class="screenshot-card">
-    <img src="${imgHome}" alt="StayLust Homepage">
-    <div class="screenshot-caption">Figure 4.1: StayLust Homepage featuring responsive cards, Indian destinations, and 4-line initial grid.</div>
+    <img src="${imgLogin}" alt="StayLust Login UI">
+    <div class="screenshot-caption">Figure 2.1: Secure Split-Screen Authentication Portal with PBKDF2 Encryption.</div>
   </div>
 
-  <div class="callout">
-    <strong>Card Hierarchy Innovation:</strong> Each card displays:
-    <ul style="margin-left: 1.2rem; margin-top: 0.3rem;">
-      <li><strong>Line 1 (Top):</strong> Bold Property Title (e.g. <em>Lush Green Surroundings.</em>).</li>
-      <li><strong>Line 2 (Middle):</strong> Muted Address (e.g. <em>Vagator, India</em>).</li>
-      <li><strong>Line 3 (Bottom):</strong> GST-inclusive price inline with Star Rating: <code>₹2,199 night · ★ 4.3</code>.</li>
-      <li><strong>Exclusive Photo Navigation:</strong> Clicking the image triggers navigation to property details; text remains highlightable.</li>
-    </ul>
-  </div>
-
+  <!-- ==================== CHAPTER 3: RESPONSIVE GRID & CARDS ==================== -->
   <div class="page-break"></div>
-  <h2 class="subsection-title">4.2 Property Detail & Interactive Mapbox Integration</h2>
-  <p>
-    The property detail page displays high-resolution Cloudinary imagery, host badges, property descriptions, interactive Mapbox GL vector map, and an instant booking widget.
-  </p>
+  <h1 class="chapter-title">Chapter 3: Dynamic 4-Row Grid & Card Hierarchy</h1>
+
+  <div class="triad-box">
+    <div class="triad-header triad-what">📌 What It Is</div>
+    <div class="triad-body">
+      A viewport-adaptive accommodation grid that dynamically computes <strong>exactly 4 complete rows of property cards</strong> across all device types, with a single-click "Show more stays" accordion and dedicated photo-only navigation.
+    </div>
+  </div>
+
+  <div class="triad-box">
+    <div class="triad-header triad-why">💡 Why We Built It This Way</div>
+    <div class="triad-body">
+      Hardcoded pagination (e.g., showing 12 stays) looks asymmetrical: on a 6-column widescreen desktop it yields only 2 rows, while on a 2-column mobile device it generates an overwhelming 6 rows. By calculating <code>cols * 4</code> dynamically:
+      <ul style="margin-left: 1.2rem; margin-top: 0.3rem;">
+        <li><strong>Mobile (&lt;768px):</strong> 2 cols &times; 4 rows = <strong>8 stays</strong>.</li>
+        <li><strong>Tablet Portrait (768px-1023px):</strong> 3 cols &times; 4 rows = <strong>12 stays</strong>.</li>
+        <li><strong>Tablet Landscape (1024px-1279px):</strong> 4 cols &times; 4 rows = <strong>16 stays</strong>.</li>
+        <li><strong>Desktop Widescreen (&ge;1280px):</strong> 6 cols &times; 4 rows = <strong>24 stays</strong>.</li>
+        <li><strong>Navigation Isolation:</strong> The <code>&lt;Link&gt;</code> tag wraps <em>strictly the photo</em>. Users can highlight address text or click wishlist buttons without triggering accidental page transitions.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="triad-box">
+    <div class="triad-header triad-how">⚙️ Implementation & Code Walkthrough</div>
+    <div class="triad-body">
+      <div class="code-label">client/src/pages/Listings.jsx: Responsive Calculator</div>
+      <pre><code>// Dynamic responsive columns: 6 on desktop (xl), 4 on landscape tablet (lg), 3 on portrait tablet (md), 2 on mobile
+const isXl = useMediaQuery("(min-width: 1280px)");
+const isLg = useMediaQuery("(min-width: 1024px)");
+const isMd = useMediaQuery("(min-width: 768px)");
+const cols = isXl ? 6 : isLg ? 4 : isMd ? 3 : 2;
+const initialListingCount = cols * 4; // Exactly 4 complete lines of listings
+
+const visibleListings = showAll ? allListings : allListings.slice(0, initialListingCount);</code></pre>
+
+      <div class="code-label">client/src/components/ListingCard.jsx: Isolated Photo Link & Inline Rating</div>
+      <pre><code>{/* Navigation happens strictly on clicking the photo */}
+&lt;Link
+  to={\`/listings/\${listing._id}\`}
+  aria-label={listing.title}
+  className="block relative aspect-[4/3.6] overflow-hidden rounded-card bg-neutral-200"
+&gt;
+  &lt;SmoothImage src={imageUrl(listing.image?.url, 600)} alt={listing.title} /&gt;
+&lt;/Link&gt;
+
+&lt;div className="mt-2 sm:mt-3 px-0.5 sm:px-1"&gt;
+  {/* Line 1: Highlighted Title */}
+  &lt;h3 className="truncate font-bold text-xs sm:text-base text-neutral-900"&gt;{listing.title}&lt;/h3&gt;
+
+  {/* Line 2: Muted Address */}
+  &lt;p className="truncate text-[11px] sm:text-sm text-neutral-500"&gt;
+    {[listing.location, listing.country].filter(Boolean).join(", ")}
+  &lt;/p&gt;
+
+  {/* Line 3: Nightly Price + Inline Star Rating */}
+  &lt;p className="mt-0.5 flex items-center gap-1 sm:gap-1.5 text-xs sm:text-[15px] truncate"&gt;
+    &lt;span className="font-bold"&gt;{formatPrice(price)}&lt;/span&gt;
+    &lt;span className="text-neutral-500 text-[11px] sm:text-sm"&gt;night&lt;/span&gt;
+    &lt;span className="text-neutral-400 text-[11px] select-none"&gt;&middot;&lt;/span&gt;
+    &lt;Rating value={listing.averageRating} count={listing.reviewCount} showCount={false} /&gt;
+  &lt;/p&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+  </div>
 
   <div class="screenshot-card">
-    <img src="${imgDetail}" alt="StayLust Property Detail Page">
-    <div class="screenshot-caption">Figure 4.2: Property detail page displaying Mapbox GL geocoding, ratings, and host manager.</div>
+    <img src="${imgHome}" alt="StayLust Homepage Grid">
+    <div class="screenshot-caption">Figure 3.1: StayLust Homepage showing the 4-row grid, enlarged logo, and inline card rating.</div>
   </div>
 
-  <h2 class="subsection-title">4.3 Authentication, Security & Brand Architecture</h2>
-  <p>
-    Security is maintained via Passport.js with salted PBKDF2 hashing, cookie serialization, and distributed <code>connect-mongo</code> session management.
-  </p>
+  <!-- ==================== CHAPTER 4: 18% GST ENGINE ==================== -->
+  <div class="page-break"></div>
+  <h1 class="chapter-title">Chapter 4: Default 18% GST Pricing Engine</h1>
+
+  <div class="triad-box">
+    <div class="triad-header triad-what">📌 What It Is</div>
+    <div class="triad-body">
+      A transparent pricing computation layer that automatically factors India's statutory <strong>18% Goods and Services Tax (GST)</strong> into all displayed listing prices, reservation calculations, and booking payout summaries by default.
+    </div>
+  </div>
+
+  <div class="triad-box">
+    <div class="triad-header triad-why">💡 Why We Built It This Way</div>
+    <div class="triad-body">
+      Mutating raw price fields directly inside MongoDB (e.g. saving ₹2,595 instead of ₹2,199) violates standard database normalization:
+      <ul style="margin-left: 1.2rem; margin-top: 0.3rem;">
+        <li>If tax laws change (e.g. from 18% to 12%), an entire database migration would be required.</li>
+        <li>Hosts would receive skewed commission reports because base payouts would be conflated with government tax liabilities.</li>
+        <li>StayLust stores the raw base price in MongoDB and applies <code>const price = Math.round((Number(listing.price) || 0) * (1 + GST_RATE))</code> on the presentation layer, keeping base data pristine while giving guests accurate checkout figures.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="triad-box">
+    <div class="triad-header triad-how">⚙️ Implementation & Code Walkthrough</div>
+    <div class="triad-body">
+      <div class="code-label">client/src/lib/format.js: Centralized Financial Logic</div>
+      <pre><code>export const GST_RATE = 0.18; // India accommodation tax standard rate
+
+export function formatPrice(amount) {
+  if (amount == null || isNaN(amount)) return "₹0";
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
+export function bookingTotals(nightlyPrice, nights) {
+  const base = (Number(nightlyPrice) || 0) * (Number(nights) || 0);
+  const gst = Math.round(base * GST_RATE);
+  const total = base + gst;
+  return { base, gst, total };
+}</code></pre>
+    </div>
+  </div>
+
+  <!-- ==================== CHAPTER 5: CLOUDINARY & MULTER ==================== -->
+  <div class="page-break"></div>
+  <h1 class="chapter-title">Chapter 5: Cloudinary Media Storage & Multer Upload Pipeline</h1>
+
+  <div class="triad-box">
+    <div class="triad-header triad-what">📌 What It Is</div>
+    <div class="triad-body">
+      A cloud-native media streaming pipeline that connects Express multipart form uploads directly to <strong>Cloudinary CDN</strong> via <strong>Multer</strong>, storing secure HTTPS URLs and public asset IDs in MongoDB.
+    </div>
+  </div>
+
+  <div class="triad-box">
+    <div class="triad-header triad-why">💡 Why We Built It This Way</div>
+    <div class="triad-body">
+      Writing file uploads to local disk (e.g. <code>/public/uploads</code>):
+      <ul style="margin-left: 1.2rem; margin-top: 0.3rem;">
+        <li>Fails on cloud deployment platforms (Render, Heroku, AWS Lambda) because server file systems are <em>ephemeral</em>—any container restart wipes out all user-uploaded photos.</li>
+        <li>Slows down response times because Node.js must serve multi-megabyte image assets instead of delegating to a dedicated Content Delivery Network.</li>
+        <li>Cloudinary provides automatic format negotiation (serving modern WebP and AVIF to supported browsers) and automated image resizing.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="triad-box">
+    <div class="triad-header triad-how">⚙️ Implementation & Code Walkthrough</div>
+    <div class="triad-body">
+      <div class="code-label">cloudConfig.js: Cloudinary Storage Engine</div>
+      <pre><code>const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'staylust_DEV',
+    allowedFormats: ["png", "jpg", "jpeg", "webp", "avif"],
+  },
+});
+
+module.exports = { cloudinary, storage };</code></pre>
+
+      <div class="code-label">routes/listing.js: Route Handler with Multer Middleware</div>
+      <pre><code>const upload = multer({ storage });
+
+router.route("/")
+  .get(wrapAsync(listingController.index))
+  .post(
+    isLoggedIn,
+    upload.single("listing[image]"), // Streams binary file to Cloudinary
+    validateListing,                 // Validates body with Joi schema
+    wrapAsync(listingController.createListing)
+  );</code></pre>
+    </div>
+  </div>
+
+  <!-- ==================== CHAPTER 6: MAPBOX GEOCODING ==================== -->
+  <div class="page-break"></div>
+  <h1 class="chapter-title">Chapter 6: Forward Geocoding & Mapbox GL WebGL Engine</h1>
+
+  <div class="triad-box">
+    <div class="triad-header triad-what">📌 What It Is</div>
+    <div class="triad-body">
+      An automated geospatial pipeline that resolves human-readable location strings (e.g. <em>"Assagao, India"</em>) into precise longitude and latitude coordinates using the <strong>Mapbox Geocoding SDK</strong>, persisting them as <strong>GeoJSON Points</strong> in MongoDB and rendering interactive vector maps on the client using <strong>Mapbox GL JS</strong>.
+    </div>
+  </div>
+
+  <div class="triad-box">
+    <div class="triad-header triad-why">💡 Why We Built It This Way</div>
+    <div class="triad-body">
+      Forcing hosts to type decimal coordinates (e.g. <code>73.78, 15.59</code>) creates massive friction and high error rates. Forward geocoding allows hosts to enter familiar town names, while Mapbox resolves exact spatial coordinates. Using Mapbox GL JS over static images delivers smooth 60fps GPU-accelerated client panning, zooming, and custom branded markers.
+    </div>
+  </div>
+
+  <div class="triad-box">
+    <div class="triad-header triad-how">⚙️ Implementation & Code Walkthrough</div>
+    <div class="triad-body">
+      <div class="code-label">controller/listings.js: Server-Side Forward Geocode</div>
+      <pre><code>const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const geocodingClient = mbxGeocoding({ accessToken: process.env.MAP_TOKEN });
+
+const geocode = async (location) => {
+  const response = await geocodingClient
+    .forwardGeocode({ query: location, limit: 1 })
+    .send();
+  return response.body.features[0]?.geometry; // Returns { type: 'Point', coordinates: [lng, lat] }
+};
+
+module.exports.createListing = async (req, res) => {
+  const geometry = await geocode(\`\${req.body.listing.location}, \${req.body.listing.country}\`);
+  const newListing = new Listing(req.body.listing);
+  newListing.owner = req.user._id;
+  newListing.geometry = geometry;
+  if (req.file) newListing.image = { url: req.file.path, filename: req.file.filename };
+  await newListing.save();
+  res.status(201).json(newListing);
+};</code></pre>
+    </div>
+  </div>
 
   <div class="screenshot-card">
-    <img src="${imgLogin}" alt="StayLust Login Screen">
-    <div class="screenshot-caption">Figure 4.3: Secure split-screen authentication portal with persistent session cookies.</div>
+    <img src="${imgDetail}" alt="StayLust Detail & Mapbox">
+    <div class="screenshot-caption">Figure 6.1: Property Detail Page displaying Mapbox GL Vector Map, Coordinates, and Host Manager.</div>
   </div>
 
+  <!-- ==================== CHAPTER 7: OPTIMISTIC REVIEW DELETION ==================== -->
   <div class="page-break"></div>
-  <h2 class="subsection-title">4.4 Community Guidelines, Trust & About Us</h2>
-  <p>
-    StayLust includes complete consumer guidelines, privacy policies, terms of service, and accessibility feedback channels.
-  </p>
+  <h1 class="chapter-title">Chapter 7: Optimistic UI Updates & Parallel DB Execution</h1>
+
+  <div class="triad-box">
+    <div class="triad-header triad-what">📌 What It Is</div>
+    <div class="triad-body">
+      A zero-latency state reconciliation pattern that instantly removes deleted reviews from the UI (0ms feedback), paired with concurrent backend execution using <code>Promise.all</code> and automatic rollback on failure.
+    </div>
+  </div>
+
+  <div class="triad-box">
+    <div class="triad-header triad-why">💡 Why We Built It This Way</div>
+    <div class="triad-body">
+      Standard CRUD deletion causes frustrating delay: the user clicks delete, waits 800ms for a database trip, and watches the entire page reload. With <strong>Optimistic UI</strong>:
+      <ul style="margin-left: 1.2rem; margin-top: 0.3rem;">
+        <li>The review disappears instantly from the screen, and the average star rating recalculates immediately.</li>
+        <li>Backend execution uses <code>Promise.all</code> to run <code>Listing.updateOne</code> and <code>Review.findByIdAndDelete</code> simultaneously rather than sequentially.</li>
+        <li>If network drops, React automatically restores previous data and shows an error toast.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="triad-box">
+    <div class="triad-header triad-how">⚙️ Implementation & Code Walkthrough</div>
+    <div class="triad-body">
+      <div class="code-label">client/src/pages/ListingDetail.jsx: Optimistic State Update with Rollback</div>
+      <pre><code>const deleteReview = async (reviewId) => {
+  const previousData = data;
+  const currentReviews = listing.reviews || [];
+  const remainingReviews = currentReviews.filter((r) => String(r._id) !== String(reviewId));
+  const newCount = remainingReviews.length;
+  const newAvg = newCount === 0 ? 0 : remainingReviews.reduce((sum, r) => sum + (Number(r.rating) || 0), 0) / newCount;
+
+  // 1. Optimistic Update: Immediately mutate React state and recalculate stars
+  setData({
+    ...data,
+    listing: { ...listing, reviews: remainingReviews },
+    reviewCount: newCount,
+    averageRating: newAvg,
+  });
+  toast("Review Deleted!");
+
+  try {
+    // 2. Network call executes in background
+    await api(\`/listings/\${listing._id}/reviews/\${reviewId}\`, { method: "DELETE" });
+  } catch (err) {
+    // 3. Rollback on failure
+    setData(previousData);
+    toast(err.message || "Failed to delete review", "error");
+  }
+};</code></pre>
+
+      <div class="code-label">controller/reviews.js: Parallel DB Execution</div>
+      <pre><code>module.exports.destroyReview = async (req, res) => {
+  const { id, reviewId } = req.params;
+
+  // Concurrently remove review reference from listing AND delete review document
+  await Promise.all([
+    Listing.updateOne({ _id: id }, { $pull: { reviews: reviewId } }),
+    Review.findByIdAndDelete(reviewId),
+  ]);
+
+  res.json({ ok: true });
+};</code></pre>
+    </div>
+  </div>
+
+  <!-- ==================== CHAPTER 8: HOST BOOKING ENGINE ==================== -->
+  <div class="page-break"></div>
+  <h1 class="chapter-title">Chapter 8: Host Reservation Manager & Booking Engine</h1>
+
+  <div class="triad-box">
+    <div class="triad-header triad-what">📌 What It Is</div>
+    <div class="triad-body">
+      A dual-mode accommodation reservation engine. For visiting guests, it provides an interactive date picker, night calculation, and GST billing. For the property owner, it transforms into an <strong>in-situ Host Reservation Dashboard</strong> displaying real-time guest reservations, guest contact emails, and payout totals.
+    </div>
+  </div>
+
+  <div class="triad-box">
+    <div class="triad-header triad-why">💡 Why We Built It This Way</div>
+    <div class="triad-body">
+      Most clones force hosts to visit a disconnected admin screen to check bookings. In StayLust, the booking card automatically detects ownership (<code>isOwner = user && listing.owner._id === user._id</code>) and renders host reservation telemetry right on the property page.
+    </div>
+  </div>
+
+  <div class="triad-box">
+    <div class="triad-header triad-how">⚙️ Implementation & Code Walkthrough</div>
+    <div class="triad-body">
+      <div class="code-label">client/src/components/BookingCard.jsx: Host Manager View</div>
+      <pre><code>// If the logged-in user is the property owner, display host management UI
+{isOwner ? (
+  &lt;div className="mt-6 space-y-4"&gt;
+    &lt;div className="flex items-center justify-between"&gt;
+      &lt;span className="badge badge-get"&gt;Host Reservation Manager&lt;/span&gt;
+      &lt;span className="text-xs font-semibold"&gt;{hostBookings.length} bookings&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div className="max-h-80 space-y-2.5 overflow-y-auto"&gt;
+      {hostBookings.map((b) => (
+        &lt;div key={b._id} className="p-3 border rounded-xl"&gt;
+          &lt;span className="font-bold"&gt;{b.user?.username}&lt;/span&gt;
+          &lt;a href={\`mailto:\${b.user?.email}\`}&gt;{b.user?.email}&lt;/a&gt;
+          &lt;div&gt;Dates: {formatDate(b.checkIn)} &rarr; {formatDate(b.checkOut)}&lt;/div&gt;
+          &lt;div className="font-bold text-sm"&gt;Payout: {formatPrice(b.totalPrice)}&lt;/div&gt;
+        &lt;/div&gt;
+      ))}
+    &lt;/div&gt;
+  &lt;/div&gt;
+) : (
+  /* Guest Reservation Form with Date Pickers */
+  &lt;form onSubmit={submit}&gt;...&lt;/form&gt;
+)}</code></pre>
+    </div>
+  </div>
 
   <div class="screenshot-card">
     <img src="${imgAbout}" alt="StayLust About Page">
-    <div class="screenshot-caption">Figure 4.4: Brand manifesto and platform information page.</div>
+    <div class="screenshot-caption">Figure 8.1: StayLust Platform Information, Community Safety & Trust Guidelines.</div>
   </div>
 
-  <!-- ==================== CHAPTER 5: REST API REFERENCE ==================== -->
+  <!-- ==================== CHAPTER 9: VIVA & INTERVIEWS ==================== -->
   <div class="page-break"></div>
-  <h1 class="section-title">5. Comprehensive REST API Reference</h1>
-
-  <table>
-    <thead>
-      <tr>
-        <th style="width: 12%;">Method</th>
-        <th style="width: 28%;">Endpoint</th>
-        <th style="width: 25%;">Access Level</th>
-        <th style="width: 35%;">Purpose & Response Payload</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="badge badge-get">GET</span></td>
-        <td><code>/api/listings</code></td>
-        <td>Public</td>
-        <td>Returns filtered array of listings with dynamic averageRating and reviewCount.</td>
-      </tr>
-      <tr>
-        <td><span class="badge badge-post">POST</span></td>
-        <td><code>/api/listings</code></td>
-        <td>Authenticated Host</td>
-        <td>Creates a new listing, forward-geocodes coordinates via Mapbox, uploads photo to Cloudinary.</td>
-      </tr>
-      <tr>
-        <td><span class="badge badge-get">GET</span></td>
-        <td><code>/api/listings/:id</code></td>
-        <td>Public</td>
-        <td>Returns single listing populated with owner info and all child reviews.</td>
-      </tr>
-      <tr>
-        <td><span class="badge badge-put">PUT</span></td>
-        <td><code>/api/listings/:id</code></td>
-        <td>Listing Owner Only</td>
-        <td>Updates listing fields and optionally replaces Cloudinary image asset.</td>
-      </tr>
-      <tr>
-        <td><span class="badge badge-del">DELETE</span></td>
-        <td><code>/api/listings/:id</code></td>
-        <td>Listing Owner Only</td>
-        <td>Deletes listing and triggers cascading deletion of child reviews.</td>
-      </tr>
-      <tr>
-        <td><span class="badge badge-post">POST</span></td>
-        <td><code>/api/listings/:id/reviews</code></td>
-        <td>Authenticated User</td>
-        <td>Adds a new star rating (1-5) and comment; recalculates averageRating.</td>
-      </tr>
-      <tr>
-        <td><span class="badge badge-del">DELETE</span></td>
-        <td><code>/api/listings/:id/reviews/:rId</code></td>
-        <td>Review Author Only</td>
-        <td>Executes parallel <code>Promise.all</code> to unlink review from listing and delete review document.</td>
-      </tr>
-      <tr>
-        <td><span class="badge badge-post">POST</span></td>
-        <td><code>/api/listings/:id/bookings</code></td>
-        <td>Authenticated Guest</td>
-        <td>Creates confirmed booking, validates check-in/out dates, and computes 18% GST totals.</td>
-      </tr>
-      <tr>
-        <td><span class="badge badge-get">GET</span></td>
-        <td><code>/api/listings/:id/bookings</code></td>
-        <td>Listing Owner Only</td>
-        <td>Fetches all guest bookings and contact information for host management.</td>
-      </tr>
-      <tr>
-        <td><span class="badge badge-post">POST</span></td>
-        <td><code>/api/signup</code></td>
-        <td>Public</td>
-        <td>Registers new user with email and username using Passport-Local-Mongoose PBKDF2 hashing.</td>
-      </tr>
-      <tr>
-        <td><span class="badge badge-post">POST</span></td>
-        <td><code>/api/login</code></td>
-        <td>Public</td>
-        <td>Authenticates credentials and establishes session cookie in MongoDB store.</td>
-      </tr>
-      <tr>
-        <td><span class="badge badge-post">POST</span></td>
-        <td><code>/api/logout</code></td>
-        <td>Authenticated User</td>
-        <td>Terminates user session and clears client cookie.</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- ==================== CHAPTER 6: VIVA & INTERVIEW GUIDE ==================== -->
-  <div class="page-break"></div>
-  <h1 class="section-title">6. Technical Viva & Recruiter Interview Guide</h1>
+  <h1 class="chapter-title">Chapter 9: High-Yield Viva Voce & Technical Interview Guide</h1>
 
   <div class="qa-item">
-    <div class="qa-question"><span class="qa-num">Q1</span> Why did you decouple the architecture into a React 19 SPA instead of using server-rendered EJS templates?</div>
+    <div class="qa-question"><span class="qa-num">Q1</span> Explain the overall architecture of StayLust.</div>
     <div class="qa-answer">
-      Traditional server-side templates (like EJS) require full-page HTML rebuilds and reloads on every interaction, causing white flashes, losing scroll positions, and placing excessive rendering load on the Node.js server. By building StayLust as a decoupled Single Page Application (SPA) using React 19 and Vite, the server only serves lean JSON data over REST endpoints. The client retains state locally, handles instant client-side transitions via React Router, renders vector maps with WebGL (Mapbox GL), and utilizes optimistic UI updates for instantaneous user interactions.
+      StayLust uses a decoupled SPA + REST API architecture. The client is a React 19 Single Page Application bundled with Vite 8 and styled with Tailwind CSS v4. The backend is an Express.js 5 micro-monolith running on Node.js 24 connected to MongoDB Atlas. Static assets stream from Cloudinary CDN, spatial queries resolve through Mapbox Geocoding, and state transitions occur client-side without full-page reloads.
     </div>
   </div>
 
   <div class="qa-item">
-    <div class="qa-question"><span class="qa-num">Q2</span> How does session-based authentication in StayLust work, and why was it chosen over stateless JWTs?</div>
+    <div class="qa-question"><span class="qa-num">Q2</span> Why use session cookies in MongoDB instead of JSON Web Tokens (JWT)?</div>
     <div class="qa-answer">
-      StayLust uses Passport.js Local Strategy with session cookies stored in MongoDB Atlas via <code>connect-mongo</code>. Unlike JWTs (which cannot be revoked instantly without maintaining a complex distributed token blacklist), server-managed sessions allow instantaneous host/admin revoking, protection against XSS token theft (as cookies use <code>httpOnly: true</code> and <code>secure: true</code>), and automated session touch-throttling (via <code>touchAfter: 24 * 3600</code>).
+      JWTs stored in <code>localStorage</code> are vulnerable to Cross-Site Scripting (XSS) token theft and cannot be invalidated immediately by the server if an account is compromised. StayLust uses <code>httpOnly</code>, <code>secure</code> cookies managed by Passport.js and <code>connect-mongo</code>. This guarantees immune-to-XSS cookie handling and instant server-side revocation on logout or account termination.
     </div>
   </div>
 
   <div class="qa-item">
-    <div class="qa-question"><span class="qa-num">Q3</span> How did you solve the review deletion lag in ListingDetail?</div>
+    <div class="qa-question"><span class="qa-num">Q3</span> How does the review deletion optimization work?</div>
     <div class="qa-answer">
-      Previously, deleting a review caused a noticeable delay because the frontend waited for the database network response and then triggered a complete page reload, which re-fetched all listings and aggregations. I fixed this by implementing <strong>optimistic UI state management</strong>: the review is removed from React state immediately upon user click, providing a 0ms feedback loop. On the backend in <code>controller/reviews.js</code>, I refactored the two sequential operations into a concurrent <code>Promise.all([Listing.findByIdAndUpdate(...), Review.findByIdAndDelete(...)])</code>, reducing database round-trip latency by over 50%. If the network call fails, the client gracefully rolls back the UI state and displays a toast error.
+      Previously, deleting a review caused lag because the UI waited for the network delete and triggered a full page reload. I implemented Optimistic UI on the frontend: the review is removed from React state immediately (0ms latency), and ratings are recalculated in memory. On the backend, I converted sequential queries into concurrent execution using <code>Promise.all([Listing.updateOne(...), Review.findByIdAndDelete(...)])</code>, reducing database roundtrip latency by over 50%.
     </div>
   </div>
 
   <div class="qa-item">
-    <div class="qa-question"><span class="qa-num">Q4</span> How does the forward geocoding with Mapbox work?</div>
+    <div class="qa-question"><span class="qa-num">Q4</span> How does forward geocoding work in the listing creation flow?</div>
     <div class="qa-answer">
-      When a host registers a new property with a city name (e.g. "Varkala, India"), the backend intercepts the string and sends a query to the Mapbox Geocoding REST API via <code>@mapbox/mapbox-sdk</code>. The API returns a GeoJSON FeatureCollection containing exact longitude and latitude coordinates. We save this directly in MongoDB inside the <code>geometry</code> field following the standardized GeoJSON Point schema (<code>{ type: "Point", coordinates: [lng, lat] }</code>). On the client, Mapbox GL JS initializes a WebGL map canvas and dynamically mounts a custom interactive marker at those coordinates.
+      When a host registers a property location string (e.g. "Assagao, Goa"), the backend sends the query to the Mapbox Geocoding SDK. Mapbox returns a GeoJSON FeatureCollection with exact coordinates. The controller stores this as a standard GeoJSON Point (<code>{ type: "Point", coordinates: [lng, lat] }</code>) in MongoDB. The React frontend mounts an interactive WebGL Mapbox GL canvas using these coordinates.
     </div>
   </div>
 
   <div class="qa-item">
-    <div class="qa-question"><span class="qa-num">Q5</span> How is 18% GST implemented without corrupting base property prices?</div>
+    <div class="qa-question"><span class="qa-num">Q5</span> How is India's 18% GST implemented without corrupting database prices?</div>
     <div class="qa-answer">
-      In database design, storing pre-tax and post-tax values redundantly violates data normalization and risks price drift. In StayLust, MongoDB stores strictly the raw nightly property rate (e.g., ₹2,199). On the client display layer, we apply a centralized GST factor (<code>GST_RATE = 0.18</code>) via <code>formatPrice(Math.round(price * 1.18))</code>. This ensures that cards, reserve bars, and booking breakdowns remain 100% synchronized, while hosts can edit base rates without recalculation errors.
+      To preserve data normalization, MongoDB stores strictly the raw nightly base rate. The client uses a centralized financial utility (<code>formatPrice(Math.round(price * (1 + GST_RATE)))</code>) to compute GST-inclusive prices dynamically. This guarantees that if tax rates change, zero database migrations are required, and host payout records remain uncorrupted.
     </div>
   </div>
 
   <div class="qa-item">
-    <div class="qa-question"><span class="qa-num">Q6</span> How does the 4-row responsive grid calculate initial listings on the homepage?</div>
+    <div class="qa-question"><span class="qa-num">Q6</span> How does the 4-row responsive grid calculate listing counts?</div>
     <div class="qa-answer">
-      Different devices display different column counts (2 on mobile, 3 on portrait tablet, 4 on landscape tablet, 6 on desktop). Rather than showing a hardcoded number like 12 or 20 stays, StayLust uses a custom React hook (<code>useMediaQuery</code>) to determine the exact screen tier dynamically. It computes <code>initialListingCount = cols * 4</code> rows (e.g., 2 × 4 = 8 stays on mobile; 6 × 4 = 24 stays on desktop). Any remaining listings are smoothly revealed when the user clicks "Show more stays".
+      Using a custom React <code>useMediaQuery</code> hook, the client detects the exact active viewport tier (2 cols mobile, 3 cols portrait tablet, 4 cols landscape tablet, 6 cols desktop). It dynamically calculates <code>initialListingCount = cols * 4</code> (8 on mobile, 24 on desktop). This ensures a clean, symmetrical 4-row layout on every screen, with excess listings revealed via "Show more stays".
     </div>
   </div>
 
   <div class="qa-item">
-    <div class="qa-question"><span class="qa-num">Q7</span> How does StayLust prevent NoSQL injection and parameter tampering?</div>
+    <div class="qa-question"><span class="qa-num">Q7</span> How does cascading deletion prevent orphaned documents in MongoDB?</div>
     <div class="qa-answer">
-      We enforce two layers of defense: First, <strong>Joi validation schemas</strong> rigorously validate every incoming <code>req.body</code> against strict data types, string length caps, and integer thresholds before database execution. Second, Mongoose schemas enforce casting checks (e.g., rejecting invalid <code>ObjectId</code>s with automatic 404 CastError handling). Finally, authorization middleware explicitly compares <code>listing.owner._id</code> with <code>req.user._id</code> to prevent Broken Object Level Authorization (BOLA).
+      In <code>models/listing.js</code>, a Mongoose <code>post("findOneAndDelete")</code> middleware hook checks if the deleted listing had child review IDs. If so, it executes <code>Review.deleteMany({ _id: { $in: listing.reviews } })</code>, ensuring no orphaned reviews linger in the database.
     </div>
   </div>
 
   <div class="qa-item">
-    <div class="qa-question"><span class="qa-num">Q8</span> What would you do if StayLust scaled to 1,000,000 daily active users?</div>
+    <div class="qa-question"><span class="qa-num">Q8</span> How do you prevent NoSQL injection in Express routes?</div>
     <div class="qa-answer">
-      I would introduce three key architectural upgrades:
-      <ol style="margin-left: 1.2rem; margin-top: 0.3rem;">
-        <li><strong>Redis Caching Layer:</strong> Cache frequent read queries (like <code>/api/listings</code> and category filters) in an in-memory Redis cluster with cache invalidation on property updates.</li>
-        <li><strong>Database Read Replicas:</strong> Separate MongoDB write operations (primary node) from read queries (secondary replica set nodes) to eliminate database read bottlenecks.</li>
-        <li><strong>Cloudinary Edge CDN Optimization:</strong> Use Cloudinary's dynamic quality and format auto-negotiation (<code>f_auto,q_auto</code>) so mobile clients download lightweight WebP/AVIF images.</li>
+      We enforce two defensive barriers: First, strict Joi validation schemas validate data types, numeric ranges, and string lengths before queries touch MongoDB. Second, Mongoose schema casting rejects unexpected query objects and handles malformed ObjectIds via centralized CastError middleware.
+    </div>
+  </div>
+
+  <div class="qa-item">
+    <div class="qa-question"><span class="qa-num">Q9</span> How would you scale StayLust to handle 1,000,000 daily users?</div>
+    <div class="qa-answer">
+      I would implement:
+      <ol style="margin-left: 1.2rem; margin-top: 0.2rem;">
+        <li><strong>Redis Caching:</strong> Cache popular listings and category filter queries in memory with time-to-live (TTL) invalidation on listing updates.</li>
+        <li><strong>Read Replicas:</strong> Route read operations to MongoDB Atlas secondary replica set nodes while reserving primary nodes for writes.</li>
+        <li><strong>CDN Optimization:</strong> Enable Cloudinary automatic format/quality negotiation (<code>f_auto,q_auto</code>) to serve next-gen AVIF/WebP assets globally.</li>
       </ol>
     </div>
   </div>
 
-  <!-- ==================== CHAPTER 7: CONCLUSION & METRICS ==================== -->
-  <div class="page-break"></div>
-  <h1 class="section-title">7. Project Metrics & Summary</h1>
-
-  <h2 class="subsection-title">7.1 Codebase & Engineering Statistics</h2>
-  <table>
-    <thead>
-      <tr>
-        <th style="width: 35%;">Metric</th>
-        <th style="width: 35%;">Measurement / Value</th>
-        <th style="width: 30%;">Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>Frontend Framework</strong></td>
-        <td>React 19.3 + Vite 8.3 + Tailwind CSS v4.3</td>
-        <td>Production Ready</td>
-      </tr>
-      <tr>
-        <td><strong>Backend Runtime</strong></td>
-        <td>Node.js 24.18 + Express 5.2.1</td>
-        <td>Production Ready</td>
-      </tr>
-      <tr>
-        <td><strong>Database Cluster</strong></td>
-        <td>MongoDB Atlas (Replica Set M0 Cloud Cluster)</td>
-        <td>Active (36 Seeded Stays)</td>
-      </tr>
-      <tr>
-        <td><strong>Production Build Time</strong></td>
-        <td>~2.5 - 3.1 seconds</td>
-        <td>Optimized Rollup Chunks</td>
-      </tr>
-      <tr>
-        <td><strong>Review Deletion Latency</strong></td>
-        <td>~0ms perceived (Optimistic UI)</td>
-        <td>Zero Lag Achieved</td>
-      </tr>
-      <tr>
-        <td><strong>Cloudinary Storage</strong></td>
-        <td>High-resolution responsive imagery with CDN caching</td>
-        <td>Operational</td>
-      </tr>
-      <tr>
-        <td><strong>Mapbox Geocoding</strong></td>
-        <td>Real-time forward geocoding with GeoJSON Point</td>
-        <td>Operational</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <h2 class="subsection-title">7.2 Developer Sign-Off</h2>
-  <div class="callout callout-info" style="margin-top: 1.5rem;">
-    <strong>Conclusion:</strong> StayLust demonstrates end-to-end full-stack mastery, encompassing modern front-end state architecture, secure session-based backend engineering, third-party cloud SDK orchestration, and responsive cross-device UI design. It stands as a production-grade, resume-worthy project engineered for performance, maintainability, and scale.
+  <div class="qa-item">
+    <div class="qa-question"><span class="qa-num">Q10</span> Why did you restrict card navigation exclusively to the photo?</div>
+    <div class="qa-answer">
+      Wrapping entire card blocks in an anchor tag causes user frustration when selecting text, copying address details, or toggling wishlist buttons. Restricting the <code>&lt;Link&gt;</code> strictly to the photo container ensures clear intent: photos navigate to details, while card text remains clean, selectable, and accessible.
+    </div>
   </div>
 
-  <div style="margin-top: 3rem; display: flex; justify-content: space-between; border-top: 1px solid #cbd5e1; padding-top: 1.5rem;">
+  <!-- ==================== SIGN-OFF ==================== -->
+  <div style="margin-top: 2.5rem; display: flex; justify-content: space-between; border-top: 1px solid #cbd5e1; padding-top: 1rem; page-break-inside: avoid;">
     <div>
-      <p style="font-weight: 700; color: #0f172a;">Developer & Engineer</p>
-      <p style="color: #64748b;">Ranjit Sharma</p>
+      <p style="font-weight: 800; color: #0f172a; font-size: 10pt;">StayLust Engineering Master Dossier</p>
+      <p style="color: #64748b; font-size: 8.5pt;">Prepared by Ranjit Sharma • MERN Full-Stack Engineer</p>
     </div>
     <div style="text-align: right;">
-      <p style="font-weight: 700; color: #0f172a;">Repository & Documentation</p>
-      <p style="color: #64748b;">github.com/ranjit-sharma/StayLust</p>
+      <p style="font-weight: 800; color: #0f172a; font-size: 10pt;">Project Repository</p>
+      <p style="color: #64748b; font-size: 8.5pt;">github.com/ranjit-sharma/StayLust</p>
     </div>
   </div>
 
 </body>
 </html>`;
 
-// Write HTML file
 const htmlPath = path.join(__dirname, 'StayLust_Complete_Project_Notes.html');
 fs.writeFileSync(htmlPath, htmlContent, 'utf8');
-console.log(`HTML generated successfully at: ${htmlPath}`);
+console.log(`Updated HTML written to: ${htmlPath}`);
 
-// Compile HTML to PDF using Chrome Headless
+// Convert to PDF using Chrome Headless via PowerShell
 const pdfPath = path.join(__dirname, '..', 'StayLust_Complete_Project_Notes.pdf');
-const tempProfile = path.join(__dirname, 'temp_chrome_profile');
+const profileDir = path.join(__dirname, 'temp_profile');
 
-console.log("Compiling PDF with Chrome Headless...");
-const chromeCmd = `cmd /c "start /wait \\"\\" \\"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\\" --headless=new --user-data-dir=\\"${tempProfile}\\" --no-pdf-header-footer --print-to-pdf=\\"${pdfPath}\\" \\"file:///${htmlPath.replace(/\\\\/g, '/')}\\""`;
+console.log("Compiling PDF via Headless Chrome...");
+const psScript = `
+$html = (Resolve-Path "${htmlPath.replace(/\\/g, '\\\\')}").Path
+$pdf = "${pdfPath.replace(/\\/g, '\\\\')}"
+$profile = "${profileDir.replace(/\\/g, '\\\\')}"
 
-try {
-  execSync(chromeCmd, { stdio: 'inherit' });
-  if (fs.existsSync(pdfPath)) {
-    const stats = fs.statSync(pdfPath);
-    console.log(`\n========================================`);
-    console.log(`SUCCESS: StayLust Project Notes PDF Created!`);
-    console.log(`Path: ${pdfPath}`);
-    console.log(`Size: ${(stats.size / 1024 / 1024).toFixed(2)} MB (${stats.size} bytes)`);
-    console.log(`========================================\n`);
-  } else {
-    console.error("PDF file was not found after execution.");
-  }
-} catch (err) {
-  console.error("Error generating PDF:", err);
+$args = @(
+  "--headless=new",
+  "--user-data-dir=$profile",
+  "--no-pdf-header-footer",
+  "--print-to-pdf=$pdf",
+  "file:///$($html -replace '\\\\', '/')"
+)
+
+Start-Process -FilePath "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" -ArgumentList $args -Wait
+`;
+
+const psPath = path.join(__dirname, 'run_chrome_pdf.ps1');
+fs.writeFileSync(psPath, psScript, 'utf8');
+
+execSync(`powershell -ExecutionPolicy Bypass -File "${psPath}"`, { stdio: 'inherit' });
+
+if (fs.existsSync(pdfPath)) {
+  const stats = fs.statSync(pdfPath);
+  console.log(`\n======================================================`);
+  console.log(`SUCCESS: StayLust Master Notes PDF Generated!`);
+  console.log(`File: ${pdfPath}`);
+  console.log(`Size: ${(stats.size / 1024 / 1024).toFixed(2)} MB (${stats.size} bytes)`);
+  console.log(`======================================================\n`);
+} else {
+  console.error("PDF generation failed: Output file missing.");
 }
