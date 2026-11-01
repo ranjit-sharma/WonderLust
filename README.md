@@ -56,7 +56,7 @@ A modern full-stack travel and staycation accommodation web application inspired
 
 ## 🌐 Live Application
 
-- **Live URL:** [https://wonderlust-yppn.onrender.com](https://wonderlust-yppn.onrender.com)
+- **Live URL:** [https://staylust.onrender.com](https://staylust.onrender.com)
 - **GitHub Repository:** [https://github.com/ranjit-sharma/StayLust](https://github.com/ranjit-sharma/StayLust)
 
 ---
