@@ -31,7 +31,7 @@ const icons = {
   ),
 };
 
-// shortcut: these point to each platform's home page; swap in the real WonderLust profiles when available.
+// shortcut: these point to each platform's home page; swap in the real StayLust profiles when available.
 const socials = [
   { key: "instagram", label: "Instagram", href: "https://www.instagram.com/", hover: "hover:bg-linear-to-br hover:from-[#f58529] hover:via-[#dd2a7b] hover:to-[#8134af]" },
   { key: "facebook", label: "Facebook", href: "https://www.facebook.com/", hover: "hover:bg-[#1877f2]" },
@@ -42,7 +42,7 @@ const socials = [
 
 export default function SocialLinks({ className = "" }) {
   return (
-    <ul className={`flex flex-wrap gap-2.5 ${className}`} aria-label="WonderLust on social media">
+    <ul className={`flex flex-wrap gap-2.5 ${className}`} aria-label="StayLust on social media">
       {socials.map((s, i) => (
         <motion.li
           key={s.key}

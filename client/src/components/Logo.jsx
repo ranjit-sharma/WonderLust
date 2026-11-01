@@ -18,7 +18,7 @@ export default function Logo({
       >
         <Compass className={iconSize} strokeWidth={2.2} />
       </motion.span>
-      <span className={`${textSize} font-extrabold tracking-tight`}>WonderLust</span>
+      <span className={`${textSize} font-extrabold tracking-tight`}>StayLust</span>
     </>
   );
 
@@ -26,7 +26,7 @@ export default function Logo({
     return (
       <div
         className={`group inline-flex items-center gap-2 md:gap-2.5 lg:gap-3 text-brand-500 select-none cursor-default ${className}`}
-        aria-label="WonderLust"
+        aria-label="StayLust"
       >
         {content}
       </div>
@@ -38,7 +38,7 @@ export default function Logo({
       to="/listings"
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
       className={`group inline-flex items-center gap-2 md:gap-2.5 lg:gap-3 text-brand-500 focus-visible:outline-none ${className}`}
-      aria-label="WonderLust home"
+      aria-label="StayLust home"
     >
       {content}
     </Link>

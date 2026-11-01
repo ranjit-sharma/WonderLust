@@ -83,7 +83,7 @@ function Field({ id, label, ...props }) {
 }
 
 export function Login() {
-  const { user, busy, submit, next, query } = useAuthForm("/login", "Welcome back to WonderLust!");
+  const { user, busy, submit, next, query } = useAuthForm("/login", "Welcome back to StayLust!");
   if (user && !busy) return <Navigate to={next} replace />;
 
   const onSubmit = (e) => {
@@ -96,7 +96,7 @@ export function Login() {
     <AuthLayout
       title="Welcome back"
       text="Your next great adventure awaits. Log in to unlock exclusive stays and connect with hosts around the world."
-      footer={<>New to WonderLust? <Link to={`/signup?${query}`} className="font-semibold text-brand-600 hover:underline dark:text-brand-400">Create an account</Link></>}
+      footer={<>New to StayLust? <Link to={`/signup?${query}`} className="font-semibold text-brand-600 hover:underline dark:text-brand-400">Create an account</Link></>}
     >
       <form onSubmit={onSubmit} className="space-y-5">
         <Field id="username" label="Username" autoComplete="username" />
@@ -110,7 +110,7 @@ export function Login() {
 }
 
 export function Signup() {
-  const { user, busy, submit, next, query } = useAuthForm("/signup", "Welcome to WonderLust");
+  const { user, busy, submit, next, query } = useAuthForm("/signup", "Welcome to StayLust");
   if (user && !busy) return <Navigate to={next} replace />;
 
   const onSubmit = (e) => {
@@ -121,7 +121,7 @@ export function Signup() {
 
   return (
     <AuthLayout
-      title="Join WonderLust"
+      title="Join StayLust"
       text="From quiet escapes to unforgettable adventures, create an account and find a place that feels like yours."
       footer={<>Already have an account? <Link to={`/login?${query}`} className="font-semibold text-brand-600 hover:underline dark:text-brand-400">Log in</Link></>}
     >

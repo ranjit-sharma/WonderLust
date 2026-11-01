@@ -1,4 +1,4 @@
-# 🏡 WonderLust — Full-Stack Travel & Vacation Rental Platform
+# 🏡 StayLust — Full-Stack Travel & Vacation Rental Platform
 
 ---
 
@@ -57,7 +57,7 @@ A modern full-stack travel and staycation accommodation web application inspired
 ## 🌐 Live Application
 
 - **Live URL:** [https://wonderlust-yppn.onrender.com](https://wonderlust-yppn.onrender.com)
-- **GitHub Repository:** [https://github.com/ranjit-sharma/WonderLust](https://github.com/ranjit-sharma/WonderLust)
+- **GitHub Repository:** [https://github.com/ranjit-sharma/StayLust](https://github.com/ranjit-sharma/StayLust)
 
 ---
 
@@ -81,7 +81,7 @@ A modern full-stack travel and staycation accommodation web application inspired
 
 # 🌍 About the Project
 
-**WonderLust** is an end-to-end travel and vacation rental booking platform modeled after Airbnb. It empowers travellers to explore stays across the world, search properties with live filters, book reservations, leave reviews, and pin favourite destinations. Property hosts can list their accommodations, upload images to cloud storage, and manage bookings and listing details in real time.
+**StayLust** is an end-to-end travel and vacation rental booking platform modeled after Airbnb. It empowers travellers to explore stays across the world, search properties with live filters, book reservations, leave reviews, and pin favourite destinations. Property hosts can list their accommodations, upload images to cloud storage, and manage bookings and listing details in real time.
 
 The application is structured as a decoupled **Single Page Application (SPA)** powered by **React 19** and **Tailwind CSS 4** communicating with an **Express 5.x REST API** and **MongoDB Atlas** backend, with third-party cloud integrations for **Cloudinary** media storage and **Mapbox GL JS** geocoding and mapping.
 
@@ -363,7 +363,7 @@ Create a `.env` file in the project root with the following keys:
 
 ```env
 # MongoDB Atlas Connection
-ATLASDB_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/wonderlust?retryWrites=true&w=majority
+ATLASDB_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/staylust?retryWrites=true&w=majority
 
 # Express Session Secret
 SESSION_SECRET=your_super_secret_session_key
@@ -393,8 +393,8 @@ PORT=8080
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/ranjit-sharma/WonderLust.git
-cd WonderLust
+git clone https://github.com/ranjit-sharma/StayLust.git
+cd StayLust
 ```
 
 ### 2. Install Dependencies
@@ -441,7 +441,7 @@ Access the application at [http://localhost:8080](http://localhost:8080).
 
 The project is configured for one-click deployment on platforms like **Render**:
 
-1. **Connect GitHub Repo**: Link `https://github.com/ranjit-sharma/WonderLust` to a new Render Web Service.
+1. **Connect GitHub Repo**: Link `https://github.com/ranjit-sharma/StayLust` to a new Render Web Service.
 2. **Build Command**:
    ```bash
    npm run build
@@ -460,7 +460,7 @@ The project is configured for one-click deployment on platforms like **Render**:
 
 ### Ranjit Sharma
 - **GitHub:** [@ranjit-sharma](https://github.com/ranjit-sharma)
-- **Repository:** [WonderLust](https://github.com/ranjit-sharma/WonderLust)
+- **Repository:** [StayLust](https://github.com/ranjit-sharma/StayLust)
 
 ---
 

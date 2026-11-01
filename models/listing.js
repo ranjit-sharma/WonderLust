@@ -1,4 +1,4 @@
-// Model: Mongoose schema and model definition for WonderLust listings
+// Model: Mongoose schema and model definition for StayLust listings
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Review = require("./review.js");

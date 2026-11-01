@@ -17,7 +17,7 @@ const columns = [
     ],
   },
   {
-    title: "Explore WonderLust",
+    title: "Explore StayLust",
     links: [
       ["/listings", "Explore stays"],
       ["/listings/new", "Become a host"],
@@ -108,7 +108,7 @@ export default function Footer() {
               Some places you visit. Some places you remember.
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
-              WonderLust helps you discover stays with character, welcoming hosts, and destinations that turn ordinary trips into stories worth telling.
+              StayLust helps you discover stays with character, welcoming hosts, and destinations that turn ordinary trips into stories worth telling.
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-2 text-xs font-medium text-neutral-600 dark:text-neutral-400">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200/80 bg-white px-3 py-1 shadow-2xs dark:border-neutral-800 dark:bg-neutral-900">
@@ -142,7 +142,7 @@ export default function Footer() {
       <div className="border-t border-neutral-200 dark:border-neutral-800">
         <div className="container-wide flex flex-col gap-4 py-6 text-sm text-neutral-500 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <span>© {new Date().getFullYear()} WonderLust Private Limited</span>
+            <span>© {new Date().getFullYear()} StayLust Private Limited</span>
             <Link to="/privacy" className="transition-colors hover:text-neutral-900 dark:hover:text-white">Privacy</Link>
             <Link to="/terms" className="transition-colors hover:text-neutral-900 dark:hover:text-white">Terms</Link>
           </div>

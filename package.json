@@ -4,7 +4,7 @@
   },
   "name": "majorproject",
   "version": "1.0.0",
-  "description": "WonderLust - Full-stack travel stays and vacation rental platform",
+  "description": "StayLust - Full-stack travel stays and vacation rental platform",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

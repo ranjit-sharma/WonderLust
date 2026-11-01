@@ -490,7 +490,7 @@ function AccountMenu() {
             {divider}
             <MenuLink to="/help" icon={LifeBuoy}>Help Centre</MenuLink>
             <MenuLink to="/feedback" icon={MessageSquareText}>Feedback</MenuLink>
-            <MenuLink to="/about" icon={Info}>About WonderLust</MenuLink>
+            <MenuLink to="/about" icon={Info}>About StayLust</MenuLink>
             {user && (
               <>
                 {divider}

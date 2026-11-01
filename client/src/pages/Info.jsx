@@ -118,13 +118,13 @@ function Prose({ sections }) {
 export function About() {
   return (
     <Page>
-      <Hero icon={Compass} eyebrow="Find somewhere memorable" title="About WonderLust" text="A simple way to discover welcoming stays, share special places, and plan your next escape." />
+      <Hero icon={Compass} eyebrow="Find somewhere memorable" title="About StayLust" text="A simple way to discover welcoming stays, share special places, and plan your next escape." />
       <Story
         eyebrow="Our idea"
         title="Travel should feel personal."
         paragraphs={[
-          "WonderLust brings guests and hosts together through a focused, easy-to-use experience. Browse inspiring places, compare the details that matter, save favorites, and reserve a stay that feels right for you.",
-          "Whether you are planning a quiet weekend, a mountain adventure, or a city escape, WonderLust helps you move from curiosity to a place worth remembering.",
+          "StayLust brings guests and hosts together through a focused, easy-to-use experience. Browse inspiring places, compare the details that matter, save favorites, and reserve a stay that feels right for you.",
+          "Whether you are planning a quiet weekend, a mountain adventure, or a city escape, StayLust helps you move from curiosity to a place worth remembering.",
         ]}
         cta={["/listings", "Start exploring"]}
       />
@@ -143,7 +143,7 @@ export function About() {
 export function CoHosts() {
   return (
     <Page>
-      <Hero icon={Users} eyebrow="Host with confidence" title="Find a co-host" text="Get support from someone who can help you manage your WonderLust listing and create a great guest experience." />
+      <Hero icon={Users} eyebrow="Host with confidence" title="Find a co-host" text="Get support from someone who can help you manage your StayLust listing and create a great guest experience." />
       <Story
         eyebrow="A little extra support"
         title="Share the hosting journey."
@@ -165,11 +165,11 @@ export function CoHosts() {
 export function ReferHost() {
   return (
     <Page>
-      <Hero icon={UserPlus} eyebrow="Share the WonderLust experience" title="Refer a host" text="Know someone with a memorable place to share? Invite them to become part of the WonderLust hosting community." />
+      <Hero icon={UserPlus} eyebrow="Share the StayLust experience" title="Refer a host" text="Know someone with a memorable place to share? Invite them to become part of the StayLust hosting community." />
       <Story
         eyebrow="Help a great place get discovered"
         title="Every stay starts with a recommendation."
-        paragraphs={["Tell a friend, family member, or local host about WonderLust. They can create a listing, share their space, and welcome guests looking for their next memorable stay."]}
+        paragraphs={["Tell a friend, family member, or local host about StayLust. They can create a listing, share their space, and welcome guests looking for their next memorable stay."]}
         cta={["/listings/new", "Become a host"]}
       />
     </Page>
@@ -211,7 +211,7 @@ export function Questions() {
   const [open, setOpen] = useState(0);
   return (
     <Page>
-      <Hero icon={CircleHelp} eyebrow="Answers at a glance" title="Questions & answers" text="Common questions about using WonderLust as a guest or host." />
+      <Hero icon={CircleHelp} eyebrow="Answers at a glance" title="Questions & answers" text="Common questions about using StayLust as a guest or host." />
       <Reveal className="card divide-y divide-neutral-200 px-6 dark:divide-neutral-800">
         {faqs.map(([q, a], i) => (
           <div key={q}>
@@ -244,13 +244,13 @@ export function Questions() {
 export function Privacy() {
   return (
     <Page>
-      <Hero icon={ShieldCheck} eyebrow="Your trust matters" title="Privacy at WonderLust" text="We collect and use information responsibly so you can discover stays with confidence." />
+      <Hero icon={ShieldCheck} eyebrow="Your trust matters" title="Privacy at StayLust" text="We collect and use information responsibly so you can discover stays with confidence." />
       <Prose
         sections={[
           ["What we collect", "When you create an account, list a property, make a booking, or contact us, we may collect details such as your name, email address, listing information, and booking preferences."],
-          ["How we use your information", "We use this information to provide and improve WonderLust, process bookings, keep accounts secure, personalize your experience, and communicate important updates about the service."],
+          ["How we use your information", "We use this information to provide and improve StayLust, process bookings, keep accounts secure, personalize your experience, and communicate important updates about the service."],
           ["Information sharing", "We only share information when it is needed to provide the service, comply with the law, protect our users, or operate trusted infrastructure. We do not sell your personal information."],
-          ["Your choices", "You can review your account information, manage your listings and bookings, or contact us with questions about your data. We may update this policy as WonderLust grows."],
+          ["Your choices", "You can review your account information, manage your listings and bookings, or contact us with questions about your data. We may update this policy as StayLust grows."],
         ]}
       />
     </Page>
@@ -260,13 +260,13 @@ export function Privacy() {
 export function Terms() {
   return (
     <Page>
-      <Hero icon={FileText} eyebrow="Simple and transparent" title="Terms of service" text="These guidelines help keep WonderLust welcoming, reliable, and useful for everyone." />
+      <Hero icon={FileText} eyebrow="Simple and transparent" title="Terms of service" text="These guidelines help keep StayLust welcoming, reliable, and useful for everyone." />
       <Prose
         sections={[
-          ["Using WonderLust", "You agree to provide accurate account information, keep your login details secure, and use the platform lawfully. You are responsible for activity carried out through your account."],
+          ["Using StayLust", "You agree to provide accurate account information, keep your login details secure, and use the platform lawfully. You are responsible for activity carried out through your account."],
           ["Listings and bookings", "Hosts are responsible for accurate listing details, availability, pricing, and a safe guest experience. Guests are responsible for respecting the property and following the host's reasonable instructions."],
           ["Respectful conduct", "Do not misuse the platform, upload harmful or misleading content, interfere with other users, or attempt to access accounts or data that do not belong to you."],
-          ["Changes and availability", "We may improve, update, or temporarily suspend parts of WonderLust. We will make reasonable efforts to keep the service available and communicate important changes."],
+          ["Changes and availability", "We may improve, update, or temporarily suspend parts of StayLust. We will make reasonable efforts to keep the service available and communicate important changes."],
         ]}
       />
     </Page>
@@ -278,18 +278,18 @@ const supportPages = {
     title: "Safety support",
     eyebrow: "Your safety matters",
     icon: ShieldCheck,
-    summary: "If something feels unsafe during a stay or while using WonderLust, move to a safe place first and contact the appropriate local emergency service.",
+    summary: "If something feels unsafe during a stay or while using StayLust, move to a safe place first and contact the appropriate local emergency service.",
     sections: [
-      ["During an emergency", "Call your local emergency service immediately. WonderLust cannot replace local emergency responders."],
+      ["During an emergency", "Call your local emergency service immediately. StayLust cannot replace local emergency responders."],
       ["After the immediate danger", "Keep relevant booking details, messages, and evidence. Contact the host or guest only when it is safe to do so."],
-      ["Tell us what happened", "Use our neighbourhood concern form for a detailed report, or contact the WonderLust team through the Help Center."],
+      ["Tell us what happened", "Use our neighbourhood concern form for a detailed report, or contact the StayLust team through the Help Center."],
     ],
   },
   aircover: {
     title: "AirCover information",
     eyebrow: "Help for your stay",
     icon: Umbrella,
-    summary: "WonderLust helps you understand your reservation details and connect with the right support when a stay does not go as expected.",
+    summary: "StayLust helps you understand your reservation details and connect with the right support when a stay does not go as expected.",
     sections: [
       ["Before you book", "Review the listing description, photos, amenities, location, reviews, and cancellation details carefully."],
       ["A problem during your stay", "Document the issue, contact the host through the available booking information, and keep communication clear."],
@@ -300,7 +300,7 @@ const supportPages = {
     title: "Anti-discrimination",
     eyebrow: "Everyone belongs here",
     icon: Users,
-    summary: "WonderLust is committed to a respectful community where guests and hosts are treated fairly and with dignity.",
+    summary: "StayLust is committed to a respectful community where guests and hosts are treated fairly and with dignity.",
     sections: [
       ["Our expectation", "Users must not discriminate against another person based on protected characteristics or use hateful, threatening, or degrading language."],
       ["If you experience discrimination", "Write down what happened, save relevant messages, and report the concern so it can be reviewed."],
@@ -311,11 +311,11 @@ const supportPages = {
     title: "Disability support",
     eyebrow: "Designed for more people",
     icon: Accessibility,
-    summary: "We want WonderLust to be easier to use for people with different access needs and welcome feedback that helps us improve.",
+    summary: "We want StayLust to be easier to use for people with different access needs and welcome feedback that helps us improve.",
     sections: [
       ["Finding useful details", "Hosts should describe important access information accurately, including entrances, stairs, bathrooms, and other relevant features."],
       ["Ask before booking", "If you need a specific accommodation, contact the host before confirming so expectations are clear."],
-      ["Share feedback", "Contact the WonderLust team through the Help Center if a page or listing creates an accessibility barrier."],
+      ["Share feedback", "Contact the StayLust team through the Help Center if a page or listing creates an accessibility barrier."],
     ],
   },
   cancellation: {
@@ -369,7 +369,7 @@ function SupportForm({
         // Send email via FormSubmit AJAX endpoint
         const payload = {
           ...data,
-          _subject: `WonderLust Feedback: ${data.name || "A User"} (${data.rating ? data.rating + "/5 stars" : "Rating"})`,
+          _subject: `StayLust Feedback: ${data.name || "A User"} (${data.rating ? data.rating + "/5 stars" : "Rating"})`,
           _template: "table",
           _captcha: "false",
         };
@@ -437,7 +437,7 @@ export function Feedback() {
   const [rating, setRating] = useState("");
   return (
     <Page>
-      <Hero icon={MessageSquareText} eyebrow="Help us improve" title="Share your feedback" text="Tell us what you enjoyed, what we can improve, or what would make your WonderLust experience better." />
+      <Hero icon={MessageSquareText} eyebrow="Help us improve" title="Share your feedback" text="Tell us what you enjoyed, what we can improve, or what would make your StayLust experience better." />
       <SupportForm
         endpoint="/feedback"
         formSubmitEmail="ctrl.ranjit@gmail.com"
@@ -479,7 +479,7 @@ export function Feedback() {
 export function NeighbourhoodConcern() {
   return (
     <Page>
-      <Hero icon={TriangleAlert} eyebrow="Community support" title="Report a neighbourhood concern" text="Tell us about a serious issue connected to a WonderLust listing or stay. We will review the details you provide." />
+      <Hero icon={TriangleAlert} eyebrow="Community support" title="Report a neighbourhood concern" text="Tell us about a serious issue connected to a StayLust listing or stay. We will review the details you provide." />
       <SupportForm
         endpoint="/support/neighbourhood-concern"
         submitLabel="Submit concern"
